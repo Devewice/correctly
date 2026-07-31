@@ -1,0 +1,107 @@
+{
+  "app": {
+    "name": "Correctly",
+    "tagline": "Faça certo, um dia de cada vez."
+  },
+  "nav": {
+    "dashboard": "Hoje",
+    "meals": "Refeições",
+    "water": "Água",
+    "mood": "Humor",
+    "sleep": "Sono",
+    "habits": "Hábitos",
+    "profile": "Perfil"
+  },
+  "login": {
+    "title": "Bem-vindo ao Correctly",
+    "subtitle": "Seu bem-estar diário, em um só lugar.",
+    "google": "Continuar com Google",
+    "dev": "Entrar no modo demo",
+    "googleUnavailable": "OAuth do Google ainda não está configurado. Use o modo demo."
+  },
+  "onboarding": {
+    "welcome": "Vamos começar sua jornada",
+    "language": "Idioma",
+    "modules": "O que você quer cuidar?",
+    "routines": "Sua rotina",
+    "wake": "Horário de acordar",
+    "sleep": "Horário de dormir",
+    "goal": "Meta principal (opcional)",
+    "continue": "Continuar",
+    "finish": "Ir ao dashboard"
+  },
+  "modules": {
+    "meals": "Refeições",
+    "water": "Água",
+    "mood": "Humor",
+    "sleep": "Sono",
+    "habits": "Hábitos",
+    "activity": "Atividade",
+    "journal": "Diário",
+    "meditation": "Meditação"
+  },
+  "dashboard": {
+    "greetingMorning": "Bom dia, {name}",
+    "greetingAfternoon": "Boa tarde, {name}",
+    "greetingEvening": "Boa noite, {name}",
+    "progress": "{pct}% do dia",
+    "streak": "Sequência: {days} dias",
+    "timeline": "Linha do tempo",
+    "habits": "Hábitos de hoje",
+    "quickLog": "Registrar",
+    "water": "Água",
+    "mood": "Humor",
+    "sleep": "Sono",
+    "meals": "Refeições",
+    "emptyTimeline": "Ainda não há registros hoje. Comece com um toque.",
+    "insight": "Insight do dia"
+  },
+  "meals": {
+    "title": "Refeições",
+    "add": "Registrar refeição",
+    "description": "O que você comeu?",
+    "satisfaction": "Saciedade",
+    "quality": "Qualidade",
+    "save": "Salvar",
+    "types": {
+      "breakfast": "Café da manhã",
+      "mid_morning": "Lanche da manhã",
+      "lunch": "Almoço",
+      "snack": "Lanche",
+      "dinner": "Jantar",
+      "night_snack": "Lanche noturno"
+    }
+  },
+  "water": {
+    "title": "Hidratação",
+    "goal": "Meta: {goal} ml",
+    "add": "Adicionar {amount} ml"
+  },
+  "mood": {
+    "title": "Como você se sente?",
+    "save": "Registrar humor"
+  },
+  "sleep": {
+    "title": "Sono",
+    "bed": "Fui para a cama",
+    "wake": "Acordei",
+    "quality": "Qualidade",
+    "save": "Salvar sono"
+  },
+  "habits": {
+    "title": "Hábitos",
+    "empty": "Você ainda não tem hábitos. Adicione no onboarding ou perfil."
+  },
+  "common": {
+    "loading": "Carregando…",
+    "logout": "Sair",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "error": "Algo deu errado"
+  },
+  "insights": {
+    "welcome": "Registrar o dia é um ato de cuidado. Comece com o café ou um copo d'água.",
+    "streak": "Você está há {days} dias seguidos. Bom ritmo!",
+    "logMeal": "Dica: registre o café da manhã em menos de 10 segundos com uma nota curta."
+  }
+}

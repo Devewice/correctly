@@ -1,0 +1,107 @@
+{
+  "app": {
+    "name": "Correctly",
+    "tagline": "Do it right, one day at a time."
+  },
+  "nav": {
+    "dashboard": "Today",
+    "meals": "Meals",
+    "water": "Water",
+    "mood": "Mood",
+    "sleep": "Sleep",
+    "habits": "Habits",
+    "profile": "Profile"
+  },
+  "login": {
+    "title": "Welcome to Correctly",
+    "subtitle": "Your daily wellness, in one place.",
+    "google": "Continue with Google",
+    "dev": "Enter demo mode",
+    "googleUnavailable": "Google OAuth is not configured yet. Use demo mode."
+  },
+  "onboarding": {
+    "welcome": "Let's start your journey",
+    "language": "Language",
+    "modules": "What do you want to care for?",
+    "routines": "Your routine",
+    "wake": "Wake time",
+    "sleep": "Sleep time",
+    "goal": "Main goal (optional)",
+    "continue": "Continue",
+    "finish": "Go to dashboard"
+  },
+  "modules": {
+    "meals": "Meals",
+    "water": "Water",
+    "mood": "Mood",
+    "sleep": "Sleep",
+    "habits": "Habits",
+    "activity": "Activity",
+    "journal": "Journal",
+    "meditation": "Meditation"
+  },
+  "dashboard": {
+    "greetingMorning": "Good morning, {name}",
+    "greetingAfternoon": "Good afternoon, {name}",
+    "greetingEvening": "Good evening, {name}",
+    "progress": "{pct}% of your day",
+    "streak": "Streak: {days} days",
+    "timeline": "Day timeline",
+    "habits": "Today's habits",
+    "quickLog": "Log",
+    "water": "Water",
+    "mood": "Mood",
+    "sleep": "Sleep",
+    "meals": "Meals",
+    "emptyTimeline": "No entries yet today. Start with one tap.",
+    "insight": "Today's insight"
+  },
+  "meals": {
+    "title": "Meals",
+    "add": "Log meal",
+    "description": "What did you eat?",
+    "satisfaction": "Satiety",
+    "quality": "Quality",
+    "save": "Save",
+    "types": {
+      "breakfast": "Breakfast",
+      "mid_morning": "Mid-morning",
+      "lunch": "Lunch",
+      "snack": "Snack",
+      "dinner": "Dinner",
+      "night_snack": "Night snack"
+    }
+  },
+  "water": {
+    "title": "Hydration",
+    "goal": "Goal: {goal} ml",
+    "add": "Add {amount} ml"
+  },
+  "mood": {
+    "title": "How do you feel?",
+    "save": "Log mood"
+  },
+  "sleep": {
+    "title": "Sleep",
+    "bed": "I went to bed",
+    "wake": "I woke up",
+    "quality": "Quality",
+    "save": "Save sleep"
+  },
+  "habits": {
+    "title": "Habits",
+    "empty": "No habits yet. Add some in onboarding or profile."
+  },
+  "common": {
+    "loading": "Loading…",
+    "logout": "Log out",
+    "save": "Save",
+    "cancel": "Cancel",
+    "error": "Something went wrong"
+  },
+  "insights": {
+    "welcome": "Logging your day is self-care. Start with breakfast or a glass of water.",
+    "streak": "You're on a {days}-day streak. Nice pace!",
+    "logMeal": "Tip: log breakfast in under 10 seconds with a short note."
+  }
+}
