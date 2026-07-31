@@ -123,12 +123,23 @@ app.use('/api/meditation', meditationRoutes)
 app.use('/api/weight', weightRoutes)
 app.use('/api/dashboard', dashboardRoutes)
 
-// Front estático + fallback SPA (history y hash)
+// Front estático + fallback SPA (Hostinger proxyea / y /login a Node)
 if (clientDist) {
   const indexHtml = path.join(clientDist, 'index.html')
+
+  const sendIndex = (req, res, next) => {
+    if (req.path.startsWith('/api')) return next()
+    res.sendFile(indexHtml, (err) => {
+      if (err) next(err)
+    })
+  }
+
   app.use(
     '/assets',
-    express.static(path.join(clientDist, 'assets'), { maxAge: '7d', fallthrough: true }),
+    express.static(path.join(clientDist, 'assets'), {
+      maxAge: '7d',
+      fallthrough: true,
+    }),
   )
   app.use(
     express.static(clientDist, {
@@ -138,12 +149,31 @@ if (clientDist) {
     }),
   )
 
-  // Express 5: comodín /*path — cualquier GET que no sea /api
-  app.get('/{*path}', (req, res, next) => {
+  // Rutas explícitas + fallback (el comodín Express 5 fallaba en Hostinger)
+  app.get('/', sendIndex)
+  app.get(
+    [
+      '/login',
+      '/onboarding',
+      '/dashboard',
+      '/meals',
+      '/water',
+      '/mood',
+      '/sleep',
+      '/habits',
+      '/meditation',
+      '/activity',
+      '/weight',
+      '/stats',
+      '/profile',
+      '/index.html',
+    ],
+    sendIndex,
+  )
+  app.use((req, res, next) => {
+    if (req.method !== 'GET' && req.method !== 'HEAD') return next()
     if (req.path.startsWith('/api')) return next()
-    res.sendFile(indexHtml, (err) => {
-      if (err) next(err)
-    })
+    return sendIndex(req, res, next)
   })
 } else if (env.isProd) {
   console.warn('[correctly] No se encontró UI (server/ui) — solo API')
