@@ -214,8 +214,8 @@
   },
   "day": {
     "todayLabel": "Tu día",
-    "dayProgress": "Progreso de hoy",
-    "guideTitle": "Siguiente paso",
+    "dayProgress": "Hoy",
+    "guideTitle": "Ahora",
     "stepLabel": "Paso {n}",
     "stepOf": "Vamos por partes",
     "moodAsk": "¿Cómo te sientes ahora?",

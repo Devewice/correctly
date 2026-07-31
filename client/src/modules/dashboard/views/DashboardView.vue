@@ -48,11 +48,9 @@ const chips = computed(() => {
   if (mods.value.has('mood')) {
     out.push({
       key: 'mood',
-      label: `${
-        dash.today.summary.latestMood
-          ? moodEmoji[dash.today.summary.latestMood.mood]
-          : t('day.chipMoodPending')
-      } ${t('dashboard.mood')}`,
+      label: dash.today.summary.latestMood
+        ? moodEmoji[dash.today.summary.latestMood.mood]
+        : t('day.chipMoodPending'),
     })
   }
   if (mods.value.has('water')) {
@@ -72,6 +70,12 @@ const chips = computed(() => {
     })
   }
   return out
+})
+
+const insightText = computed(() => {
+  const insight = dash.insights?.[0]
+  if (!insight) return ''
+  return t(insight.messageKey, insight.params || {})
 })
 
 function syncSkips() {
@@ -177,67 +181,21 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
     {{ t('common.loading') }}
   </div>
 
-  <div v-else-if="dash.today" class="pb-8 pb-md-4">
-    <v-row :dense="!lgAndUp">
-      <v-col cols="12" lg="5">
-        <header v-motion v-bind="withDelay(fadeUp, 0)" class="mb-5">
-          <p class="text-body-2 text-medium-emphasis mb-1">{{ t('day.todayLabel') }}</p>
-          <h1 class="text-h4 text-md-h3 font-weight-bold">{{ greeting }}</h1>
-          <p class="text-body-2 text-medium-emphasis mt-1">
-            {{ t('dashboard.streak', { days: dash.today.stats?.currentStreak || 0 }) }}
-          </p>
-          <p class="text-caption text-medium-emphasis mt-1">
-            {{ t(`day.band.${band}`) }}
-          </p>
-        </header>
+  <div v-else-if="dash.today" class="today-view pb-8 pb-md-4">
+    <!-- 1. Cabecera corta -->
+    <header v-motion v-bind="withDelay(fadeUp, 0)" class="today-view__header">
+      <h1 class="today-view__greeting">{{ greeting }}</h1>
+      <p class="today-view__meta">
+        <span>{{ t(`day.band.${band}`) }}</span>
+        <span class="today-view__dot" aria-hidden="true">·</span>
+        <span>{{ t('dashboard.streak', { days: dash.today.stats?.currentStreak || 0 }) }}</span>
+      </p>
+    </header>
 
-        <v-card
-          v-motion
-          v-bind="withDelay(fadeUp, 100)"
-          class="pa-4 pa-md-5 mb-5"
-          variant="tonal"
-          color="primary"
-        >
-          <div class="d-flex align-center justify-space-between mb-2">
-            <span class="text-body-2 font-weight-medium">{{ t('day.dayProgress') }}</span>
-            <span class="text-h6 font-weight-bold">{{ progressPct }}%</span>
-          </div>
-          <v-progress-linear :model-value="progressPct" color="primary" height="10" />
-          <div class="d-flex flex-wrap ga-2 mt-3">
-            <v-chip
-              v-for="(chip, i) in chips"
-              :key="chip.key"
-              v-motion
-              v-bind="withDelay(fadeUp, 180 + i * 60)"
-              size="small"
-              label
-              variant="flat"
-              color="surface"
-            >
-              {{ chip.label }}
-            </v-chip>
-          </div>
-        </v-card>
-
-        <v-alert
-          v-if="dash.insights[0] && lgAndUp"
-          v-motion
-          v-bind="withDelay(fadeUp, 220)"
-          type="success"
-          :title="t('dashboard.insight')"
-        >
-          {{ t(dash.insights[0].messageKey, dash.insights[0].params || {}) }}
-        </v-alert>
-      </v-col>
-
-      <v-col cols="12" lg="7">
-        <p
-          v-motion
-          v-bind="withDelay(fadeUp, 160)"
-          class="text-caption text-medium-emphasis text-uppercase font-weight-bold mb-3"
-        >
-          {{ t('day.guideTitle') }}
-        </p>
+    <v-row :dense="!lgAndUp" class="today-view__row">
+      <!-- 2. Acción principal primero (en móvil va arriba) -->
+      <v-col cols="12" lg="7" order="1" order-lg="2" class="today-view__focus">
+        <p class="today-view__focus-label">{{ t('day.guideTitle') }}</p>
 
         <DayGuideCard
           v-if="current"
@@ -255,18 +213,144 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
           @journal="onJournal"
           @skip="skip"
         />
+      </v-col>
 
-        <v-alert
-          v-if="dash.insights[0] && !lgAndUp"
+      <!-- 3. Progreso e insight secundarios -->
+      <v-col cols="12" lg="5" order="2" order-lg="1" class="today-view__aside">
+        <div
           v-motion
-          v-bind="withDelay(fadeUp, 280)"
-          type="success"
-          class="mt-5"
-          :title="t('dashboard.insight')"
+          v-bind="withDelay(fadeUp, 80)"
+          class="today-progress"
         >
-          {{ t(dash.insights[0].messageKey, dash.insights[0].params || {}) }}
-        </v-alert>
+          <div class="today-progress__top">
+            <span class="today-progress__label">{{ t('day.dayProgress') }}</span>
+            <span class="today-progress__pct">{{ progressPct }}%</span>
+          </div>
+          <v-progress-linear :model-value="progressPct" color="primary" height="8" rounded />
+          <div v-if="chips.length" class="today-progress__chips">
+            <span v-for="chip in chips" :key="chip.key" class="today-progress__chip">
+              {{ chip.label }}
+            </span>
+          </div>
+        </div>
+
+        <p
+          v-if="insightText"
+          v-motion
+          v-bind="withDelay(fadeUp, 120)"
+          class="today-insight"
+        >
+          {{ insightText }}
+        </p>
       </v-col>
     </v-row>
   </div>
 </template>
+
+<style scoped>
+.today-view__header {
+  margin-bottom: 1rem;
+}
+
+.today-view__greeting {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #3d3d3d;
+  margin: 0;
+}
+
+.today-view__meta {
+  margin: 0.35rem 0 0;
+  font-size: 0.8125rem;
+  color: rgba(61, 61, 61, 0.72);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.35rem;
+}
+
+.today-view__dot {
+  opacity: 0.5;
+}
+
+.today-view__focus-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #5e7a5b;
+}
+
+.today-view__aside {
+  margin-top: 0.25rem;
+}
+
+.today-progress {
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: rgba(139, 168, 136, 0.14);
+  border: 1px solid rgba(94, 122, 91, 0.16);
+}
+
+.today-progress__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.45rem;
+}
+
+.today-progress__label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #3d3d3d;
+}
+
+.today-progress__pct {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #5e7a5b;
+}
+
+.today-progress__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.65rem;
+}
+
+.today-progress__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #3d3d3d;
+  border: 1px solid rgba(94, 122, 91, 0.12);
+}
+
+.today-insight {
+  margin: 0.85rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(61, 61, 61, 0.75);
+}
+
+@media (min-width: 1280px) {
+  .today-view__greeting {
+    font-size: 1.75rem;
+  }
+
+  .today-view__header {
+    margin-bottom: 1.25rem;
+  }
+
+  .today-view__aside {
+    margin-top: 1.65rem;
+  }
+}
+</style>

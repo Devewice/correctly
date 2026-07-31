@@ -1,11 +1,17 @@
 <script setup>
 defineProps({
   kind: { type: String, required: true },
+  /** sm = cabecera compacta de la card de guía */
+  size: { type: String, default: 'md' },
 })
 </script>
 
 <template>
-  <div class="guide-icon" :class="`guide-icon--${kind}`" aria-hidden="true">
+  <div
+    class="guide-icon"
+    :class="[`guide-icon--${kind}`, `guide-icon--${size}`]"
+    aria-hidden="true"
+  >
     <template v-if="kind === 'water'">
       <div class="guide-icon__glass">
         <div class="guide-icon__liquid" />
@@ -49,6 +55,26 @@ defineProps({
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+.guide-icon--sm {
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  border-radius: 12px;
+  background: #f5ede3;
+}
+.guide-icon--sm .guide-icon__emoji {
+  font-size: 1.55rem;
+}
+.guide-icon--sm .guide-icon__glass {
+  width: 22px;
+  height: 28px;
+  border-width: 2px;
+}
+.guide-icon--sm .guide-icon__breath {
+  width: 28px;
+  height: 28px;
 }
 .guide-icon__emoji {
   font-size: 2.4rem;

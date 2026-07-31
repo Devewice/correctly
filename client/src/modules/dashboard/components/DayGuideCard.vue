@@ -1,7 +1,7 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { fadeUp, moodHover, softHover, popIn, withDelay } from '@/shared/motion/presets'
+import { fadeUp, moodHover, softHover, withDelay } from '@/shared/motion/presets'
 import { WATER_OPTIONS, glassesFromMl } from '@/shared/utils/water'
 import GuideStepIcon from '@/modules/dashboard/components/GuideStepIcon.vue'
 
@@ -42,6 +42,38 @@ const mealText = ref('')
 const journalText = ref('')
 const selectedMood = ref(null)
 
+const askTitle = computed(() => {
+  const key = props.step.key
+  const map = {
+    mood: 'day.moodAsk',
+    water: 'day.waterAsk',
+    meal: 'day.mealAsk',
+    habit: 'day.habitAsk',
+    sleep: 'day.sleepAsk',
+    meditation: 'day.meditationAsk',
+    activity: 'day.activityAsk',
+    journal: 'day.journalAsk',
+    rest: 'day.restTitle',
+    done: 'day.doneTitle',
+  }
+  return t(map[key] || 'day.doneTitle')
+})
+
+const contextLine = computed(() => {
+  const s = props.step
+  if (s.key === 'water') {
+    return (s.water || 0) > 0
+      ? t('day.waterNow', { glasses: glassesFromMl(s.water) })
+      : t('day.waterNowEmpty')
+  }
+  if (s.key === 'meal') {
+    return t('day.mealHint', { type: t(`meals.types.${s.mealType || props.mealType}`) })
+  }
+  if (s.key === 'done') return t('day.doneHint')
+  if (s.key === 'rest') return t('day.restHint')
+  return ''
+})
+
 watch(
   () => props.step.id,
   () => {
@@ -68,37 +100,43 @@ function saveJournal() {
   emit('journal', journalText.value.trim())
   journalText.value = ''
 }
+
+function pickMood(value) {
+  selectedMood.value = value
+}
 </script>
 
 <template>
   <v-card
     v-motion
-    :initial="{ opacity: 0, y: 28, scale: 0.96 }"
+    :initial="{ opacity: 0, y: 20, scale: 0.98 }"
     :enter="{
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { type: 'spring', stiffness: 140, damping: 16 },
+      transition: { type: 'spring', stiffness: 160, damping: 18 },
     }"
-    class="pa-4 pa-sm-6 day-guide-card"
+    class="day-guide-card"
+    variant="flat"
   >
-    <GuideStepIcon :kind="step.key === 'done' ? 'done' : step.key" />
+    <div class="guide-head">
+      <GuideStepIcon :kind="step.key === 'done' ? 'done' : step.key" size="sm" />
+      <div class="guide-head__text">
+        <h2 class="guide-head__title">{{ askTitle }}</h2>
+        <p v-if="contextLine" class="guide-head__context">{{ contextLine }}</p>
+      </div>
+    </div>
 
     <template v-if="step.key === 'mood'">
-      <div class="text-caption text-primary text-uppercase font-weight-bold mb-2">
-        {{ t('day.stepOf') }}
-      </div>
-      <h2 class="text-h5 font-weight-bold mb-2">{{ t('day.moodAsk') }}</h2>
-      <p class="text-body-2 text-medium-emphasis mb-6">{{ t('day.moodHint') }}</p>
-      <v-row dense class="mb-6">
+      <v-row dense class="mb-3">
         <v-col v-for="(m, i) in moods" :key="m.value" cols="4" sm>
-          <div v-motion v-bind="{ ...moodHover, ...withDelay(fadeUp, 160 + i * 50) }">
+          <div v-motion v-bind="{ ...moodHover, ...withDelay(fadeUp, 80 + i * 40) }">
             <button
               type="button"
               class="mood-tile"
               :class="{ 'mood-tile--selected': selectedMood === m.value }"
               :disabled="busy"
-              @click="selectedMood = m.value"
+              @click="pickMood(m.value)"
             >
               <span class="mood-tile__emoji" aria-hidden="true">{{ m.emoji }}</span>
               <span class="mood-tile__label">{{ t(`mood.labels.${m.key}`) }}</span>
@@ -119,21 +157,9 @@ function saveJournal() {
     </template>
 
     <template v-else-if="step.key === 'water'">
-      <div class="text-caption text-primary text-uppercase font-weight-bold mb-2">
-        {{ t('day.stepOf') }}
-      </div>
-      <h2 class="text-h5 font-weight-bold mb-2">{{ t('day.waterAsk') }}</h2>
-      <p class="text-body-2 text-medium-emphasis mb-2">{{ t('day.waterHint') }}</p>
-      <p class="text-h6 font-weight-bold text-info mb-6">
-        {{
-          (step.water || 0) > 0
-            ? t('day.waterNow', { glasses: glassesFromMl(step.water) })
-            : t('day.waterNowEmpty')
-        }}
-      </p>
-      <v-row dense class="mb-4">
+      <v-row dense class="mb-2">
         <v-col v-for="(opt, i) in WATER_OPTIONS.slice(0, 2)" :key="opt.ml" cols="6">
-          <div v-motion v-bind="{ ...softHover, ...withDelay(fadeUp, 200 + i * 70) }">
+          <div v-motion v-bind="{ ...softHover, ...withDelay(fadeUp, 80 + i * 50) }">
             <v-btn
               block
               color="info"
@@ -147,74 +173,57 @@ function saveJournal() {
           </div>
         </v-col>
       </v-row>
-      <v-btn variant="text" block @click="emit('skip')">{{ t('day.skip') }}</v-btn>
+      <v-btn variant="text" block class="guide-skip" @click="emit('skip')">
+        {{ t('day.skip') }}
+      </v-btn>
     </template>
 
     <template v-else-if="step.key === 'meal'">
-      <div class="text-caption text-primary text-uppercase font-weight-bold mb-2">
-        {{ t('day.stepOf') }}
-      </div>
-      <h2 class="text-h5 font-weight-bold mb-2">{{ t('day.mealAsk') }}</h2>
-      <p class="text-body-2 text-medium-emphasis mb-4">
-        {{ t('day.mealHint', { type: t(`meals.types.${step.mealType || mealType}`) }) }}
-      </p>
       <v-text-field
         v-model="mealText"
         :label="t('meals.description')"
         autofocus
-        class="mb-4"
+        class="mb-3"
         @keyup.enter="saveMeal"
       />
       <v-btn
         block
         color="primary"
         size="large"
-        class="mb-2"
+        class="mb-1"
         :disabled="!mealText.trim()"
         :loading="busy"
         @click="saveMeal"
       >
         {{ t('day.continue') }}
       </v-btn>
-      <v-btn variant="text" block @click="emit('skip')">{{ t('day.skip') }}</v-btn>
+      <v-btn variant="text" block class="guide-skip" @click="emit('skip')">
+        {{ t('day.skip') }}
+      </v-btn>
     </template>
 
     <template v-else-if="step.key === 'habit'">
-      <div class="text-caption text-primary text-uppercase font-weight-bold mb-2">
-        {{ t('day.stepOf') }}
+      <div class="habit-focus mb-3">
+        <span class="habit-focus__icon" aria-hidden="true">{{ step.habit.icon }}</span>
+        <span class="habit-focus__name">{{ step.habit.name }}</span>
       </div>
-      <h2 class="text-h5 font-weight-bold mb-2">{{ t('day.habitAsk') }}</h2>
-      <p class="text-body-2 text-medium-emphasis mb-6">{{ t('day.habitHint') }}</p>
-      <v-card
-        v-motion
-        v-bind="{ ...softHover, ...withDelay(popIn, 160) }"
-        color="surface-light"
-        variant="flat"
-        class="pa-5 mb-6 text-center"
-      >
-        <div class="text-h3 mb-2">{{ step.habit.icon }}</div>
-        <div class="text-h6 font-weight-bold">{{ step.habit.name }}</div>
-      </v-card>
       <v-btn
         block
         color="success"
         size="large"
-        class="mb-2"
+        class="mb-1"
         :loading="busy"
         @click="emit('habit', step.habit)"
       >
         {{ t('day.habitDone') }}
       </v-btn>
-      <v-btn variant="text" block @click="emit('skip')">{{ t('day.skip') }}</v-btn>
+      <v-btn variant="text" block class="guide-skip" @click="emit('skip')">
+        {{ t('day.skip') }}
+      </v-btn>
     </template>
 
     <template v-else-if="step.key === 'sleep'">
-      <div class="text-caption text-primary text-uppercase font-weight-bold mb-2">
-        {{ t('day.stepOf') }}
-      </div>
-      <h2 class="text-h5 font-weight-bold mb-2">{{ t('day.sleepAsk') }}</h2>
-      <p class="text-body-2 text-medium-emphasis mb-6">{{ t('day.sleepHint') }}</p>
-      <v-row dense class="mb-4">
+      <v-row dense class="mb-2">
         <v-col v-for="opt in sleepOpts" :key="opt.key" cols="4">
           <button
             type="button"
@@ -229,113 +238,163 @@ function saveJournal() {
           </button>
         </v-col>
       </v-row>
-      <v-btn variant="text" block @click="emit('skip')">{{ t('day.skip') }}</v-btn>
+      <v-btn variant="text" block class="guide-skip" @click="emit('skip')">
+        {{ t('day.skip') }}
+      </v-btn>
     </template>
 
     <template v-else-if="step.key === 'meditation'">
-      <div class="text-caption text-primary text-uppercase font-weight-bold mb-2">
-        {{ t('day.stepOf') }}
-      </div>
-      <h2 class="text-h5 font-weight-bold mb-2">{{ t('day.meditationAsk') }}</h2>
-      <p class="text-body-2 text-medium-emphasis mb-6">{{ t('day.meditationHint') }}</p>
       <v-btn
         block
         color="primary"
         size="large"
-        class="mb-2"
+        class="mb-1"
         :loading="busy"
         @click="emit('meditation', 3)"
       >
         {{ t('day.meditationQuick') }}
       </v-btn>
-      <v-btn variant="text" block to="/meditation">{{ t('day.meditationOpen') }}</v-btn>
-      <v-btn variant="text" block @click="emit('skip')">{{ t('day.skip') }}</v-btn>
+      <div class="guide-actions">
+        <v-btn variant="text" size="small" to="/meditation">{{ t('day.meditationOpen') }}</v-btn>
+        <v-btn variant="text" size="small" class="guide-skip" @click="emit('skip')">
+          {{ t('day.skip') }}
+        </v-btn>
+      </div>
     </template>
 
     <template v-else-if="step.key === 'activity'">
-      <div class="text-caption text-primary text-uppercase font-weight-bold mb-2">
-        {{ t('day.stepOf') }}
-      </div>
-      <h2 class="text-h5 font-weight-bold mb-2">{{ t('day.activityAsk') }}</h2>
-      <p class="text-body-2 text-medium-emphasis mb-6">{{ t('day.activityHint') }}</p>
       <v-btn
         block
         color="primary"
         size="large"
-        class="mb-2"
+        class="mb-1"
         :loading="busy"
         @click="emit('activity', { type: 'walk', duration: 15, intensity: 'light' })"
       >
         {{ t('day.activityQuick') }}
       </v-btn>
-      <v-btn variant="text" block to="/activity">{{ t('day.activityOpen') }}</v-btn>
-      <v-btn variant="text" block @click="emit('skip')">{{ t('day.skip') }}</v-btn>
+      <div class="guide-actions">
+        <v-btn variant="text" size="small" to="/activity">{{ t('day.activityOpen') }}</v-btn>
+        <v-btn variant="text" size="small" class="guide-skip" @click="emit('skip')">
+          {{ t('day.skip') }}
+        </v-btn>
+      </div>
     </template>
 
     <template v-else-if="step.key === 'journal'">
-      <div class="text-caption text-primary text-uppercase font-weight-bold mb-2">
-        {{ t('day.stepOf') }}
-      </div>
-      <h2 class="text-h5 font-weight-bold mb-2">{{ t('day.journalAsk') }}</h2>
-      <p class="text-body-2 text-medium-emphasis mb-4">{{ t('day.journalHint') }}</p>
       <v-textarea
         v-model="journalText"
-        rows="3"
+        rows="2"
         auto-grow
         :label="t('journal.line')"
-        class="mb-4"
+        class="mb-3"
       />
       <v-btn
         block
         color="primary"
         size="large"
-        class="mb-2"
+        class="mb-1"
         :disabled="!journalText.trim()"
         :loading="busy"
         @click="saveJournal"
       >
         {{ t('day.continue') }}
       </v-btn>
-      <v-btn variant="text" block @click="emit('skip')">{{ t('day.skip') }}</v-btn>
+      <v-btn variant="text" block class="guide-skip" @click="emit('skip')">
+        {{ t('day.skip') }}
+      </v-btn>
     </template>
 
     <template v-else-if="step.key === 'rest'">
-      <h2 class="text-h5 font-weight-bold mb-2 text-center">{{ t('day.restTitle') }}</h2>
-      <p class="text-body-2 text-medium-emphasis mb-6 text-center">{{ t('day.restHint') }}</p>
       <v-btn color="primary" variant="tonal" block to="/sleep">{{ t('day.seeSleep') }}</v-btn>
     </template>
 
     <template v-else>
-      <div class="text-center py-2">
-        <h2 class="text-h5 font-weight-bold mb-2">{{ t('day.doneTitle') }}</h2>
-        <p class="text-body-2 text-medium-emphasis mb-6">{{ t('day.doneHint') }}</p>
-        <v-btn color="primary" variant="tonal" to="/stats" prepend-icon="mdi-chart-bar">
-          {{ t('day.seeStats') }}
-        </v-btn>
-      </div>
+      <v-btn color="primary" variant="tonal" block to="/stats" prepend-icon="mdi-chart-bar">
+        {{ t('day.seeStats') }}
+      </v-btn>
     </template>
   </v-card>
 </template>
 
 <style scoped>
+.day-guide-card {
+  padding: 1rem 1.1rem 1.1rem;
+  border: 1px solid rgba(94, 122, 91, 0.2) !important;
+  background: #fff !important;
+  box-shadow: 0 8px 28px rgba(61, 61, 61, 0.06) !important;
+}
+
+.guide-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.guide-head__title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #3d3d3d;
+}
+
+.guide-head__context {
+  margin: 0.3rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  color: rgba(61, 61, 61, 0.72);
+}
+
+.habit-focus {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  background: #f5ede3;
+  border: 1px solid rgba(94, 122, 91, 0.14);
+}
+
+.habit-focus__icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.habit-focus__name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #3d3d3d;
+}
+
+.guide-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.guide-skip {
+  color: rgba(61, 61, 61, 0.65) !important;
+}
+
 .mood-tile {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
   width: 100%;
-  min-height: 5.5rem;
-  padding: 0.75rem 0.4rem;
+  min-height: 4.75rem;
+  padding: 0.55rem 0.3rem;
   border: 2px solid #e4d9cb;
-  border-radius: 1rem;
+  border-radius: 0.9rem;
   background: #f5ede3;
   color: #3d3d3d;
   cursor: pointer;
   transition:
     border-color 0.15s ease,
-    background 0.15s ease,
-    transform 0.15s ease;
+    background 0.15s ease;
 }
 
 .mood-tile:hover:not(:disabled) {
@@ -355,25 +414,33 @@ function saveJournal() {
 }
 
 .mood-tile__emoji {
-  font-size: 2rem;
+  font-size: 1.75rem;
   line-height: 1.1;
 }
 
 .mood-tile__label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.15;
   color: #3d3d3d;
   text-align: center;
 }
 
 @media (min-width: 600px) {
+  .day-guide-card {
+    padding: 1.25rem 1.35rem 1.35rem;
+  }
+
+  .guide-head__title {
+    font-size: 1.35rem;
+  }
+
   .mood-tile {
-    min-height: 6.25rem;
+    min-height: 5.25rem;
   }
 
   .mood-tile__emoji {
-    font-size: 2.35rem;
+    font-size: 2rem;
   }
 }
 </style>
