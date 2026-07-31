@@ -23,6 +23,22 @@ body {
   font-family: 'DM Sans', system-ui, sans-serif !important;
 }
 
+/* Alertas info/success más legibles en móvil (sin “banner gigante”) */
+.v-alert {
+  --v-activated-opacity: 0.08;
+}
+.v-alert .v-alert__content {
+  color: inherit;
+}
+.v-alert.text-info,
+.v-alert.bg-info,
+.v-alert--variant-tonal.v-alert--type-info {
+  color: #1f5f7a !important;
+}
+.v-alert--variant-tonal.v-alert--type-info {
+  background: rgba(47, 127, 163, 0.14) !important;
+}
+
 .v-application .text-h1,
 .v-application .text-h2,
 .v-application .text-h3,

@@ -140,7 +140,7 @@ function typeTitle(type) {
 
   <InstallAppCard />
 
-  <v-alert type="info" variant="tonal" class="mb-4">
+  <v-alert type="info" variant="tonal" density="compact" class="mb-4">
     {{ t('reminders.webHint') }}
   </v-alert>
 
@@ -167,10 +167,10 @@ function typeTitle(type) {
     </v-btn>
   </v-card>
 
-  <v-card class="pa-5 mb-4" variant="tonal" color="primary">
+  <v-card class="pa-4 mb-4 reminders-push-card" variant="flat">
     <div class="text-subtitle-1 font-weight-bold mb-1">{{ t('reminders.pushTitle') }}</div>
-    <p class="text-body-2 text-medium-emphasis mb-3">{{ pushLabel }}</p>
-    <p class="text-caption text-medium-emphasis mb-3">{{ t('reminders.pushHint') }}</p>
+    <p class="text-body-2 mb-2">{{ pushLabel }}</p>
+    <p class="text-caption mb-3 reminders-push-card__hint">{{ t('reminders.pushHint') }}</p>
     <div class="d-flex flex-wrap ga-2">
       <v-btn
         color="primary"
@@ -302,3 +302,14 @@ function typeTitle(type) {
     </div>
   </v-card>
 </template>
+
+<style scoped>
+.reminders-push-card {
+  background: #e4efe3 !important;
+  color: #3d3d3d !important;
+  border: 1px solid rgba(94, 122, 91, 0.22) !important;
+}
+.reminders-push-card__hint {
+  color: rgba(61, 61, 61, 0.72) !important;
+}
+</style>

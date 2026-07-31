@@ -277,14 +277,15 @@ async function logout() {
             }"
           >
             <v-card
-              variant="tonal"
-              color="surface-light"
-              class="pa-3 h-100"
+              variant="flat"
+              class="pa-3 h-100 more-tile"
               @click="go(item.to)"
             >
               <v-icon :icon="item.icon" color="primary" class="mb-1" />
-              <div class="text-subtitle-2 font-weight-bold">{{ item.title }}</div>
-              <div class="text-caption text-medium-emphasis text-truncate d-none d-sm-block">
+              <div class="text-subtitle-2 font-weight-bold more-tile__title">
+                {{ item.title }}
+              </div>
+              <div class="text-caption more-tile__hint text-truncate d-none d-sm-block">
                 {{ item.hint }}
               </div>
             </v-card>
@@ -309,5 +310,17 @@ async function logout() {
   padding-bottom: max(24px, env(safe-area-inset-bottom)) !important;
   max-height: min(85dvh, 720px);
   overflow-y: auto;
+}
+.more-tile {
+  background: #efe6da !important;
+  color: #3d3d3d !important;
+  border: 1px solid rgba(94, 122, 91, 0.18) !important;
+  box-shadow: none !important;
+}
+.more-tile__title {
+  color: #3d3d3d !important;
+}
+.more-tile__hint {
+  color: rgba(61, 61, 61, 0.72) !important;
 }
 </style>

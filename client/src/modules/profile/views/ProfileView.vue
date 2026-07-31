@@ -74,7 +74,7 @@ async function save() {
     </v-form>
   </v-card>
 
-  <v-card class="pa-4" variant="tonal" color="surface-light">
+  <v-card class="pa-4" variant="flat" color="surface-light">
     <div class="text-body-2">{{ auth.user?.email }}</div>
     <div class="text-caption text-medium-emphasis">
       XP: {{ auth.user?.stats?.totalXP || 0 }} · Level {{ auth.user?.stats?.level || 1 }}

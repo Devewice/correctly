@@ -124,15 +124,14 @@ const alertType = computed(() => {
     v-if="primary && open"
     :type="alertType"
     variant="tonal"
-    class="mb-4"
-    prominent
-    density="comfortable"
+    class="mb-3 health-banner"
+    density="compact"
   >
-    <div class="text-subtitle-2 font-weight-bold mb-1">
+    <div class="text-body-2 font-weight-bold mb-1">
       {{ titleFor(primary.id) }}
     </div>
-    <div class="text-body-2 mb-2">{{ bodyFor(primary.id) }}</div>
-    <div v-if="moreCount" class="text-caption text-medium-emphasis mb-3">
+    <div class="text-caption mb-2 health-banner__body">{{ bodyFor(primary.id) }}</div>
+    <div v-if="moreCount" class="text-caption text-medium-emphasis mb-2">
       {{ t('health.moreIssues', { n: moreCount }) }}
     </div>
     <div class="d-flex flex-wrap ga-2">
@@ -154,3 +153,14 @@ const alertType = computed(() => {
     </div>
   </v-alert>
 </template>
+
+<style scoped>
+.health-banner :deep(.v-alert__content) {
+  min-width: 0;
+}
+.health-banner__body {
+  line-height: 1.35;
+  color: inherit;
+  opacity: 0.92;
+}
+</style>
