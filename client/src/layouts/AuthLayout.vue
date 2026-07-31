@@ -1,21 +1,57 @@
 <script setup>
 import { RouterView } from 'vue-router'
+import { withDelay, fadeIn, popIn } from '@/shared/motion/presets'
 </script>
 
 <template>
   <v-main class="auth-main">
     <div class="auth-bg" aria-hidden="true">
-      <div class="auth-sun" />
-      <div class="auth-orb auth-orb--sage" />
-      <div class="auth-orb auth-orb--peach" />
-      <div class="auth-orb auth-orb--sky" />
-      <div class="auth-orb auth-orb--lavender" />
+      <div
+        v-motion
+        v-bind="withDelay(fadeIn, 0)"
+        class="auth-sun"
+      />
+      <div
+        v-motion
+        v-bind="withDelay(popIn, 80)"
+        class="auth-orb auth-orb--sage"
+      />
+      <div
+        v-motion
+        v-bind="withDelay(popIn, 160)"
+        class="auth-orb auth-orb--peach"
+      />
+      <div
+        v-motion
+        v-bind="withDelay(popIn, 240)"
+        class="auth-orb auth-orb--sky"
+      />
+      <div
+        v-motion
+        v-bind="withDelay(popIn, 320)"
+        class="auth-orb auth-orb--lavender"
+      />
       <div class="auth-haze" />
-      <div class="auth-hills" />
+      <div
+        v-motion
+        :initial="{ opacity: 0, y: 40 }"
+        :enter="{ opacity: 1, y: 0, transition: { duration: 900, delay: 200 } }"
+        class="auth-hills"
+      />
     </div>
 
     <div class="auth-center">
-      <div class="auth-panel">
+      <div
+        v-motion
+        :initial="{ opacity: 0, y: 28, scale: 0.97 }"
+        :enter="{
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          transition: { type: 'spring', stiffness: 110, damping: 16, delay: 180 },
+        }"
+        class="auth-panel"
+      >
         <RouterView />
       </div>
     </div>

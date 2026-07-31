@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
 import BrandLogo from '@/shared/components/BrandLogo.vue'
+import { fadeUp, softHover, withDelay } from '@/shared/motion/presets'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -77,22 +78,43 @@ async function logout() {
 
   <v-bottom-sheet v-model="moreOpen" inset>
     <v-card class="pa-4 pb-8">
-      <div class="text-h6 font-weight-bold mb-1">{{ t('day.moreTitle') }}</div>
-      <p class="text-body-2 text-medium-emphasis mb-4">{{ t('day.moreSubtitle') }}</p>
+      <div
+        v-motion
+        v-bind="withDelay(fadeUp, 40)"
+        class="text-h6 font-weight-bold mb-1"
+      >
+        {{ t('day.moreTitle') }}
+      </div>
+      <p
+        v-motion
+        v-bind="withDelay(fadeUp, 90)"
+        class="text-body-2 text-medium-emphasis mb-4"
+      >
+        {{ t('day.moreSubtitle') }}
+      </p>
       <v-row dense>
-        <v-col v-for="item in moreItems" :key="item.to" cols="6">
-          <v-card
-            variant="tonal"
-            color="surface-light"
-            class="pa-3 h-100"
-            @click="go(item.to)"
+        <v-col v-for="(item, i) in moreItems" :key="item.to" cols="6">
+          <div
+            v-motion
+            v-bind="{
+              ...softHover,
+              ...withDelay(fadeUp, 120 + i * 40),
+            }"
           >
-            <v-icon :icon="item.icon" color="primary" class="mb-2" />
-            <div class="text-subtitle-2 font-weight-bold">{{ item.title }}</div>
-            <div class="text-caption text-medium-emphasis">{{ item.hint }}</div>
-          </v-card>
+            <v-card
+              variant="tonal"
+              color="surface-light"
+              class="pa-3 h-100"
+              @click="go(item.to)"
+            >
+              <v-icon :icon="item.icon" color="primary" class="mb-2" />
+              <div class="text-subtitle-2 font-weight-bold">{{ item.title }}</div>
+              <div class="text-caption text-medium-emphasis">{{ item.hint }}</div>
+            </v-card>
+          </div>
         </v-col>
       </v-row>
     </v-card>
   </v-bottom-sheet>
 </template>
+

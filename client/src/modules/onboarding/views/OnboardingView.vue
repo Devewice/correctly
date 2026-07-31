@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
 import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
 import { setLocale } from '@/plugins/i18n'
+import { fadeUp, softHover, withDelay } from '@/shared/motion/presets'
 
 const { t, locale } = useI18n()
 const auth = useAuthStore()
@@ -61,14 +62,29 @@ async function finish() {
   <v-container class="fill-height py-10" style="max-width: 520px">
     <v-card
       v-motion
-      :initial="{ opacity: 0, y: 16 }"
-      :enter="{ opacity: 1, y: 0 }"
+      :initial="{ opacity: 0, y: 28, scale: 0.97 }"
+      :enter="{
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: { type: 'spring', stiffness: 120, damping: 16 },
+      }"
       class="pa-6 pa-sm-8 w-100"
     >
-      <div class="text-caption text-primary text-uppercase font-weight-bold">
+      <div
+        v-motion
+        v-bind="withDelay(fadeUp, 60)"
+        class="text-caption text-primary text-uppercase font-weight-bold"
+      >
         {{ t('app.name') }}
       </div>
-      <h1 class="text-h4 font-weight-bold mt-2">{{ t('onboarding.welcome') }}</h1>
+      <h1
+        v-motion
+        v-bind="withDelay(fadeUp, 120)"
+        class="text-h4 font-weight-bold mt-2"
+      >
+        {{ t('onboarding.welcome') }}
+      </h1>
 
       <v-window v-model="step" class="mt-6">
         <v-window-item :value="0">

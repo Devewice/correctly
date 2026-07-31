@@ -6,6 +6,7 @@ import { useDashboardStore } from '@/modules/dashboard/stores/useDashboardStore'
 import { useDayGuide } from '@/modules/dashboard/composables/useDayGuide'
 import { api } from '@/shared/api/client'
 import DayGuideCard from '@/modules/dashboard/components/DayGuideCard.vue'
+import { fadeUp, withDelay } from '@/shared/motion/presets'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -90,7 +91,11 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   </div>
 
   <div v-else-if="dash.today" class="pb-8">
-    <header class="mb-5">
+    <header
+      v-motion
+      v-bind="withDelay(fadeUp, 0)"
+      class="mb-5"
+    >
       <p class="text-body-2 text-medium-emphasis mb-1">{{ t('day.todayLabel') }}</p>
       <h1 class="text-h4 font-weight-bold">{{ greeting }}</h1>
       <p class="text-body-2 text-medium-emphasis mt-1">
@@ -98,36 +103,62 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
       </p>
     </header>
 
-    <v-card class="pa-4 mb-5" variant="tonal" color="primary">
+    <v-card
+      v-motion
+      v-bind="withDelay(fadeUp, 100)"
+      class="pa-4 mb-5"
+      variant="tonal"
+      color="primary"
+    >
       <div class="d-flex align-center justify-space-between mb-2">
         <span class="text-body-2 font-weight-medium">{{ t('day.dayProgress') }}</span>
         <span class="text-h6 font-weight-bold">{{ progressPct }}%</span>
       </div>
       <v-progress-linear :model-value="progressPct" color="primary" height="10" />
       <div class="d-flex flex-wrap ga-2 mt-3">
-        <v-chip size="small" label variant="flat" color="surface">
-          {{
-            dash.today.summary.latestMood
-              ? moodEmoji[dash.today.summary.latestMood.mood]
-              : t('day.chipMoodPending')
-          }}
-          {{ t('dashboard.mood') }}
-        </v-chip>
-        <v-chip size="small" label variant="flat" color="surface">
-          {{ Math.round((dash.today.summary.waterMl || 0) / 10) / 100 }}L · {{ t('dashboard.water') }}
-        </v-chip>
-        <v-chip size="small" label variant="flat" color="surface">
-          {{ dash.today.summary.mealsCount || 0 }} · {{ t('dashboard.meals') }}
+        <v-chip
+          v-for="(chip, i) in [
+            {
+              key: 'mood',
+              label: `${
+                dash.today.summary.latestMood
+                  ? moodEmoji[dash.today.summary.latestMood.mood]
+                  : t('day.chipMoodPending')
+              } ${t('dashboard.mood')}`,
+            },
+            {
+              key: 'water',
+              label: `${Math.round((dash.today.summary.waterMl || 0) / 10) / 100}L · ${t('dashboard.water')}`,
+            },
+            {
+              key: 'meals',
+              label: `${dash.today.summary.mealsCount || 0} · ${t('dashboard.meals')}`,
+            },
+          ]"
+          :key="chip.key"
+          v-motion
+          v-bind="withDelay(fadeUp, 180 + i * 60)"
+          size="small"
+          label
+          variant="flat"
+          color="surface"
+        >
+          {{ chip.label }}
         </v-chip>
       </div>
     </v-card>
 
-    <p class="text-caption text-medium-emphasis text-uppercase font-weight-bold mb-3">
+    <p
+      v-motion
+      v-bind="withDelay(fadeUp, 220)"
+      class="text-caption text-medium-emphasis text-uppercase font-weight-bold mb-3"
+    >
       {{ t('day.guideTitle') }}
     </p>
 
     <DayGuideCard
       v-if="current"
+      :key="current.id"
       :step="current"
       :meal-type="suggestedMealType"
       :busy="busy"
@@ -140,6 +171,8 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
 
     <v-alert
       v-if="dash.insights[0]"
+      v-motion
+      v-bind="withDelay(fadeUp, 280)"
       type="success"
       class="mt-5"
       :title="t('dashboard.insight')"
