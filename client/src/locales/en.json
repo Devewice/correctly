@@ -21,8 +21,7 @@
     "title": "Welcome to Correctly",
     "subtitle": "Your daily wellness, in one place.",
     "google": "Continue with Google",
-    "dev": "Enter demo mode",
-    "googleUnavailable": "Google OAuth is not configured yet. Use demo mode."
+    "googleUnavailable": "Google sign-in is not configured yet. Please try again later."
   },
   "admin": {
     "badge": "Admin",

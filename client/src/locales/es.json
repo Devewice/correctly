@@ -21,8 +21,7 @@
     "title": "Bienvenido a Correctly",
     "subtitle": "Tu bienestar diario, en un solo lugar.",
     "google": "Continuar con Google",
-    "dev": "Entrar en modo demo",
-    "googleUnavailable": "Google OAuth aún no está configurado. Usa el modo demo."
+    "googleUnavailable": "El inicio con Google aún no está configurado. Vuelve en un momento."
   },
   "admin": {
     "badge": "Admin",

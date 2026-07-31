@@ -4,11 +4,15 @@ defineProps({
   variant: { type: String, default: 'full' },
   size: { type: [Number, String], default: 40 },
   dark: { type: Boolean, default: false },
+  stacked: { type: Boolean, default: false },
 })
 </script>
 
 <template>
-  <div class="brand-logo d-inline-flex align-center ga-3" :class="{ 'brand-logo--dark': dark }">
+  <div
+    class="brand-logo d-inline-flex align-center ga-3"
+    :class="{ 'brand-logo--dark': dark, 'brand-logo--stacked': stacked }"
+  >
     <svg
       class="brand-logo__mark"
       :width="size"
@@ -62,4 +66,10 @@ defineProps({
 .brand-logo--dark .brand-logo__tagline {
   color: rgba(250, 248, 245, 0.7);
 }
+.brand-logo--stacked {
+  flex-direction: column;
+  text-align: center;
+  gap: 12px;
+}
 </style>
+

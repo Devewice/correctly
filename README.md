@@ -9,8 +9,8 @@ Sistema integral de seguimiento de bienestar diario.
 ## Stack
 
 - **Backend:** Node.js + Express + MySQL (Hostinger) + Prisma
-- **Frontend:** Vue 3 + Vite + Tailwind + Motion + vue-i18n
-- **Auth:** Google OAuth 2.0 (+ login demo en desarrollo)
+- **Frontend:** Vue 3 + Vite + Vuetify + Motion + vue-i18n
+- **Auth:** Google OAuth 2.0
 - **i18n:** ES / EN / PT
 
 ## Arranque local
@@ -32,9 +32,7 @@ npm run dev
 - Front: http://localhost:5173  
 - API: http://localhost:3000/api/health  
 
-Sin Google OAuth configurado, usa **Entrar en modo demo** en el login.
-
-### Google OAuth (opcional)
+### Google OAuth (requerido para entrar)
 
 En `server/.env`:
 

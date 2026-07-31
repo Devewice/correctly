@@ -65,15 +65,11 @@ export async function saveGoogleConfig(data, updatedBy) {
 
 export async function getPublicAuthFlags() {
   const google = await getGoogleConfig()
-  const allowDemo =
-    (await getSetting(KEYS.allowDemoLogin, '')) === 'true' ||
-    env.nodeEnv !== 'production' ||
-    process.env.ALLOW_DEMO_LOGIN === 'true'
 
   return {
     googleConfigured: google.configured,
     googleWizardDone: google.wizardDone,
-    devLogin: allowDemo,
+    devLogin: false,
     callbackUrl: google.callbackUrl,
   }
 }

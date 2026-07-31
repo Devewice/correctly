@@ -6,7 +6,7 @@ import { setLocale } from '@/plugins/i18n'
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
   const loading = ref(true)
-  const authStatus = ref({ googleConfigured: false, devLogin: true })
+  const authStatus = ref({ googleConfigured: false, devLogin: false })
 
   const isAuthenticated = computed(() => !!user.value)
 
@@ -32,14 +32,6 @@ export const useAuthStore = defineStore('auth', () => {
     } finally {
       loading.value = false
     }
-  }
-
-  async function devLogin(payload = {}) {
-    const data = await api('/auth/dev-login', { method: 'POST', body: payload })
-    setToken(data.token)
-    user.value = data.user
-    if (data.user?.language) setLocale(data.user.language)
-    return data.user
   }
 
   async function logout() {
@@ -69,7 +61,6 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated,
     fetchStatus,
     fetchMe,
-    devLogin,
     logout,
     bootstrapFromUrl,
   }

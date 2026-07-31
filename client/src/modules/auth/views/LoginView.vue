@@ -1,6 +1,5 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
 import { setLocale } from '@/plugins/i18n'
@@ -8,48 +7,35 @@ import BrandLogo from '@/shared/components/BrandLogo.vue'
 
 const { t, locale } = useI18n()
 const auth = useAuthStore()
-const router = useRouter()
-const busy = ref(false)
 const error = ref('')
 
 onMounted(() => {
   auth.fetchStatus()
 })
 
-async function demoLogin() {
-  busy.value = true
-  error.value = ''
-  try {
-    const user = await auth.devLogin({ language: locale.value })
-    router.push(user.onboardingCompleted ? '/dashboard' : '/onboarding')
-  } catch (e) {
-    error.value = e.message || t('common.error')
-  } finally {
-    busy.value = false
-  }
-}
-
 function googleLogin() {
+  if (!auth.authStatus.googleConfigured) {
+    error.value = t('login.googleUnavailable')
+    return
+  }
   window.location.href = '/api/auth/google'
 }
 </script>
 
 <template>
-  <v-card class="pa-6 pa-sm-8">
+  <v-card class="login-card pa-8 text-center" elevation="0">
     <div class="d-flex justify-center mb-6">
-      <BrandLogo :size="56">
+      <BrandLogo :size="64" stacked>
         <template #tagline>
-          <div class="brand-logo__tagline">{{ t('app.tagline') }}</div>
+          <div class="login-tagline">{{ t('app.tagline') }}</div>
         </template>
       </BrandLogo>
     </div>
 
-    <div class="text-center mb-6">
-      <div class="text-h6 font-weight-bold">{{ t('login.title') }}</div>
-      <div class="text-body-2 text-medium-emphasis mt-1">{{ t('login.subtitle') }}</div>
-    </div>
+    <h1 class="text-h5 font-weight-bold mb-2">{{ t('login.title') }}</h1>
+    <p class="text-body-2 text-medium-emphasis mb-6">{{ t('login.subtitle') }}</p>
 
-    <div class="d-flex justify-center ga-2 mb-6">
+    <div class="d-flex justify-center ga-2 mb-8">
       <v-chip
         v-for="lang in ['es', 'en', 'pt']"
         :key="lang"
@@ -65,9 +51,8 @@ function googleLogin() {
 
     <v-btn
       block
-      color="on-surface"
-      class="mb-3"
-      size="large"
+      color="primary"
+      size="x-large"
       :disabled="!auth.authStatus.googleConfigured"
       @click="googleLogin"
     >
@@ -77,34 +62,30 @@ function googleLogin() {
 
     <p
       v-if="!auth.authStatus.googleConfigured"
-      class="text-caption text-medium-emphasis text-center mb-4"
+      class="text-caption text-medium-emphasis mt-4"
     >
       {{ t('login.googleUnavailable') }}
     </p>
 
-    <v-btn
-      v-if="auth.authStatus.devLogin"
-      block
-      color="primary"
-      size="large"
-      class="mb-3"
-      :loading="busy"
-      @click="demoLogin"
-    >
-      {{ t('login.dev') }}
-    </v-btn>
-
-    <v-alert v-if="error" type="error" class="mt-4" density="compact">
+    <v-alert v-if="error" type="error" class="mt-4 text-left" density="compact">
       {{ error }}
     </v-alert>
   </v-card>
 </template>
 
 <style scoped>
-.brand-logo__tagline {
-  font-size: 0.8rem;
-  color: rgba(61, 61, 61, 0.65);
-  margin-top: 4px;
-  max-width: 220px;
+.login-card {
+  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.82) !important;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 18px 50px rgba(94, 122, 91, 0.12);
+}
+
+.login-tagline {
+  font-size: 0.85rem;
+  color: rgba(61, 61, 61, 0.7);
+  margin-top: 2px;
+  max-width: 260px;
+  line-height: 1.35;
 }
 </style>

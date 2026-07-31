@@ -1,7 +1,6 @@
 import { Router } from 'express'
 import passport from 'passport'
 import { env } from '../config/env.js'
-import { prisma } from '../config/database.js'
 import {
   clearAuthCookie,
   requireAuth,
@@ -13,7 +12,6 @@ import {
   refreshGoogleStrategy,
 } from '../config/passport.js'
 import { getPublicAuthFlags } from '../services/settings.js'
-import { ROLES, matchesSuperAdminIdentity } from '../services/roles.js'
 
 const router = Router()
 
@@ -22,7 +20,7 @@ router.get('/google', async (req, res, next) => {
   if (!ok && !(await isGoogleAuthConfigured())) {
     return res.status(503).json({
       error: 'Google OAuth no configurado',
-      hint: 'El superadmin debe completarlo en /admin (wizard Google)',
+      hint: 'Configura Google OAuth en el panel admin o variables de entorno',
     })
   }
   return passport.authenticate('google', {
@@ -50,44 +48,6 @@ router.get(
     res.redirect(`${env.clientUrl}/${dest}?token=${token}`)
   },
 )
-
-router.post('/dev-login', async (req, res) => {
-  const flags = await getPublicAuthFlags()
-  if (!flags.devLogin) {
-    return res.status(404).json({ error: 'Not found' })
-  }
-
-  // Usuario demo normal — nunca eleva a superadmin.
-  const email = (req.body?.email || 'user@correctly.app').toLowerCase()
-  const name = req.body?.name || 'Demo Correctly'
-
-  if (matchesSuperAdminIdentity({ email })) {
-    return res.status(400).json({ error: 'Cuenta no permitida en login demo' })
-  }
-
-  let user = await prisma.user.findUnique({ where: { email } })
-  if (!user) {
-    user = await prisma.user.create({
-      data: {
-        email,
-        name,
-        language: req.body?.language || 'es',
-        role: ROLES.USER,
-        stats: { create: {} },
-      },
-    })
-  } else {
-    await prisma.userStats.upsert({
-      where: { userId: user.id },
-      create: { userId: user.id },
-      update: {},
-    })
-  }
-
-  const token = signToken(user)
-  setAuthCookie(res, token)
-  res.json({ token, user })
-})
 
 router.post('/logout', (_req, res) => {
   clearAuthCookie(res)

@@ -56,7 +56,6 @@ No hace falta el `RewriteRule ^ index.html` si Passenger apunta a `/` — lo res
 ```env
 NODE_ENV=production
 CLIENT_URL=https://jeisson.click
-ALLOW_DEMO_LOGIN=true
 DATABASE_HOST=localhost
 DATABASE_NAME=u301973293_correctly
 DATABASE_USER=u301973293_admin
