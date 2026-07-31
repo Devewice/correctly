@@ -1,10 +1,11 @@
 /* Correctly — PWA + Web Push */
+const CACHE = 'correctly-shell-v2'
 const SHELL = ['/', '/dashboard', '/manifest.webmanifest', '/favicon.svg', '/icon-192.png']
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
-      .open('correctly-shell-v1')
+      .open(CACHE)
       .then((cache) => cache.addAll(SHELL).catch(() => undefined))
       .then(() => self.skipWaiting()),
   )
@@ -15,7 +16,7 @@ self.addEventListener('activate', (event) => {
     caches
       .keys()
       .then((keys) =>
-        Promise.all(keys.filter((k) => k !== 'correctly-shell-v1').map((k) => caches.delete(k))),
+        Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))),
       )
       .then(() => self.clients.claim()),
   )
@@ -37,7 +38,7 @@ self.addEventListener('fetch', (event) => {
         // Cachear navegación HTML básica para abrir offline suave
         if (request.mode === 'navigate' && response.ok) {
           const copy = response.clone()
-          caches.open('correctly-shell-v1').then((c) => c.put('/dashboard', copy)).catch(() => {})
+          caches.open(CACHE).then((c) => c.put('/dashboard', copy)).catch(() => {})
         }
         return response
       })
