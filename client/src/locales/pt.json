@@ -113,9 +113,18 @@
         "subject": "Subject (mailto:…)",
         "envTitle": "Opcional no Hostinger (.env)",
         "openReminders": "Ir às Alarmes",
+        "enableHere": "Ativar Web Push neste dispositivo",
+        "pushAlreadyOn": "Web Push ativo neste dispositivo",
+        "pushEnabled": "Pronto: este dispositivo já pode receber push.",
+        "pushDenied": "O navegador bloqueou as notificações. Ative nas configurações do site.",
+        "pushUnsupported": "Este navegador não suporta Web Push.",
+        "pushNotConfigured": "Faltam as chaves VAPID. Volte ao passo Salvar.",
+        "pushFail": "Não foi possível ativar o Web Push neste dispositivo.",
+        "deviceReady": "Este dispositivo está inscrito ({n} na sua conta).",
+        "deviceNeeded": "Este dispositivo ainda não está inscrito. Toque em Ativar Web Push aqui.",
         "sendTest": "Enviar push de teste",
         "testOk": "Enviado para {n} dispositivo(s). Deve aparecer uma notificação.",
-        "testFail": "Não foi possível enviar. Ative o Web Push em Alarmes neste dispositivo primeiro.",
+        "testFail": "Não foi possível enviar. Ative o Web Push neste dispositivo primeiro.",
         "steps": {
           "explain": "O que é",
           "generate": "Gerar",
@@ -133,10 +142,10 @@
           "paste": "Revise ou cole as chaves e salve. Ficam no banco (com fallback no .env).",
           "hostinger": "Se quiser, também coloque no .env do Hostinger. Não é obrigatório se já salvou aqui.",
           "hostingerOptional": "Salvar neste wizard basta para produção. O .env é só backup ou preferência.",
-          "test": "Ative o Web Push em Alarmes neste dispositivo e teste o envio. Se a notificação chegar, marque o wizard como pronto.",
-          "test1": "Abra Alarmes suaves no Correctly.",
-          "test2": "Toque em Ativar Web Push e aceite a permissão.",
-          "test3": "Volte aqui e toque em Enviar push de teste."
+          "test": "Ative o Web Push neste dispositivo (aqui mesmo) e envie um teste. Se a notificação chegar, marque o wizard como pronto.",
+          "test1": "Toque em Ativar Web Push neste dispositivo e aceite a permissão do navegador.",
+          "test2": "Toque em Enviar push de teste.",
+          "test3": "Se ver a notificação, marque o wizard como pronto."
         }
       }
     }

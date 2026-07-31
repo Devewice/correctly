@@ -113,9 +113,18 @@
         "subject": "Subject (mailto:…)",
         "envTitle": "Optional on Hostinger (.env)",
         "openReminders": "Open Alarms",
+        "enableHere": "Enable Web Push on this device",
+        "pushAlreadyOn": "Web Push is on for this device",
+        "pushEnabled": "Done: this device can receive push.",
+        "pushDenied": "The browser blocked notifications. Enable them in site settings.",
+        "pushUnsupported": "This browser does not support Web Push.",
+        "pushNotConfigured": "VAPID keys are missing. Go back to the Save step.",
+        "pushFail": "Could not enable Web Push on this device.",
+        "deviceReady": "This device is subscribed ({n} on your account).",
+        "deviceNeeded": "This device is not subscribed yet. Tap Enable Web Push here.",
         "sendTest": "Send test push",
         "testOk": "Sent to {n} device(s). You should see a notification.",
-        "testFail": "Couldn't send. Enable Web Push in Alarms on this device first.",
+        "testFail": "Couldn't send. Enable Web Push on this device first.",
         "steps": {
           "explain": "What it is",
           "generate": "Generate",
@@ -133,10 +142,10 @@
           "paste": "Review or paste the keys and save. They're stored in the database (with .env as fallback).",
           "hostinger": "Optionally also put them in Hostinger's .env. Not required if you already saved them here.",
           "hostingerOptional": "Saving in this wizard is enough for production. .env is only a backup or preference.",
-          "test": "Enable Web Push in Alarms on this device and send a test. If the notification arrives, mark the wizard done.",
-          "test1": "Open Soft alarms in Correctly.",
-          "test2": "Tap Enable Web Push and allow the permission.",
-          "test3": "Come back here and tap Send test push."
+          "test": "Enable Web Push on this device (right here) and send a test. If the notification arrives, mark the wizard done.",
+          "test1": "Tap Enable Web Push on this device and allow the browser permission.",
+          "test2": "Tap Send test push.",
+          "test3": "If you see the notification, mark the wizard done."
         }
       }
     }

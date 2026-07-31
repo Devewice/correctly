@@ -1,7 +1,12 @@
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
+import {
+  getPushStatus,
+  pushSupported,
+  subscribeWebPush,
+} from '@/shared/reminders/pushClient'
 
 const { t } = useI18n()
 const step = ref(0)
@@ -10,6 +15,13 @@ const busy = ref(false)
 const saved = ref(false)
 const error = ref('')
 const testMsg = ref('')
+const pushBusy = ref(false)
+const pushStatus = ref({
+  supported: pushSupported(),
+  configured: false,
+  subscribed: false,
+  devices: 0,
+})
 
 const form = reactive({
   publicKey: '',
@@ -20,6 +32,22 @@ const form = reactive({
 const steps = computed(() => wizard.value?.steps || [])
 const current = computed(() => steps.value[step.value])
 
+async function refreshPushStatus() {
+  pushStatus.value.supported = pushSupported()
+  try {
+    const status = await getPushStatus()
+    pushStatus.value = {
+      supported: pushSupported(),
+      configured: Boolean(status.configured),
+      subscribed: Boolean(status.subscribed),
+      devices: status.devices || 0,
+    }
+  } catch {
+    pushStatus.value.configured = false
+    pushStatus.value.subscribed = false
+  }
+}
+
 onMounted(async () => {
   const data = await api('/admin/wizard/vapid')
   wizard.value = data
@@ -28,7 +56,15 @@ onMounted(async () => {
   if (data.current.configured && !data.current.wizardDone) {
     step.value = Math.min(2, data.steps.length - 1)
   }
+  await refreshPushStatus()
 })
+
+watch(
+  () => current.value?.id,
+  (id) => {
+    if (id === 'test') refreshPushStatus()
+  },
+)
 
 function next() {
   if (step.value < steps.value.length - 1) step.value += 1
@@ -93,13 +129,46 @@ async function finish() {
   }
 }
 
+async function enablePushHere() {
+  pushBusy.value = true
+  testMsg.value = ''
+  error.value = ''
+  try {
+    const result = await subscribeWebPush()
+    await refreshPushStatus()
+    if (result.ok) {
+      testMsg.value = t('admin.wizard.vapid.pushEnabled')
+    } else if (result.reason === 'denied') {
+      error.value = t('admin.wizard.vapid.pushDenied')
+    } else if (result.reason === 'unsupported') {
+      error.value = t('admin.wizard.vapid.pushUnsupported')
+    } else if (result.reason === 'not_configured') {
+      error.value = t('admin.wizard.vapid.pushNotConfigured')
+    } else {
+      error.value = t('admin.wizard.vapid.pushFail')
+    }
+  } catch (e) {
+    error.value = e.message || t('admin.wizard.vapid.pushFail')
+  } finally {
+    pushBusy.value = false
+  }
+}
+
 async function sendTest() {
   busy.value = true
   testMsg.value = ''
   error.value = ''
   try {
+    if (!pushStatus.value.subscribed) {
+      await enablePushHere()
+      if (!pushStatus.value.subscribed) {
+        error.value = error.value || t('admin.wizard.vapid.testFail')
+        return
+      }
+    }
     const data = await api('/push/test', { method: 'POST' })
     testMsg.value = t('admin.wizard.vapid.testOk', { n: data.sent })
+    await refreshPushStatus()
   } catch (e) {
     error.value = e.message || t('admin.wizard.vapid.testFail')
   } finally {
@@ -262,14 +331,46 @@ function copy(text) {
           <li>{{ t('admin.wizard.vapid.copy.test2') }}</li>
           <li>{{ t('admin.wizard.vapid.copy.test3') }}</li>
         </ol>
-        <div class="d-flex flex-wrap ga-2">
-          <v-btn color="secondary" variant="tonal" to="/reminders">
-            {{ t('admin.wizard.vapid.openReminders') }}
+
+        <v-alert
+          :type="pushStatus.subscribed ? 'success' : 'warning'"
+          variant="tonal"
+          density="compact"
+        >
+          {{
+            pushStatus.subscribed
+              ? t('admin.wizard.vapid.deviceReady', { n: pushStatus.devices })
+              : t('admin.wizard.vapid.deviceNeeded')
+          }}
+        </v-alert>
+
+        <div class="d-flex flex-column flex-sm-row flex-wrap ga-2">
+          <v-btn
+            color="primary"
+            :loading="pushBusy"
+            :disabled="!pushStatus.supported || pushStatus.subscribed"
+            @click="enablePushHere"
+          >
+            {{
+              pushStatus.subscribed
+                ? t('admin.wizard.vapid.pushAlreadyOn')
+                : t('admin.wizard.vapid.enableHere')
+            }}
           </v-btn>
-          <v-btn color="primary" variant="tonal" :loading="busy" @click="sendTest">
+          <v-btn
+            color="secondary"
+            variant="tonal"
+            :loading="busy"
+            :disabled="!pushStatus.subscribed && !pushBusy"
+            @click="sendTest"
+          >
             {{ t('admin.wizard.vapid.sendTest') }}
           </v-btn>
+          <v-btn variant="text" to="/reminders">
+            {{ t('admin.wizard.vapid.openReminders') }}
+          </v-btn>
         </div>
+
         <v-alert v-if="testMsg" type="success" variant="tonal" density="compact">
           {{ testMsg }}
         </v-alert>
