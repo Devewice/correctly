@@ -234,7 +234,7 @@
   },
   "companions": {
     "title": "Companion",
-    "hint": "Pick, name, and remix. It walks with you and speaks in a bubble about your day.",
+    "hint": "Pick, name, and remix in 3D. It walks with you and speaks in a bubble about your day.",
     "none": "No pet",
     "tapHint": "Wave to {name}",
     "stateHint": "{name}: {state}",

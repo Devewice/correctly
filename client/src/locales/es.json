@@ -234,7 +234,7 @@
   },
   "companions": {
     "title": "Compañero",
-    "hint": "Elige, nombra y personaliza. Camina contigo y cuenta cómo va tu día en un bocadillo.",
+    "hint": "Elige, nombra y personaliza en 3D. Camina contigo y cuenta cómo va tu día en un bocadillo.",
     "none": "Sin mascota",
     "tapHint": "Saludar a {name}",
     "stateHint": "{name}: {state}",

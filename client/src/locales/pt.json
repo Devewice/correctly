@@ -234,7 +234,7 @@
   },
   "companions": {
     "title": "Companheiro",
-    "hint": "Escolha, nomeie e personalize. Anda com você e fala do dia num balão.",
+    "hint": "Escolha, nomeie e personalize em 3D. Anda com você e fala do dia num balão.",
     "none": "Sem pet",
     "tapHint": "Acenar para {name}",
     "stateHint": "{name}: {state}",

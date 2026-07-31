@@ -209,7 +209,7 @@ function speciesLabel(s) {
         :class="{ 'companion-pick__item--on': companionPetId === c.id && !companionCustom }"
         @click="pick(c.id)"
       >
-        <CompanionBuddy preview :pet-id="c.id" mood="idle" />
+        <CompanionBuddy preview thumb :pet-id="c.id" mood="idle" />
         <span class="companion-pick__name">{{ c.name }}</span>
       </button>
     </div>
