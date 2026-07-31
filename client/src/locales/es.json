@@ -158,7 +158,19 @@
     "routines": "Tu rutina",
     "wake": "Hora de despertar",
     "sleep": "Hora de dormir",
+    "timezone": "Zona horaria",
+    "mealsRhythm": "¿A qué hora sueles comer?",
     "goal": "Meta principal (opcional)",
+    "goalPick": "¿Qué quieres mejorar primero?",
+    "goals": {
+      "water": "Tomar más agua",
+      "sleep": "Dormir mejor",
+      "mood": "Cuidar mi ánimo",
+      "activity": "Moverme más"
+    },
+    "habitsEdit": "Hábitos que quieres seguir (puedes editarlos)",
+    "addHabit": "Añadir hábito",
+    "stepOf": "Paso {n} de {total}",
     "continue": "Continuar",
     "finish": "Empezar mi día"
   },
@@ -170,7 +182,18 @@
     "habits": "Hábitos",
     "activity": "Actividad",
     "journal": "Diario",
-    "meditation": "Meditación"
+    "meditation": "Meditación",
+    "weight": "Peso"
+  },
+  "profile": {
+    "name": "Nombre"
+  },
+  "journal": {
+    "title": "Diario",
+    "subtitle": "Una línea basta. Sin presión.",
+    "line": "¿Qué te gustaría recordar de hoy?",
+    "save": "Guardar",
+    "empty": "Aún no hay notas hoy."
   },
   "dashboard": {
     "greetingMorning": "Buenos días, {name}",
@@ -209,6 +232,21 @@
     "habitAsk": "¿Lo hiciste?",
     "habitHint": "Si ya lo hiciste, un toque. Si no, puedes dejarlo para después.",
     "habitDone": "Sí, lo hice",
+    "sleepAsk": "¿Cómo dormiste?",
+    "sleepHint": "Sin horas exactas. Solo cómo te sentiste.",
+    "meditationAsk": "¿Un respiro corto?",
+    "meditationHint": "Tres minutos bastan. O abre el timer completo.",
+    "meditationQuick": "Respirar 3 min",
+    "meditationOpen": "Abrir meditación",
+    "activityAsk": "¿Te moviste un poco?",
+    "activityHint": "Un paseo corto cuenta. Sin obsesionarte.",
+    "activityQuick": "Paseo corto (15 min)",
+    "activityOpen": "Elegir otra actividad",
+    "journalAsk": "¿Una línea de hoy?",
+    "journalHint": "Lo que quieras recordar. Puede ser corto.",
+    "restTitle": "Es hora de bajar el ritmo",
+    "restHint": "Descansa. Mañana seguimos con calma.",
+    "seeSleep": "Contar el sueño",
     "doneTitle": "Vas muy bien hoy",
     "doneHint": "Ya cubriste lo importante. Si quieres, mira Más.",
     "seeStats": "Ver cómo va mi semana",
@@ -217,6 +255,13 @@
     "chipMoodPending": "—",
     "chipGlasses": "{n} vasos",
     "chipMeals": "{n} comidas",
+    "band": {
+      "morning": "Momento: mañana",
+      "midday": "Momento: mediodía",
+      "afternoon": "Momento: tarde",
+      "evening": "Momento: noche",
+      "rest": "Momento: descanso"
+    },
     "moreTitle": "También puedes…",
     "moreSubtitle": "Cosas opcionales. Lo importante ya está en Hoy.",
     "moreHints": {
@@ -229,6 +274,7 @@
       "water": "Sumar otro vaso",
       "mood": "Ver cómo me he sentido",
       "habits": "Mis hábitos del día",
+      "journal": "Una nota del día",
       "friends": "Notas y foto del día con amigos",
       "reminders": "Toques a tiempo (web)"
     }

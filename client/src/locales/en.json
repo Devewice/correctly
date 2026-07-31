@@ -158,7 +158,19 @@
     "routines": "Your routine",
     "wake": "Wake time",
     "sleep": "Sleep time",
+    "timezone": "Timezone",
+    "mealsRhythm": "When do you usually eat?",
     "goal": "Main goal (optional)",
+    "goalPick": "What do you want to improve first?",
+    "goals": {
+      "water": "Drink more water",
+      "sleep": "Sleep better",
+      "mood": "Care for my mood",
+      "activity": "Move more"
+    },
+    "habitsEdit": "Habits you want to keep (editable)",
+    "addHabit": "Add habit",
+    "stepOf": "Step {n} of {total}",
     "continue": "Continue",
     "finish": "Go to dashboard"
   },
@@ -170,7 +182,18 @@
     "habits": "Habits",
     "activity": "Activity",
     "journal": "Journal",
-    "meditation": "Meditation"
+    "meditation": "Meditation",
+    "weight": "Weight"
+  },
+  "profile": {
+    "name": "Name"
+  },
+  "journal": {
+    "title": "Journal",
+    "subtitle": "One line is enough. No pressure.",
+    "line": "What would you like to remember from today?",
+    "save": "Save",
+    "empty": "No notes yet today."
   },
   "dashboard": {
     "greetingMorning": "Good morning, {name}",
@@ -209,6 +232,21 @@
     "habitAsk": "Did you do it?",
     "habitHint": "If yes, tap. If not, leave it for later.",
     "habitDone": "Yes, I did",
+    "sleepAsk": "How did you sleep?",
+    "sleepHint": "No exact hours. Just how you felt.",
+    "meditationAsk": "A short breath?",
+    "meditationHint": "Three minutes is enough. Or open the full timer.",
+    "meditationQuick": "Breathe 3 min",
+    "meditationOpen": "Open meditation",
+    "activityAsk": "Did you move a bit?",
+    "activityHint": "A short walk counts. No obsession.",
+    "activityQuick": "Short walk (15 min)",
+    "activityOpen": "Pick another activity",
+    "journalAsk": "One line from today?",
+    "journalHint": "Whatever you want to remember. Short is fine.",
+    "restTitle": "Time to wind down",
+    "restHint": "Rest. We'll continue gently tomorrow.",
+    "seeSleep": "Log sleep",
     "doneTitle": "You're doing great today",
     "doneHint": "You've covered the important bits. More is optional.",
     "seeStats": "See how my week is going",
@@ -217,6 +255,13 @@
     "chipMoodPending": "—",
     "chipGlasses": "{n} glasses",
     "chipMeals": "{n} meals",
+    "band": {
+      "morning": "Moment: morning",
+      "midday": "Moment: midday",
+      "afternoon": "Moment: afternoon",
+      "evening": "Moment: evening",
+      "rest": "Moment: rest"
+    },
     "moreTitle": "You can also…",
     "moreSubtitle": "Optional extras. The important part is Today.",
     "moreHints": {
@@ -229,6 +274,7 @@
       "water": "Add another glass",
       "mood": "See how I've felt",
       "habits": "My daily habits",
+      "journal": "A note from today",
       "friends": "Daily notes and photos with friends",
       "reminders": "Gentle web nudges"
     }

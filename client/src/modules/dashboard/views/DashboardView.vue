@@ -9,70 +9,90 @@ import { api } from '@/shared/api/client'
 import DayGuideCard from '@/modules/dashboard/components/DayGuideCard.vue'
 import { fadeUp, withDelay } from '@/shared/motion/presets'
 import { glassesFromMl } from '@/shared/utils/water'
+import { addDaySkip, loadDaySkips } from '@/shared/utils/daySkips'
+import { activeModuleSet, dateKeyLocal } from '@/shared/utils/timeContext'
 
 const { t } = useI18n()
 const { lgAndUp } = useDisplay()
 const auth = useAuthStore()
 const dash = useDashboardStore()
-const { steps, suggestedMealType } = useDayGuide(computed(() => dash.today))
 
-const stepIndex = ref(0)
-const busy = ref(false)
 const skipped = ref(new Set())
+const busy = ref(false)
 
-const greeting = computed(() => {
-  const h = new Date().getHours()
-  const name = auth.user?.name?.split(' ')[0] || ''
-  if (h < 12) return t('dashboard.greetingMorning', { name })
-  if (h < 19) return t('dashboard.greetingAfternoon', { name })
-  return t('dashboard.greetingEvening', { name })
-})
-
-const visibleSteps = computed(() =>
-  steps.value.filter((s) => !skipped.value.has(s.id)),
+const userRef = computed(() => auth.user)
+const { steps, suggestedMealType, band } = useDayGuide(
+  computed(() => dash.today),
+  userRef,
+  skipped,
 )
 
-const current = computed(() => visibleSteps.value[stepIndex.value] || visibleSteps.value[0])
+const current = computed(() => steps.value[0] || null)
 
 const progressPct = computed(() => dash.today?.progress ?? 0)
 
+const mods = computed(() => activeModuleSet(auth.user))
+
+const greeting = computed(() => {
+  const name = auth.user?.name?.split(' ')[0] || ''
+  if (band.value === 'morning') return t('dashboard.greetingMorning', { name })
+  if (band.value === 'evening' || band.value === 'rest') {
+    return t('dashboard.greetingEvening', { name })
+  }
+  return t('dashboard.greetingAfternoon', { name })
+})
+
 const chips = computed(() => {
   if (!dash.today) return []
-  return [
-    {
+  const out = []
+  if (mods.value.has('mood')) {
+    out.push({
       key: 'mood',
       label: `${
         dash.today.summary.latestMood
           ? moodEmoji[dash.today.summary.latestMood.mood]
           : t('day.chipMoodPending')
       } ${t('dashboard.mood')}`,
-    },
-    {
+    })
+  }
+  if (mods.value.has('water')) {
+    out.push({
       key: 'water',
       label: t('day.chipGlasses', {
         n: glassesFromMl(dash.today.summary.waterMl),
       }),
-    },
-    {
+    })
+  }
+  if (mods.value.has('meals')) {
+    out.push({
       key: 'meals',
       label: t('day.chipMeals', {
         n: dash.today.summary.mealsCount || 0,
       }),
-    },
-  ]
+    })
+  }
+  return out
 })
 
-watch(visibleSteps, (list) => {
-  if (stepIndex.value >= list.length) stepIndex.value = Math.max(0, list.length - 1)
-})
+function syncSkips() {
+  const date = dash.today?.date || dateKeyLocal()
+  skipped.value = loadDaySkips(auth.user?.id, date)
+}
 
-onMounted(() => dash.loadAll())
+watch(
+  () => [dash.today?.date, auth.user?.id],
+  () => syncSkips(),
+  { immediate: true },
+)
+
+onMounted(async () => {
+  await dash.loadAll()
+  syncSkips()
+})
 
 function skip() {
-  if (!current.value) return
-  const next = new Set(skipped.value)
-  next.add(current.value.id)
-  skipped.value = next
+  if (!current.value || !dash.today) return
+  skipped.value = addDaySkip(auth.user?.id, dash.today.date, current.value.id)
 }
 
 async function withBusy(fn) {
@@ -80,6 +100,7 @@ async function withBusy(fn) {
   try {
     await fn()
     await dash.loadAll()
+    syncSkips()
   } finally {
     busy.value = false
   }
@@ -111,6 +132,43 @@ async function onHabit(habit) {
   )
 }
 
+async function onSleep(opt) {
+  const wake = new Date()
+  const bed = new Date(wake.getTime() - opt.hours * 60 * 60 * 1000)
+  await withBusy(() =>
+    api('/sleep', {
+      method: 'POST',
+      body: {
+        bedTime: bed.toISOString(),
+        wakeTime: wake.toISOString(),
+        quality: opt.quality,
+      },
+    }),
+  )
+}
+
+async function onMeditation(minutes) {
+  await withBusy(() =>
+    api('/meditation', {
+      method: 'POST',
+      body: { duration: minutes, type: 'breathing', feeling: 'calmer' },
+    }),
+  )
+}
+
+async function onActivity(payload) {
+  await withBusy(() => api('/activities', { method: 'POST', body: payload }))
+}
+
+async function onJournal(content) {
+  await withBusy(() =>
+    api('/journal', {
+      method: 'POST',
+      body: { content, type: 'evening' },
+    }),
+  )
+}
+
 const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
 </script>
 
@@ -121,17 +179,15 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
 
   <div v-else-if="dash.today" class="pb-8 pb-md-4">
     <v-row :dense="!lgAndUp">
-      <!-- Resumen: en desktop a la izquierda -->
       <v-col cols="12" lg="5">
-        <header
-          v-motion
-          v-bind="withDelay(fadeUp, 0)"
-          class="mb-5"
-        >
+        <header v-motion v-bind="withDelay(fadeUp, 0)" class="mb-5">
           <p class="text-body-2 text-medium-emphasis mb-1">{{ t('day.todayLabel') }}</p>
           <h1 class="text-h4 text-md-h3 font-weight-bold">{{ greeting }}</h1>
           <p class="text-body-2 text-medium-emphasis mt-1">
             {{ t('dashboard.streak', { days: dash.today.stats?.currentStreak || 0 }) }}
+          </p>
+          <p class="text-caption text-medium-emphasis mt-1">
+            {{ t(`day.band.${band}`) }}
           </p>
         </header>
 
@@ -174,7 +230,6 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
         </v-alert>
       </v-col>
 
-      <!-- Guía interactiva: en desktop a la derecha (protagonista) -->
       <v-col cols="12" lg="7">
         <p
           v-motion
@@ -194,6 +249,10 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
           @water="onWater"
           @meal="onMeal"
           @habit="onHabit"
+          @sleep="onSleep"
+          @meditation="onMeditation"
+          @activity="onActivity"
+          @journal="onJournal"
           @skip="skip"
         />
 

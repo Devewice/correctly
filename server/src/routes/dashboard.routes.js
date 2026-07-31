@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { prisma } from '../config/database.js'
 import { requireAuth } from '../middleware/auth.js'
-import { dayBounds, toDateKey } from '../utils/dates.js'
+import { dayBoundsInTz, toDateKey, toDateKeyInTz } from '../utils/dates.js'
 
 const router = Router()
 router.use(requireAuth)
@@ -15,62 +15,102 @@ const MEAL_SLOTS = [
   'night_snack',
 ]
 
-router.get('/today', async (req, res) => {
-  const date = typeof req.query.date === 'string' ? req.query.date : toDateKey()
-  const { start, end } = dayBounds(date)
-  const userId = req.user.id
+const DEFAULT_MODULES = ['meals', 'water', 'mood', 'sleep', 'habits']
 
-  const [meals, waterLogs, moodLogs, sleepLogs, activities, habits, journal] =
-    await Promise.all([
-      prisma.mealLog.findMany({
-        where: { userId, loggedAt: { gte: start, lte: end } },
-        orderBy: { loggedAt: 'asc' },
-      }),
-      prisma.waterLog.findMany({
-        where: { userId, loggedAt: { gte: start, lte: end } },
-      }),
-      prisma.moodLog.findMany({
-        where: { userId, loggedAt: { gte: start, lte: end } },
-        orderBy: { loggedAt: 'desc' },
-      }),
-      prisma.sleepLog.findMany({
-        where: {
-          userId,
-          OR: [
-            { bedTime: { gte: start, lte: end } },
-            { wakeTime: { gte: start, lte: end } },
-          ],
-        },
-        orderBy: { bedTime: 'desc' },
-        take: 1,
-      }),
-      prisma.activityLog.findMany({
-        where: { userId, loggedAt: { gte: start, lte: end } },
-      }),
-      prisma.habitDefinition.findMany({
-        where: { userId, active: true },
-        include: { completions: { where: { date } } },
-      }),
-      prisma.journalEntry.findMany({
-        where: { userId, loggedAt: { gte: start, lte: end } },
-        take: 3,
-      }),
-    ])
+function userModules(user) {
+  const raw = user?.activeModules
+  if (Array.isArray(raw) && raw.length) return raw
+  return DEFAULT_MODULES
+}
+
+function userDay(req) {
+  const tz = req.user.timezone || 'America/Bogota'
+  const date =
+    typeof req.query.date === 'string' ? req.query.date : toDateKeyInTz(tz)
+  const { start, end } = dayBoundsInTz(date, tz)
+  return { date, start, end, tz }
+}
+
+router.get('/today', async (req, res) => {
+  const { date, start, end } = userDay(req)
+  const userId = req.user.id
+  const modules = userModules(req.user)
+
+  const [
+    meals,
+    waterLogs,
+    moodLogs,
+    sleepLogs,
+    activities,
+    habits,
+    journal,
+    meditations,
+  ] = await Promise.all([
+    prisma.mealLog.findMany({
+      where: { userId, loggedAt: { gte: start, lte: end } },
+      orderBy: { loggedAt: 'asc' },
+    }),
+    prisma.waterLog.findMany({
+      where: { userId, loggedAt: { gte: start, lte: end } },
+    }),
+    prisma.moodLog.findMany({
+      where: { userId, loggedAt: { gte: start, lte: end } },
+      orderBy: { loggedAt: 'desc' },
+    }),
+    prisma.sleepLog.findMany({
+      where: {
+        userId,
+        OR: [
+          { bedTime: { gte: start, lte: end } },
+          { wakeTime: { gte: start, lte: end } },
+        ],
+      },
+      orderBy: { bedTime: 'desc' },
+      take: 1,
+    }),
+    prisma.activityLog.findMany({
+      where: { userId, loggedAt: { gte: start, lte: end } },
+    }),
+    prisma.habitDefinition.findMany({
+      where: { userId, active: true },
+      include: { completions: { where: { date } } },
+    }),
+    prisma.journalEntry.findMany({
+      where: { userId, loggedAt: { gte: start, lte: end } },
+      take: 3,
+    }),
+    prisma.meditationLog.findMany({
+      where: { userId, loggedAt: { gte: start, lte: end } },
+    }),
+  ])
 
   const waterMl = waterLogs.reduce((s, l) => s + l.amount, 0)
   const mealTypesDone = new Set(meals.map((m) => m.type))
-  const habitsDone = habits.filter(
-    (h) => h.completions.some((c) => c.completed),
+  const habitsDone = habits.filter((h) =>
+    h.completions.some((c) => c.completed),
   ).length
+  const meditationMin = meditations.reduce((s, m) => s + m.duration, 0)
 
-  const checks = [
-    mealTypesDone.has('breakfast'),
-    mealTypesDone.has('lunch'),
-    mealTypesDone.has('dinner'),
-    waterMl >= 500,
-    moodLogs.length > 0,
-    habits.length === 0 ? true : habitsDone > 0,
-  ]
+  const checks = []
+  if (modules.includes('meals')) {
+    checks.push(
+      mealTypesDone.has('breakfast') ||
+        mealTypesDone.has('lunch') ||
+        mealTypesDone.has('dinner') ||
+        meals.length > 0,
+    )
+  }
+  if (modules.includes('water')) checks.push(waterMl >= 500)
+  if (modules.includes('mood')) checks.push(moodLogs.length > 0)
+  if (modules.includes('habits')) {
+    checks.push(habits.length === 0 ? true : habitsDone > 0)
+  }
+  if (modules.includes('sleep')) checks.push(sleepLogs.length > 0)
+  if (modules.includes('activity')) checks.push(activities.length > 0)
+  if (modules.includes('meditation')) checks.push(meditationMin > 0)
+  if (modules.includes('journal')) checks.push(journal.length > 0)
+
+  if (!checks.length) checks.push(true)
   const done = checks.filter(Boolean).length
   const progress = Math.round((done / checks.length) * 100)
 
@@ -89,6 +129,7 @@ router.get('/today', async (req, res) => {
       habitsDone,
       habitsTotal: habits.length,
       journalCount: journal.length,
+      meditationMin,
     },
     meals,
     habits: habits.map((h) => ({
@@ -102,8 +143,7 @@ router.get('/today', async (req, res) => {
 })
 
 router.get('/timeline', async (req, res) => {
-  const date = typeof req.query.date === 'string' ? req.query.date : toDateKey()
-  const { start, end } = dayBounds(date)
+  const { date, start, end } = userDay(req)
   const userId = req.user.id
 
   const [meals, waterLogs, moodLogs, activities, sleepLogs] = await Promise.all([

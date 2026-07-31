@@ -52,6 +52,11 @@ export const appRoutes = [
         component: () => import('@/modules/wellness/views/WeightView.vue'),
       },
       {
+        path: 'journal',
+        name: 'journal',
+        component: () => import('@/modules/wellness/views/JournalView.vue'),
+      },
+      {
         path: 'stats',
         name: 'stats',
         component: () => import('@/modules/wellness/views/StatsView.vue'),

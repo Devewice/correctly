@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { z } from 'zod'
 import { prisma } from '../config/database.js'
 import { requireAuth } from '../middleware/auth.js'
-import { dayBounds, toDateKey } from '../utils/dates.js'
+import { dayBoundsInTz, toDateKeyInTz } from '../utils/dates.js'
 import { XP } from '../utils/xp.js'
 import { afterLog } from '../utils/progress.js'
 
@@ -17,8 +17,10 @@ const schema = z.object({
 })
 
 router.get('/', async (req, res) => {
-  const date = typeof req.query.date === 'string' ? req.query.date : toDateKey()
-  const { start, end } = dayBounds(date)
+  const tz = req.user.timezone || 'America/Bogota'
+  const date =
+    typeof req.query.date === 'string' ? req.query.date : toDateKeyInTz(tz)
+  const { start, end } = dayBoundsInTz(date, tz)
   const entries = await prisma.journalEntry.findMany({
     where: { userId: req.user.id, loggedAt: { gte: start, lte: end } },
     orderBy: { loggedAt: 'desc' },

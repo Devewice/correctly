@@ -6,6 +6,16 @@ import { requireAuth } from '../middleware/auth.js'
 const router = Router()
 router.use(requireAuth)
 
+const hm = z.string().regex(/^\d{2}:\d{2}$/)
+
+const mealTimesSchema = z
+  .object({
+    breakfast: hm.optional(),
+    lunch: hm.optional(),
+    dinner: hm.optional(),
+  })
+  .optional()
+
 const profileSchema = z.object({
   name: z.string().min(1).max(120).optional(),
   timezone: z.string().max(80).optional(),
@@ -15,14 +25,17 @@ const profileSchema = z.object({
   sleepTime: z.string().max(5).nullable().optional(),
   mainGoal: z.string().max(200).nullable().optional(),
   activeModules: z.array(z.string()).optional(),
+  mealTimes: mealTimesSchema.nullable().optional(),
 })
 
 const onboardingSchema = z.object({
   language: z.enum(['es', 'en', 'pt']).optional(),
+  timezone: z.string().max(80).optional(),
   mainGoal: z.string().max(200).optional(),
   wakeTime: z.string().max(5).optional(),
   sleepTime: z.string().max(5).optional(),
   activeModules: z.array(z.string()).min(1),
+  mealTimes: mealTimesSchema,
   habits: z
     .array(
       z.object({
@@ -40,12 +53,23 @@ router.get('/profile', (req, res) => {
 
 router.put('/profile', async (req, res) => {
   const data = profileSchema.parse(req.body)
-  const user = await prisma.user.update({
+  const { mealTimes, ...rest } = data
+  await prisma.user.update({
     where: { id: req.user.id },
     data: {
-      ...data,
+      ...rest,
       activeModules: data.activeModules ?? undefined,
     },
+  })
+  if (mealTimes !== undefined) {
+    await prisma.$executeRawUnsafe(
+      'UPDATE User SET mealTimes = ? WHERE id = ?',
+      mealTimes === null ? null : JSON.stringify(mealTimes),
+      req.user.id,
+    )
+  }
+  const user = await prisma.user.findUnique({
+    where: { id: req.user.id },
     include: { stats: true },
   })
   res.json({ user })
@@ -59,6 +83,7 @@ router.put('/onboarding', async (req, res) => {
       where: { id: req.user.id },
       data: {
         language: data.language,
+        timezone: data.timezone,
         mainGoal: data.mainGoal,
         wakeTime: data.wakeTime,
         sleepTime: data.sleepTime,
@@ -67,6 +92,14 @@ router.put('/onboarding', async (req, res) => {
       },
       include: { stats: true },
     })
+
+    if (data.mealTimes) {
+      await tx.$executeRawUnsafe(
+        'UPDATE User SET mealTimes = ? WHERE id = ?',
+        JSON.stringify(data.mealTimes),
+        req.user.id,
+      )
+    }
 
     if (data.habits?.length) {
       await tx.habitDefinition.createMany({
@@ -79,7 +112,11 @@ router.put('/onboarding', async (req, res) => {
       })
     }
 
-    return updated
+    // Releer por si mealTimes se guardó por SQL
+    return tx.user.findUnique({
+      where: { id: req.user.id },
+      include: { stats: true },
+    })
   })
 
   res.json({ user })

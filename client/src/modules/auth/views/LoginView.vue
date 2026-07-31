@@ -103,8 +103,7 @@ function googleLogin() {
         block
         color="primary"
         size="x-large"
-        :disabled="auth.authStatus.googleConfigured === false && !auth.authStatus.statusError"
-        :loading="!auth.authStatus.statusLoaded"
+        :disabled="auth.authStatus.googleConfigured === false && auth.authStatus.statusLoaded"
         @click="googleLogin"
       >
         <v-icon start icon="mdi-google" />

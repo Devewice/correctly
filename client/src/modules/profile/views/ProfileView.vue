@@ -11,11 +11,32 @@ const { t } = useI18n()
 const auth = useAuthStore()
 const saved = ref(false)
 const busy = ref(false)
+
+const moduleKeys = [
+  'meals',
+  'water',
+  'mood',
+  'sleep',
+  'habits',
+  'activity',
+  'journal',
+  'meditation',
+  'weight',
+]
+
+function initialModules() {
+  const raw = auth.user?.activeModules
+  if (Array.isArray(raw) && raw.length) return [...raw]
+  return ['meals', 'water', 'mood', 'sleep', 'habits']
+}
+
 const form = reactive({
   name: auth.user?.name || '',
   language: auth.user?.language || 'es',
+  timezone: auth.user?.timezone || 'America/Bogota',
   wakeTime: auth.user?.wakeTime || '07:00',
   sleepTime: auth.user?.sleepTime || '23:00',
+  activeModules: initialModules(),
 })
 
 const languages = [
@@ -23,6 +44,14 @@ const languages = [
   { title: 'English', value: 'en' },
   { title: 'Português', value: 'pt' },
 ]
+
+function toggleModule(key) {
+  const i = form.activeModules.indexOf(key)
+  if (i >= 0) {
+    if (form.activeModules.length <= 1) return
+    form.activeModules.splice(i, 1)
+  } else form.activeModules.push(key)
+}
 
 async function save() {
   busy.value = true
@@ -48,11 +77,16 @@ async function save() {
 
   <v-card class="pa-5 mb-4">
     <v-form @submit.prevent="save">
-      <v-text-field v-model="form.name" label="Name" class="mb-2" />
+      <v-text-field v-model="form.name" :label="t('profile.name')" class="mb-2" />
       <v-select
         v-model="form.language"
         :items="languages"
         :label="t('onboarding.language')"
+        class="mb-2"
+      />
+      <v-text-field
+        v-model="form.timezone"
+        :label="t('onboarding.timezone')"
         class="mb-2"
       />
       <v-text-field
@@ -67,6 +101,21 @@ async function save() {
         :label="t('onboarding.sleep')"
         class="mb-4"
       />
+
+      <p class="text-body-2 text-medium-emphasis mb-2">{{ t('onboarding.modules') }}</p>
+      <v-row dense class="mb-4">
+        <v-col v-for="key in moduleKeys" :key="key" cols="6">
+          <v-card
+            :color="form.activeModules.includes(key) ? 'primary' : undefined"
+            :variant="form.activeModules.includes(key) ? 'tonal' : 'outlined'"
+            class="pa-3"
+            @click="toggleModule(key)"
+          >
+            <div class="text-body-2">{{ t(`modules.${key}`) }}</div>
+          </v-card>
+        </v-col>
+      </v-row>
+
       <v-btn type="submit" block color="primary" size="large" :loading="busy">
         {{ t('common.save') }}
       </v-btn>
@@ -78,9 +127,6 @@ async function save() {
     <div class="text-body-2">{{ auth.user?.email }}</div>
     <div class="text-caption text-medium-emphasis">
       XP: {{ auth.user?.stats?.totalXP || 0 }} · Level {{ auth.user?.stats?.level || 1 }}
-    </div>
-    <div class="text-caption text-medium-emphasis mt-1">
-      👍 {{ auth.user?.stats?.likesReceived || 0 }} · 👎 {{ auth.user?.stats?.dislikesReceived || 0 }}
     </div>
   </v-card>
 </template>

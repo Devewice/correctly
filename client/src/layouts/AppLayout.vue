@@ -8,6 +8,7 @@ import BrandLogo from '@/shared/components/BrandLogo.vue'
 import InstallAppCard from '@/shared/components/InstallAppCard.vue'
 import SystemHealthBanner from '@/shared/components/SystemHealthBanner.vue'
 import { fadeUp, softHover, withDelay } from '@/shared/motion/presets'
+import { activeModuleSet } from '@/shared/utils/timeContext'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -28,19 +29,24 @@ const tab = computed(() => {
   return 'more'
 })
 
-const moreItems = computed(() => [
-  { to: '/water', title: t('water.title'), icon: 'mdi-cup-water', hint: t('day.moreHints.water') },
-  { to: '/meals', title: t('meals.title'), icon: 'mdi-food-apple', hint: t('day.moreHints.meals') },
-  { to: '/mood', title: t('mood.title'), icon: 'mdi-emoticon-outline', hint: t('day.moreHints.mood') },
-  { to: '/habits', title: t('habits.title'), icon: 'mdi-checkbox-marked-circle-outline', hint: t('day.moreHints.habits') },
-  { to: '/sleep', title: t('sleep.title'), icon: 'mdi-sleep', hint: t('day.moreHints.sleep') },
-  { to: '/meditation', title: t('meditation.title'), icon: 'mdi-meditation', hint: t('day.moreHints.meditation') },
-  { to: '/activity', title: t('activity.title'), icon: 'mdi-run', hint: t('day.moreHints.activity') },
-  { to: '/weight', title: t('weight.title'), icon: 'mdi-scale-bathroom', hint: t('day.moreHints.weight') },
-  { to: '/stats', title: t('stats.title'), icon: 'mdi-chart-bar', hint: t('day.moreHints.stats') },
-  { to: '/friends', title: t('friends.title'), icon: 'mdi-account-group-outline', hint: t('day.moreHints.friends') },
-  { to: '/reminders', title: t('reminders.title'), icon: 'mdi-bell-ring-outline', hint: t('day.moreHints.reminders') },
-])
+const moreItems = computed(() => {
+  const mods = activeModuleSet(auth.user)
+  const all = [
+    { to: '/water', module: 'water', title: t('water.title'), icon: 'mdi-cup-water', hint: t('day.moreHints.water') },
+    { to: '/meals', module: 'meals', title: t('meals.title'), icon: 'mdi-food-apple', hint: t('day.moreHints.meals') },
+    { to: '/mood', module: 'mood', title: t('mood.title'), icon: 'mdi-emoticon-outline', hint: t('day.moreHints.mood') },
+    { to: '/habits', module: 'habits', title: t('habits.title'), icon: 'mdi-checkbox-marked-circle-outline', hint: t('day.moreHints.habits') },
+    { to: '/sleep', module: 'sleep', title: t('sleep.title'), icon: 'mdi-sleep', hint: t('day.moreHints.sleep') },
+    { to: '/meditation', module: 'meditation', title: t('meditation.title'), icon: 'mdi-meditation', hint: t('day.moreHints.meditation') },
+    { to: '/activity', module: 'activity', title: t('activity.title'), icon: 'mdi-run', hint: t('day.moreHints.activity') },
+    { to: '/journal', module: 'journal', title: t('journal.title'), icon: 'mdi-notebook-outline', hint: t('day.moreHints.journal') },
+    { to: '/weight', module: 'weight', title: t('weight.title'), icon: 'mdi-scale-bathroom', hint: t('day.moreHints.weight') },
+    { to: '/stats', module: null, title: t('stats.title'), icon: 'mdi-chart-bar', hint: t('day.moreHints.stats') },
+    { to: '/friends', module: null, title: t('friends.title'), icon: 'mdi-account-group-outline', hint: t('day.moreHints.friends') },
+    { to: '/reminders', module: null, title: t('reminders.title'), icon: 'mdi-bell-ring-outline', hint: t('day.moreHints.reminders') },
+  ]
+  return all.filter((item) => !item.module || mods.has(item.module))
+})
 
 const contentMax = computed(() => {
   if (lgAndUp.value) return 1100

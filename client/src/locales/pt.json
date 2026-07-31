@@ -158,7 +158,19 @@
     "routines": "Sua rotina",
     "wake": "Horário de acordar",
     "sleep": "Horário de dormir",
+    "timezone": "Fuso horário",
+    "mealsRhythm": "A que horas você costuma comer?",
     "goal": "Meta principal (opcional)",
+    "goalPick": "O que quer melhorar primeiro?",
+    "goals": {
+      "water": "Beber mais água",
+      "sleep": "Dormir melhor",
+      "mood": "Cuidar do humor",
+      "activity": "Me mover mais"
+    },
+    "habitsEdit": "Hábitos que quer manter (editáveis)",
+    "addHabit": "Adicionar hábito",
+    "stepOf": "Passo {n} de {total}",
     "continue": "Continuar",
     "finish": "Ir ao dashboard"
   },
@@ -170,7 +182,18 @@
     "habits": "Hábitos",
     "activity": "Atividade",
     "journal": "Diário",
-    "meditation": "Meditação"
+    "meditation": "Meditação",
+    "weight": "Peso"
+  },
+  "profile": {
+    "name": "Nome"
+  },
+  "journal": {
+    "title": "Diário",
+    "subtitle": "Uma linha basta. Sem pressão.",
+    "line": "O que você gostaria de lembrar de hoje?",
+    "save": "Salvar",
+    "empty": "Ainda não há notas hoje."
   },
   "dashboard": {
     "greetingMorning": "Bom dia, {name}",
@@ -209,6 +232,21 @@
     "habitAsk": "Você fez?",
     "habitHint": "Se já fez, um toque. Se não, pode deixar para depois.",
     "habitDone": "Sim, fiz",
+    "sleepAsk": "Como você dormiu?",
+    "sleepHint": "Sem horas exatas. Só como se sentiu.",
+    "meditationAsk": "Uma respiração curta?",
+    "meditationHint": "Três minutos bastam. Ou abra o timer completo.",
+    "meditationQuick": "Respirar 3 min",
+    "meditationOpen": "Abrir meditação",
+    "activityAsk": "Você se moveu um pouco?",
+    "activityHint": "Uma caminhada curta conta. Sem obsessão.",
+    "activityQuick": "Caminhada curta (15 min)",
+    "activityOpen": "Escolher outra atividade",
+    "journalAsk": "Uma linha de hoje?",
+    "journalHint": "O que quiser lembrar. Pode ser curto.",
+    "restTitle": "Hora de desacelerar",
+    "restHint": "Descanse. Amanhã seguimos com calma.",
+    "seeSleep": "Registrar sono",
     "doneTitle": "Você está indo muito bem",
     "doneHint": "Você cobriu o essencial. Mais é opcional.",
     "seeStats": "Ver como vai minha semana",
@@ -217,6 +255,13 @@
     "chipMoodPending": "—",
     "chipGlasses": "{n} copos",
     "chipMeals": "{n} refeições",
+    "band": {
+      "morning": "Momento: manhã",
+      "midday": "Momento: meio-dia",
+      "afternoon": "Momento: tarde",
+      "evening": "Momento: noite",
+      "rest": "Momento: descanso"
+    },
     "moreTitle": "Você também pode…",
     "moreSubtitle": "Extras opcionais. O importante está em Hoje.",
     "moreHints": {
@@ -229,6 +274,7 @@
       "water": "Somar outro copo",
       "mood": "Ver como me senti",
       "habits": "Meus hábitos do dia",
+      "journal": "Uma nota do dia",
       "friends": "Notas e foto do dia com amigos",
       "reminders": "Toques no horário (web)"
     }

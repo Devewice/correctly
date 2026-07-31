@@ -21,6 +21,8 @@ model User {
   sleepTime            String?  @db.VarChar(5)
   mainGoal             String?
   activeModules        Json     @default("[\"meals\",\"water\",\"mood\",\"sleep\",\"habits\"]")
+  /** Horarios aproximados de comidas: { breakfast, lunch, dinner } HH:mm */
+  mealTimes            Json?
   /** Alarmas/recordatorios web: [{ id, type, time, enabled, withSound, label? }] */
   reminders            Json     @default("[]")
   onboardingCompleted  Boolean  @default(false)

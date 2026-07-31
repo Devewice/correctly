@@ -16,8 +16,10 @@ export const useAuthStore = defineStore('auth', () => {
   const isAuthenticated = computed(() => !!user.value)
 
   async function fetchStatus() {
+    const ctrl = new AbortController()
+    const timer = setTimeout(() => ctrl.abort(), 8000)
     try {
-      const data = await api('/auth/status')
+      const data = await api('/auth/status', { signal: ctrl.signal })
       authStatus.value = {
         ...data,
         statusLoaded: true,
@@ -29,10 +31,14 @@ export const useAuthStore = defineStore('auth', () => {
         ...authStatus.value,
         statusLoaded: true,
         statusError: true,
-        // No asumir "no configurado" si el API no responde
-        googleConfigured: authStatus.value.googleConfigured,
+        googleConfigured:
+          authStatus.value.googleConfigured === false
+            ? false
+            : null,
       }
       throw new Error('status_unavailable')
+    } finally {
+      clearTimeout(timer)
     }
   }
 
