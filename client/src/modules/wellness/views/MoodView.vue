@@ -83,10 +83,10 @@ onMounted(load)
   width: 100%;
   min-height: 5.5rem;
   padding: 0.75rem 0.4rem;
-  border: 2px solid #e4d9cb;
-  border-radius: 1rem;
-  background: #f5ede3;
-  color: #3d3d3d;
+  border: 1.5px solid var(--cx-border-strong);
+  border-radius: var(--cx-radius);
+  background: var(--cx-surface-soft);
+  color: var(--cx-text);
   cursor: pointer;
   transition:
     border-color 0.15s ease,
@@ -94,14 +94,14 @@ onMounted(load)
 }
 
 .mood-tile:hover:not(:disabled) {
-  border-color: #8ba888;
-  background: #eef3ed;
+  border-color: var(--cx-primary);
+  background: var(--cx-primary-soft);
 }
 
 .mood-tile--selected {
-  border-color: #8ba888;
-  background: #f4cba8;
-  box-shadow: 0 0 0 1px #8ba888;
+  border-color: var(--cx-primary-deep);
+  background: var(--cx-secondary-soft);
+  box-shadow: inset 0 0 0 1px var(--cx-primary-deep);
 }
 
 .mood-tile:disabled {
@@ -118,7 +118,7 @@ onMounted(load)
   font-size: 0.75rem;
   font-weight: 600;
   line-height: 1.2;
-  color: #3d3d3d;
+  color: var(--cx-text);
   text-align: center;
 }
 

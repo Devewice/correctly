@@ -48,7 +48,13 @@ const labels = computed(() =>
 
 <style scoped>
 .day-close {
-  background: linear-gradient(160deg, #eef3ed 0%, #faf8f5 55%, #f5ede3 100%) !important;
+  background: linear-gradient(
+    160deg,
+    var(--cx-primary-soft) 0%,
+    var(--cx-surface) 55%,
+    var(--cx-surface-soft) 100%
+  ) !important;
+  border: 1px solid var(--cx-border) !important;
 }
 .day-close__phrase {
   margin: 0;

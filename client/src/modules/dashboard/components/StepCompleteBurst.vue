@@ -28,7 +28,7 @@ defineProps({
   justify-content: center;
   gap: 0.75rem;
   pointer-events: none;
-  background: rgba(250, 248, 245, 0.4);
+  background: color-mix(in srgb, var(--cx-bg) 55%, transparent);
   padding: 1rem;
 }
 .burst__mark {
@@ -42,7 +42,7 @@ defineProps({
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 3px solid var(--cx-primary, #8ba888);
+  border: 3px solid var(--cx-primary);
   animation: ringPop 0.55s ease-out;
 }
 .burst__check {
@@ -51,14 +51,14 @@ defineProps({
   font-size: clamp(1.5rem, 5vw, 2rem);
   font-weight: 700;
   line-height: 1;
-  color: var(--cx-primary-deep, #5e7a5b);
+  color: var(--cx-primary-deep);
   animation: checkPop 0.45s ease-out;
 }
 .burst__label {
   margin: 0;
   font-size: clamp(0.85rem, 3.5vw, 0.95rem);
   font-weight: 600;
-  color: var(--cx-text, #3d3d3d);
+  color: var(--cx-text);
   text-align: center;
 }
 .burst-enter-active,

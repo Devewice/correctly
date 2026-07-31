@@ -376,7 +376,7 @@ function pickMood(value) {
   padding: clamp(0.9rem, 3vw, 1.25rem);
   border: 1px solid var(--cx-border) !important;
   background: var(--cx-surface) !important;
-  box-shadow: 0 4px 16px rgba(61, 61, 61, 0.05) !important;
+  box-shadow: var(--cx-shadow) !important;
   overflow: visible !important;
   width: 100%;
   max-width: 100%;
@@ -391,17 +391,18 @@ function pickMood(value) {
 
 .guide-head__title {
   margin: 0;
+  font-family: var(--cx-font-display);
   font-size: 1.2rem;
   font-weight: 700;
   line-height: 1.25;
-  color: #3d3d3d;
+  color: var(--cx-text);
 }
 
 .guide-head__context {
   margin: 0.3rem 0 0;
   font-size: 0.875rem;
   line-height: 1.35;
-  color: rgba(61, 61, 61, 0.72);
+  color: var(--cx-text-soft);
 }
 
 .habit-focus {
@@ -409,9 +410,9 @@ function pickMood(value) {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 0.9rem;
-  border-radius: 12px;
-  background: #f5ede3;
-  border: 1px solid rgba(94, 122, 91, 0.14);
+  border-radius: var(--cx-radius);
+  background: var(--cx-surface-soft);
+  border: 1px solid var(--cx-border);
 }
 
 .habit-focus__icon {
@@ -422,7 +423,7 @@ function pickMood(value) {
 .habit-focus__name {
   font-size: 1rem;
   font-weight: 700;
-  color: #3d3d3d;
+  color: var(--cx-text);
 }
 
 .guide-actions {
@@ -432,7 +433,7 @@ function pickMood(value) {
 }
 
 .guide-skip {
-  color: rgba(61, 61, 61, 0.65) !important;
+  color: var(--cx-text-soft) !important;
 }
 
 .mood-tile {
@@ -442,12 +443,12 @@ function pickMood(value) {
   justify-content: center;
   gap: 0.3rem;
   width: 100%;
-  min-height: 4.75rem;
+  min-height: 4.5rem;
   padding: 0.55rem 0.3rem;
-  border: 2px solid #e4d9cb;
-  border-radius: 0.9rem;
-  background: #f5ede3;
-  color: #3d3d3d;
+  border: 1.5px solid var(--cx-border-strong);
+  border-radius: var(--cx-radius-sm);
+  background: var(--cx-surface-soft);
+  color: var(--cx-text);
   cursor: pointer;
   transition:
     border-color 0.15s ease,
@@ -455,14 +456,14 @@ function pickMood(value) {
 }
 
 .mood-tile:hover:not(:disabled) {
-  border-color: #8ba888;
-  background: #eef3ed;
+  border-color: var(--cx-primary);
+  background: var(--cx-primary-soft);
 }
 
 .mood-tile--selected {
-  border-color: #8ba888;
-  background: #f4cba8;
-  box-shadow: 0 0 0 1px #8ba888;
+  border-color: var(--cx-primary-deep);
+  background: var(--cx-secondary-soft);
+  box-shadow: inset 0 0 0 1px var(--cx-primary-deep);
 }
 
 .mood-tile:disabled {
@@ -471,7 +472,7 @@ function pickMood(value) {
 }
 
 .mood-tile__emoji {
-  font-size: 1.75rem;
+  font-size: clamp(1.5rem, 5vw, 1.85rem);
   line-height: 1.1;
 }
 
@@ -479,25 +480,13 @@ function pickMood(value) {
   font-size: 0.7rem;
   font-weight: 600;
   line-height: 1.15;
-  color: #3d3d3d;
+  color: var(--cx-text);
   text-align: center;
 }
 
 @media (min-width: 600px) {
-  .day-guide-card {
-    padding: 1.25rem 1.35rem 1.35rem;
-  }
-
-  .guide-head__title {
-    font-size: 1.35rem;
-  }
-
   .mood-tile {
-    min-height: 5.25rem;
-  }
-
-  .mood-tile__emoji {
-    font-size: 2rem;
+    min-height: 5rem;
   }
 }
 </style>

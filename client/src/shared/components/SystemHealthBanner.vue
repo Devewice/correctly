@@ -124,17 +124,15 @@ const alertType = computed(() => {
     v-if="primary && open"
     :type="alertType"
     variant="tonal"
-    class="mb-3 health-banner"
-    density="compact"
+    class="mb-4 health-banner"
+    density="comfortable"
   >
-    <div class="text-body-2 font-weight-bold mb-1">
-      {{ titleFor(primary.id) }}
-    </div>
-    <div class="text-caption mb-2 health-banner__body">{{ bodyFor(primary.id) }}</div>
-    <div v-if="moreCount" class="text-caption text-medium-emphasis mb-2">
+    <div class="health-banner__title">{{ titleFor(primary.id) }}</div>
+    <div class="health-banner__body">{{ bodyFor(primary.id) }}</div>
+    <div v-if="moreCount" class="health-banner__more">
       {{ t('health.moreIssues', { n: moreCount }) }}
     </div>
-    <div class="d-flex flex-wrap ga-2">
+    <div class="health-banner__actions">
       <v-btn
         v-if="primary.action"
         size="small"
@@ -155,12 +153,26 @@ const alertType = computed(() => {
 </template>
 
 <style scoped>
-.health-banner :deep(.v-alert__content) {
-  min-width: 0;
+.health-banner__title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 0.25rem;
 }
 .health-banner__body {
-  line-height: 1.35;
-  color: inherit;
+  font-size: 0.8rem;
+  line-height: 1.4;
   opacity: 0.92;
+  margin-bottom: 0.45rem;
+}
+.health-banner__more {
+  font-size: 0.75rem;
+  opacity: 0.75;
+  margin-bottom: 0.5rem;
+}
+.health-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
 }
 </style>

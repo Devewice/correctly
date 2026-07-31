@@ -109,7 +109,7 @@ async function finish() {
           scale: 1,
           transition: { type: 'spring', stiffness: 120, damping: 16 },
         }"
-        class="pa-4 pa-sm-8 w-100"
+        class="pa-4 pa-sm-8 w-100 cx-card-shell"
       >
         <div
           v-motion

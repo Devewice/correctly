@@ -69,14 +69,16 @@ watch(
 <template>
   <v-snackbar
     :model-value="Boolean(reminders.toast)"
-    color="primary"
+    color="primary-darken-1"
     timeout="8000"
+    class="cx-snackbar"
     @update:model-value="(v) => !v && reminders.clearToast()"
   >
     {{ reminders.toast?.text }}
     <template #actions>
       <v-btn
         variant="text"
+        class="text-white"
         @click="
           () => {
             const r = reminders.toast?.route

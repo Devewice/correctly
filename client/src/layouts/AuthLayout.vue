@@ -63,7 +63,7 @@ const { t } = useI18n()
   min-height: 100dvh;
   overflow-x: hidden;
   overflow-y: auto;
-  background: #e8f0e6;
+  background: var(--cx-bg);
 }
 
 .auth-bg {
@@ -73,10 +73,10 @@ const { t } = useI18n()
   background:
     linear-gradient(
       180deg,
-      #cfe0d8 0%,
-      #e8f0e6 38%,
-      #f5ede3 72%,
-      #f4cba855 100%
+      #d5e4d4 0%,
+      #e8efe6 36%,
+      #f3ebe1 70%,
+      #efc4a055 100%
     );
 }
 
@@ -87,7 +87,7 @@ const { t } = useI18n()
   width: min(28vw, 180px);
   height: min(28vw, 180px);
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #fff6d8, #f4cba8 55%, transparent 70%);
+  background: radial-gradient(circle at 35% 35%, #fff6d8, #efc4a0 55%, transparent 70%);
   opacity: 0.85;
   animation: drift 18s ease-in-out infinite alternate;
 }
@@ -106,7 +106,7 @@ const { t } = useI18n()
   max-height: 420px;
   left: -10%;
   top: 18%;
-  background: radial-gradient(circle, #8ba888aa, transparent 70%);
+  background: radial-gradient(circle, #7f9f7caa, transparent 70%);
   animation: floatA 16s ease-in-out infinite;
 }
 
@@ -117,7 +117,7 @@ const { t } = useI18n()
   max-height: 340px;
   right: -8%;
   bottom: 22%;
-  background: radial-gradient(circle, #f4cba8bb, transparent 70%);
+  background: radial-gradient(circle, #efc4a0bb, transparent 70%);
   animation: floatB 20s ease-in-out infinite;
 }
 
@@ -146,7 +146,7 @@ const { t } = useI18n()
 .auth-haze {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 120%, #faf8f5ee 0%, transparent 55%);
+  background: radial-gradient(ellipse at 50% 120%, #f7f4efee 0%, transparent 55%);
 }
 
 .auth-hills {
@@ -156,8 +156,8 @@ const { t } = useI18n()
   bottom: -4%;
   height: 34%;
   background:
-    radial-gradient(120% 80% at 20% 100%, #8ba88866 0%, transparent 55%),
-    radial-gradient(100% 70% at 70% 100%, #5e7a5b55 0%, transparent 50%),
+    radial-gradient(120% 80% at 20% 100%, #7f9f7c66 0%, transparent 55%),
+    radial-gradient(100% 70% at 70% 100%, #4f6b4c55 0%, transparent 50%),
     radial-gradient(90% 60% at 50% 120%, #b5cfb588 0%, transparent 45%);
   animation: breathe 14s ease-in-out infinite;
 }
@@ -190,7 +190,7 @@ const { t } = useI18n()
 
 .auth-hero__tag {
   font-size: 1rem;
-  color: rgba(61, 61, 61, 0.72);
+  color: var(--cx-text-soft);
   margin-top: 6px;
   max-width: 280px;
   line-height: 1.4;
@@ -199,7 +199,7 @@ const { t } = useI18n()
 .auth-hero__copy {
   font-size: 1.15rem;
   line-height: 1.5;
-  color: #5e7a5b;
+  color: var(--cx-primary-deep);
   font-weight: 600;
   max-width: 320px;
 }

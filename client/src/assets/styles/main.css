@@ -11,6 +11,8 @@ body {
   overflow-x: hidden;
   background: var(--cx-bg);
   color: var(--cx-text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 .font-mono,
@@ -18,12 +20,13 @@ body {
   word-break: break-all;
   white-space: normal !important;
   height: auto !important;
-  min-height: 40px;
+  min-height: var(--cx-touch);
 }
 
 .v-application {
   font-family: var(--cx-font) !important;
   background: var(--cx-bg) !important;
+  color: var(--cx-text) !important;
 }
 
 .v-application .text-h1,
@@ -37,26 +40,33 @@ body {
   color: var(--cx-text);
 }
 
-/* —— Sistema de página compartido (app + admin) —— */
+.text-medium-emphasis {
+  color: var(--cx-text-soft) !important;
+  opacity: 1 !important;
+}
+
+/* —— Layout primitives —— */
 .cx-page-title {
   margin: 0;
   font-family: var(--cx-font-display);
-  font-size: 1.45rem;
+  font-size: clamp(1.3rem, 4.2vw, 1.75rem);
   font-weight: 700;
   line-height: 1.25;
   color: var(--cx-text);
+  letter-spacing: -0.02em;
 }
 .cx-page-sub {
-  margin: 0.35rem 0 0;
-  font-size: 0.875rem;
-  line-height: 1.4;
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
   color: var(--cx-text-soft);
+  max-width: 36rem;
 }
 .cx-section-label {
-  margin: 0 0 0.5rem;
-  font-size: 0.7rem;
+  margin: 0 0 0.55rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--cx-primary-deep);
 }
@@ -65,6 +75,7 @@ body {
   border-radius: var(--cx-radius-lg) !important;
   background: var(--cx-surface) !important;
   box-shadow: var(--cx-shadow) !important;
+  overflow: visible !important;
 }
 .cx-soft-panel {
   padding: var(--cx-space-3);
@@ -78,23 +89,68 @@ body {
   color: var(--cx-text-soft);
 }
 
-/* Alertas legibles */
+/* —— Buttons —— */
+.v-btn {
+  min-height: var(--cx-touch);
+}
+.v-btn--size-small {
+  min-height: 36px;
+}
+.v-btn--variant-flat.bg-primary,
+.v-chip--variant-flat.bg-primary {
+  color: #2f322e !important;
+  background: var(--cx-primary) !important;
+}
+.v-btn--variant-flat.bg-primary:hover,
+.v-btn--variant-flat.bg-primary:focus {
+  background: var(--cx-primary-deep) !important;
+  color: #fff !important;
+}
+.v-btn--variant-tonal {
+  font-weight: 600;
+}
+
+/* —— Cards —— */
+.v-card {
+  border-color: var(--cx-border) !important;
+}
+.v-card--variant-outlined,
+.v-card--border {
+  border-color: var(--cx-border) !important;
+}
+
+/* —— Alerts / notifications —— */
 .v-alert {
   --v-activated-opacity: 0.08;
+  border: 1px solid transparent !important;
 }
 .v-alert .v-alert__content {
   color: inherit;
+  min-width: 0;
 }
-.v-alert.text-info,
-.v-alert.bg-info,
-.v-alert--variant-tonal.v-alert--type-info {
-  color: #1f5f7a !important;
+.v-alert--variant-tonal.v-alert--type-info,
+.v-alert.text-info {
+  color: #1a5570 !important;
+  background: var(--cx-info-soft) !important;
+  border-color: rgba(42, 115, 150, 0.22) !important;
 }
-.v-alert--variant-tonal.v-alert--type-info {
-  background: rgba(47, 127, 163, 0.14) !important;
+.v-alert--variant-tonal.v-alert--type-success {
+  color: #245c38 !important;
+  background: var(--cx-success-soft) !important;
+  border-color: rgba(58, 133, 84, 0.22) !important;
+}
+.v-alert--variant-tonal.v-alert--type-warning {
+  color: #6d5208 !important;
+  background: var(--cx-warning-soft) !important;
+  border-color: rgba(166, 124, 10, 0.25) !important;
+}
+.v-alert--variant-tonal.v-alert--type-error {
+  color: #7a342f !important;
+  background: var(--cx-error-soft) !important;
+  border-color: rgba(181, 79, 72, 0.25) !important;
 }
 
-/* Contraste tonal */
+/* —— Tonal contrast —— */
 .v-card--variant-tonal,
 .v-chip--variant-tonal,
 .v-btn--variant-tonal,
@@ -104,13 +160,18 @@ body {
 .v-card--variant-tonal.bg-primary,
 .v-chip--variant-tonal.bg-primary,
 .v-btn--variant-tonal.bg-primary {
-  background: rgba(139, 168, 136, 0.24) !important;
-  color: #2f3d2e !important;
+  background: var(--cx-primary-soft) !important;
+  color: #2f322e !important;
 }
 .v-card--variant-tonal.bg-secondary,
 .v-chip--variant-tonal.bg-secondary,
 .v-btn--variant-tonal.bg-secondary {
-  background: rgba(244, 203, 168, 0.45) !important;
+  background: var(--cx-secondary-soft) !important;
+  color: var(--cx-text) !important;
+}
+.v-card--variant-tonal.bg-accent,
+.v-chip--variant-tonal.bg-accent {
+  background: rgba(201, 184, 216, 0.35) !important;
   color: var(--cx-text) !important;
 }
 .v-card--variant-tonal .text-body-1,
@@ -123,23 +184,25 @@ body {
   color: inherit !important;
 }
 
-/* Botones flat primary: texto oscuro sobre sage */
-.v-btn--variant-flat.bg-primary,
-.v-chip--variant-flat.bg-primary {
-  color: #2f3d2e !important;
+/* —— Fields —— */
+.v-field--variant-solo-filled .v-field__overlay {
+  background: var(--cx-surface-soft) !important;
+}
+.v-field {
+  border-radius: var(--cx-radius) !important;
 }
 
-/* Tile seleccionable */
+/* —— Select tiles —— */
 .select-tile {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 48px;
-  padding: 0.7rem 0.75rem;
-  border: 2px solid #e4d9cb;
-  border-radius: 12px;
-  background: var(--cx-bg);
+  min-height: var(--cx-touch);
+  padding: 0.7rem 0.85rem;
+  border: 1.5px solid var(--cx-border-strong);
+  border-radius: var(--cx-radius-sm);
+  background: var(--cx-surface);
   color: var(--cx-text);
   font-size: 0.875rem;
   font-weight: 600;
@@ -148,22 +211,23 @@ body {
   cursor: pointer;
   transition:
     border-color 0.15s ease,
-    background 0.15s ease;
+    background 0.15s ease,
+    box-shadow 0.15s ease;
 }
 .select-tile:hover {
   border-color: var(--cx-primary);
-  background: #eef3ed;
+  background: var(--cx-primary-soft);
 }
 .select-tile--on {
   border-color: var(--cx-primary-deep);
-  background: #dfe9dd;
-  color: #2f3d2e;
+  background: color-mix(in srgb, var(--cx-primary) 22%, var(--cx-surface));
+  color: var(--cx-text);
   box-shadow: inset 0 0 0 1px var(--cx-primary-deep);
 }
 .select-tile--center {
   flex-direction: column;
-  gap: 0.25rem;
-  min-height: 72px;
+  gap: 0.3rem;
+  min-height: 4.75rem;
 }
 .select-tile__emoji {
   font-size: 1.5rem;
@@ -174,44 +238,19 @@ body {
   cursor: default;
 }
 
-/* Admin: misma base visual */
-.admin-shell .v-tabs {
-  background: var(--cx-surface);
-  border: 1px solid var(--cx-border);
-  border-radius: var(--cx-radius);
-  padding: 0.25rem;
-}
-.admin-shell .v-card {
-  border-color: var(--cx-border) !important;
-}
-
-/* —— Responsive / layout estable —— */
-.v-main > .v-container {
-  overflow: visible;
-  width: 100%;
-  max-width: 100%;
-  padding-left: max(12px, env(safe-area-inset-left));
-  padding-right: max(12px, env(safe-area-inset-right));
-}
-@media (min-width: 600px) {
-  .v-main > .v-container {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-}
-
-/* Stats / métricas del mismo alto en filas */
+/* —— Stat cards —— */
 .cx-stat-card {
-  min-height: 6.5rem;
+  min-height: 6.25rem;
   height: 100%;
   display: flex !important;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
+  border-radius: var(--cx-radius) !important;
 }
 .cx-stat-card__label {
   font-size: 0.75rem;
-  line-height: 1.25;
+  line-height: 1.3;
   min-height: 2.5em;
   color: var(--cx-text-soft);
   display: -webkit-box;
@@ -220,19 +259,87 @@ body {
   overflow: hidden;
 }
 .cx-stat-card__value {
-  font-size: clamp(1.25rem, 4vw, 1.5rem);
+  font-family: var(--cx-font-display);
+  font-size: clamp(1.3rem, 4vw, 1.55rem);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
   color: var(--cx-text);
   margin-top: 0.35rem;
 }
 
-/* Cards: sombra suave sin recortes raros */
-.cx-card-shell {
-  overflow: visible !important;
+/* —— Shell / nav —— */
+.v-main > .v-container {
+  overflow: visible;
+  width: 100%;
+  max-width: 100%;
+  padding-left: max(14px, env(safe-area-inset-left));
+  padding-right: max(14px, env(safe-area-inset-right));
+}
+@media (min-width: 600px) {
+  .v-main > .v-container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
 
-/* Tipografía fluida en títulos de página */
-.cx-page-title {
-  font-size: clamp(1.25rem, 4.2vw, 1.75rem);
+.v-bottom-navigation {
+  border-top: 1px solid var(--cx-border) !important;
+  background: var(--cx-surface) !important;
+  box-shadow: 0 -4px 20px rgba(47, 50, 46, 0.06) !important;
+}
+.v-bottom-navigation .v-btn {
+  min-width: 0 !important;
+  font-size: clamp(0.62rem, 2.6vw, 0.72rem) !important;
+  font-weight: 600 !important;
+  opacity: 0.72;
+}
+.v-bottom-navigation .v-btn--active {
+  opacity: 1;
+}
+
+.v-app-bar {
+  border-bottom-color: var(--cx-border) !important;
+  backdrop-filter: blur(8px);
+}
+
+.v-navigation-drawer {
+  border-right: 1px solid var(--cx-border) !important;
+}
+
+/* —— Admin —— */
+.admin-shell .v-tabs {
+  background: var(--cx-surface);
+  border: 1px solid var(--cx-border);
+  border-radius: var(--cx-radius);
+  padding: 0.2rem;
+}
+.admin-shell .v-card {
+  border-color: var(--cx-border) !important;
+  box-shadow: var(--cx-shadow) !important;
+}
+
+/* —— Lists —— */
+.v-list-item-title {
+  font-weight: 600;
+  color: var(--cx-text);
+}
+.v-list-item-subtitle {
+  color: var(--cx-text-soft) !important;
+  opacity: 1 !important;
+}
+
+/* —— Snackbars / toasts —— */
+.v-snackbar .v-snackbar__wrapper {
+  min-height: var(--cx-touch);
+  border-radius: var(--cx-radius) !important;
+  box-shadow: var(--cx-shadow-lift) !important;
+}
+.v-snackbar.bg-primary-darken-1 .v-snackbar__content,
+.v-snackbar .v-snackbar__wrapper.bg-primary-darken-1 {
+  color: #fff !important;
+}
+
+/* —— Flat success (readable on light brand) —— */
+.v-btn--variant-flat.bg-success {
+  color: #fff !important;
 }

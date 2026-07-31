@@ -1,28 +1,50 @@
 /**
- * Design tokens Correctly — tipografía, color, radio, espacio.
- * Usar en app y admin para una sola lengua visual.
+ * Correctly design tokens — una sola lengua visual (app + admin).
  */
 :root {
-  --cx-bg: #faf8f5;
+  /* Surfaces */
+  --cx-bg: #f7f4ef;
   --cx-surface: #ffffff;
-  --cx-surface-soft: #f5ede3;
-  --cx-surface-muted: #ede4d8;
-  --cx-border: rgba(94, 122, 91, 0.18);
-  --cx-border-strong: rgba(94, 122, 91, 0.32);
-  --cx-text: #3d3d3d;
-  --cx-text-soft: rgba(61, 61, 61, 0.72);
-  --cx-primary: #8ba888;
-  --cx-primary-deep: #5e7a5b;
-  --cx-primary-soft: rgba(139, 168, 136, 0.18);
-  --cx-secondary: #f4cba8;
-  --cx-info: #2f7fa3;
+  --cx-surface-soft: #f3ebe1;
+  --cx-surface-muted: #e8dfd2;
+
+  /* Ink */
+  --cx-text: #2f322e;
+  --cx-text-soft: rgba(47, 50, 46, 0.68);
+  --cx-text-faint: rgba(47, 50, 46, 0.48);
+
+  /* Brand */
+  --cx-primary: #7f9f7c;
+  --cx-primary-deep: #4f6b4c;
+  --cx-primary-soft: rgba(127, 159, 124, 0.16);
+  --cx-secondary: #efc4a0;
+  --cx-secondary-soft: rgba(239, 196, 160, 0.4);
+  --cx-accent: #c9b8d8;
+  --cx-info: #2a7396;
+  --cx-info-soft: rgba(42, 115, 150, 0.14);
+  --cx-success: #3a8554;
+  --cx-success-soft: rgba(58, 133, 84, 0.14);
+  --cx-warning: #a67c0a;
+  --cx-warning-soft: rgba(166, 124, 10, 0.14);
+  --cx-error: #b54f48;
+  --cx-error-soft: rgba(181, 79, 72, 0.14);
+
+  /* Borders / depth */
+  --cx-border: rgba(79, 107, 76, 0.16);
+  --cx-border-strong: rgba(79, 107, 76, 0.28);
+  --cx-radius-sm: 10px;
   --cx-radius: 14px;
-  --cx-radius-lg: 18px;
+  --cx-radius-lg: 20px;
+  --cx-shadow: 0 2px 12px rgba(47, 50, 46, 0.05);
+  --cx-shadow-lift: 0 8px 24px rgba(47, 50, 46, 0.08);
+
+  /* Space / type */
   --cx-space-1: 0.35rem;
   --cx-space-2: 0.65rem;
   --cx-space-3: 1rem;
   --cx-space-4: 1.35rem;
+  --cx-space-5: 1.75rem;
+  --cx-touch: 44px;
   --cx-font: 'DM Sans', system-ui, sans-serif;
   --cx-font-display: 'Nunito', 'DM Sans', system-ui, sans-serif;
-  --cx-shadow: 0 8px 28px rgba(61, 61, 61, 0.06);
 }

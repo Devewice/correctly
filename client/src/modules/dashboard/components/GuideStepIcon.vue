@@ -62,7 +62,8 @@ defineProps({
   height: 44px;
   margin: 0;
   border-radius: 12px;
-  background: #f5ede3;
+  background: var(--cx-surface-soft);
+  border: 1px solid var(--cx-border);
 }
 .guide-icon--sm .guide-icon__emoji {
   font-size: 1.55rem;
@@ -101,12 +102,12 @@ defineProps({
 .guide-icon__glass {
   width: 34px;
   height: 44px;
-  border: 3px solid #2f7fa3;
+  border: 3px solid var(--cx-info);
   border-top: none;
   border-radius: 0 0 8px 8px;
   position: relative;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.35);
+  background: color-mix(in srgb, var(--cx-surface) 55%, transparent);
 }
 .guide-icon__liquid {
   position: absolute;
@@ -114,7 +115,7 @@ defineProps({
   right: 0;
   bottom: 0;
   height: 55%;
-  background: linear-gradient(180deg, #7ec8e3, #2f7fa3);
+  background: linear-gradient(180deg, #7ec8e3, var(--cx-info));
   animation: liquidWave 2.2s ease-in-out infinite;
   border-radius: 0 0 5px 5px;
 }
@@ -123,7 +124,7 @@ defineProps({
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: radial-gradient(circle, #b5cfb5, #8ba888);
+  background: radial-gradient(circle, #b5cfb5, var(--cx-primary));
   animation: breathe 4s ease-in-out infinite;
 }
 

@@ -248,22 +248,24 @@ onMounted(load)
         </div>
         <p v-if="share.note" class="text-body-1 mb-3">{{ share.note }}</p>
         <v-img v-if="share.photoUrl" :src="share.photoUrl" max-height="280" cover class="rounded-lg mb-3" />
-        <div class="d-flex ga-2">
+        <div class="d-flex flex-wrap ga-2">
           <v-btn
             size="small"
             :color="share.myReaction === 'like' ? 'success' : undefined"
             :variant="share.myReaction === 'like' ? 'flat' : 'tonal'"
+            prepend-icon="mdi-heart"
             @click="react(share, 'like')"
           >
-            💛 {{ t('friends.reactCheer') }} {{ share.likes }}
+            {{ t('friends.reactCheer') }} · {{ share.likes }}
           </v-btn>
           <v-btn
             size="small"
             :color="share.myReaction === 'dislike' ? 'secondary' : undefined"
             :variant="share.myReaction === 'dislike' ? 'flat' : 'tonal'"
+            prepend-icon="mdi-arm-flex"
             @click="react(share, 'dislike')"
           >
-            💪 {{ t('friends.reactStrength') }} {{ share.dislikes }}
+            {{ t('friends.reactStrength') }} · {{ share.dislikes }}
           </v-btn>
         </div>
       </v-card>

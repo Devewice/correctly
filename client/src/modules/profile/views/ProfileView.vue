@@ -156,13 +156,15 @@ async function save() {
       <v-btn type="submit" block color="primary" size="large" :loading="busy">
         {{ t('common.save') }}
       </v-btn>
-      <v-alert v-if="saved" type="success" density="compact" class="mt-3">✓</v-alert>
+      <v-alert v-if="saved" type="success" density="compact" class="mt-3">
+        {{ t('common.saved') }}
+      </v-alert>
     </v-form>
   </v-card>
 
-  <v-card class="pa-4" variant="flat" color="surface-light">
-    <div class="text-body-2">{{ auth.user?.email }}</div>
-    <div class="text-caption text-medium-emphasis">
+  <v-card class="pa-4 mt-4" variant="flat" color="surface-light">
+    <div class="text-body-2 font-weight-medium">{{ auth.user?.email }}</div>
+    <div class="text-caption text-medium-emphasis mt-1">
       XP: {{ auth.user?.stats?.totalXP || 0 }} · Level {{ auth.user?.stats?.level || 1 }}
     </div>
   </v-card>

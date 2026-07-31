@@ -3,7 +3,6 @@ import { useI18n } from 'vue-i18n'
 import { usePwaInstall } from '@/shared/pwa/usePwaInstall'
 
 defineProps({
-  /** Versión baja para el menú Más / espacios estrechos */
   compact: { type: Boolean, default: false },
 })
 
@@ -14,13 +13,13 @@ const { canPrompt, isApp, showIosHelp, promptInstall } = usePwaInstall()
 <template>
   <v-card
     v-if="!isApp"
-    class="install-card mb-4"
+    class="install-card mb-3"
     :class="compact ? 'install-card--compact pa-3' : 'pa-4'"
     variant="flat"
   >
     <div class="d-flex align-start ga-3">
       <v-avatar
-        color="primary"
+        color="secondary"
         variant="flat"
         :size="compact ? 36 : 40"
         class="flex-shrink-0"
@@ -60,7 +59,7 @@ const { canPrompt, isApp, showIosHelp, promptInstall } = usePwaInstall()
 
   <v-card
     v-else
-    class="install-card install-card--done mb-4"
+    class="install-card install-card--done mb-3"
     :class="compact ? 'pa-3' : 'pa-4'"
     variant="flat"
   >
@@ -84,46 +83,34 @@ const { canPrompt, isApp, showIosHelp, promptInstall } = usePwaInstall()
 
 <style scoped>
 .install-card {
-  background: #f4cba8 !important;
-  color: #3d3d3d !important;
-  border: 1px solid rgba(94, 122, 91, 0.16) !important;
-  overflow: visible !important;
+  background: var(--cx-secondary-soft) !important;
+  color: var(--cx-text) !important;
+  border: 1px solid var(--cx-border) !important;
+  border-radius: var(--cx-radius) !important;
   width: 100%;
-  max-width: 100%;
 }
 .install-card--done {
-  background: #e4efe3 !important;
-  border-color: rgba(63, 143, 91, 0.28) !important;
+  background: var(--cx-success-soft) !important;
+  border-color: color-mix(in srgb, var(--cx-success) 35%, transparent) !important;
 }
 .install-card__body {
   flex: 1 1 auto;
   min-width: 0;
-  overflow: visible;
 }
 .install-card__title {
-  color: #3d3d3d !important;
+  color: var(--cx-text) !important;
   line-height: 1.3;
-  white-space: normal;
   word-break: break-word;
-  overflow-wrap: anywhere;
 }
-.install-card__sub {
-  color: rgba(61, 61, 61, 0.8) !important;
-  line-height: 1.35;
-  white-space: normal;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
+.install-card__sub,
 .install-card__list {
-  color: rgba(61, 61, 61, 0.85);
+  color: var(--cx-text-soft) !important;
   line-height: 1.4;
 }
 .install-card__btn {
   white-space: normal !important;
   height: auto !important;
   min-height: 36px;
-  padding-top: 6px !important;
-  padding-bottom: 6px !important;
 }
 .install-card--compact .install-card__sub {
   display: -webkit-box;

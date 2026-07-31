@@ -305,11 +305,11 @@ function typeTitle(type) {
 
 <style scoped>
 .reminders-push-card {
-  background: #e4efe3 !important;
-  color: #3d3d3d !important;
-  border: 1px solid rgba(94, 122, 91, 0.22) !important;
+  background: var(--cx-primary-soft) !important;
+  color: var(--cx-text) !important;
+  border: 1px solid var(--cx-border-strong) !important;
 }
 .reminders-push-card__hint {
-  color: rgba(61, 61, 61, 0.72) !important;
+  color: var(--cx-text-soft) !important;
 }
 </style>

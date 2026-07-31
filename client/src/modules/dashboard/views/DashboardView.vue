@@ -362,7 +362,7 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
 
 <style scoped>
 .today-view {
-  --today-glow: rgba(139, 168, 136, 0.14);
+  --today-glow: rgba(127, 159, 124, 0.16);
   position: relative;
   isolation: isolate;
   overflow: visible;
@@ -379,17 +379,17 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   pointer-events: none;
 }
 .today-view--morning {
-  --today-glow: rgba(244, 203, 168, 0.4);
+  --today-glow: rgba(239, 196, 160, 0.42);
 }
 .today-view--midday {
-  --today-glow: rgba(139, 168, 136, 0.26);
+  --today-glow: rgba(127, 159, 124, 0.28);
 }
 .today-view--afternoon {
-  --today-glow: rgba(212, 197, 226, 0.32);
+  --today-glow: rgba(201, 184, 216, 0.34);
 }
 .today-view--evening,
 .today-view--rest {
-  --today-glow: rgba(95, 122, 140, 0.22);
+  --today-glow: rgba(42, 115, 150, 0.2);
 }
 .today-view__header {
   margin-bottom: 1rem;

@@ -73,4 +73,7 @@ const links = [
 .admin-title {
   min-width: 0;
 }
+.admin-shell {
+  background: var(--cx-bg);
+}
 </style>

@@ -55,7 +55,7 @@ function googleLogin() {
 </script>
 
 <template>
-  <v-card class="login-card pa-5 pa-sm-8 text-center" elevation="0">
+  <v-card class="login-card cx-card-shell pa-5 pa-sm-8 text-center" elevation="0">
     <div
       v-motion
       v-bind="withDelay(fadeUp, 80)"
@@ -143,15 +143,15 @@ function googleLogin() {
 
 <style scoped>
 .login-card {
-  backdrop-filter: blur(14px);
-  background: rgba(255, 255, 255, 0.82) !important;
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  box-shadow: 0 18px 50px rgba(94, 122, 91, 0.12);
+  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.88) !important;
+  border: 1px solid rgba(255, 255, 255, 0.7) !important;
+  box-shadow: var(--cx-shadow-lift) !important;
 }
 
 .login-tagline {
   font-size: 0.85rem;
-  color: rgba(61, 61, 61, 0.7);
+  color: var(--cx-text-soft);
   margin-top: 2px;
   max-width: 260px;
   line-height: 1.35;

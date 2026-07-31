@@ -367,23 +367,27 @@ async function logout() {
   font-size: clamp(0.65rem, 2.8vw, 0.75rem);
 }
 .more-sheet {
-  border-radius: 16px 16px 0 0 !important;
+  border-radius: 20px 20px 0 0 !important;
   max-height: min(85dvh, 720px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background: var(--cx-bg) !important;
+  border: 1px solid var(--cx-border) !important;
 }
 .more-sheet__chrome {
   flex-shrink: 0;
-  padding: 8px 12px 4px;
+  padding: 10px 14px 6px;
   touch-action: pan-y;
+  background: var(--cx-surface);
+  border-bottom: 1px solid var(--cx-border);
 }
 .more-sheet__handle {
-  width: 40px;
+  width: 36px;
   height: 4px;
   border-radius: 999px;
-  background: rgba(61, 61, 61, 0.28);
-  margin: 0 auto 8px;
+  background: var(--cx-text-faint);
+  margin: 0 auto 10px;
 }
 .more-sheet__header {
   display: flex;
@@ -392,7 +396,7 @@ async function logout() {
   gap: 8px;
 }
 .more-sheet__body {
-  padding: 8px 12px max(20px, calc(env(safe-area-inset-bottom) + 12px));
+  padding: 12px 14px max(22px, calc(env(safe-area-inset-bottom) + 14px));
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -407,18 +411,23 @@ async function logout() {
   flex-direction: row;
   align-items: center;
   gap: 10px;
-  min-height: 44px;
-  padding: 8px 10px;
-  border: 1px solid rgba(94, 122, 91, 0.18);
-  border-radius: 12px;
-  background: #efe6da;
-  color: #3d3d3d;
+  min-height: var(--cx-touch);
+  padding: 10px 12px;
+  border: 1.5px solid var(--cx-border);
+  border-radius: var(--cx-radius-sm);
+  background: var(--cx-surface);
+  color: var(--cx-text);
   text-align: left;
   cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.more-row:active {
+  background: var(--cx-primary-soft);
 }
 .more-row--active {
-  border-color: #8ba888;
-  background: #e7f0e5;
+  border-color: var(--cx-primary-deep);
+  background: var(--cx-primary-soft);
+  box-shadow: inset 0 0 0 1px var(--cx-primary-deep);
 }
 .more-row__icon {
   flex-shrink: 0;
@@ -427,7 +436,7 @@ async function logout() {
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.2;
-  color: #3d3d3d;
+  color: var(--cx-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

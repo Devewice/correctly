@@ -27,17 +27,17 @@ onMounted(async () => {
   <div v-else-if="!data" class="text-medium-emphasis">{{ t('common.loading') }}</div>
 
   <div v-else class="d-flex flex-column ga-4">
-    <v-row dense>
+    <v-row dense class="align-stretch">
       <v-col cols="12" sm="4">
-        <v-card class="pa-5 cx-card-shell">
-          <div class="text-caption text-medium-emphasis">{{ t('admin.overview.users') }}</div>
-          <div class="text-h4 font-weight-bold">{{ data.stats.usersCount }}</div>
+        <v-card class="pa-4 pa-sm-5 cx-stat-card">
+          <div class="cx-stat-card__label">{{ t('admin.overview.users') }}</div>
+          <div class="cx-stat-card__value">{{ data.stats.usersCount }}</div>
         </v-card>
       </v-col>
       <v-col cols="12" sm="4">
-        <v-card class="pa-5">
-          <div class="text-caption text-medium-emphasis">{{ t('admin.overview.google') }}</div>
-          <div class="text-h6 font-weight-bold">
+        <v-card class="pa-4 pa-sm-5 cx-stat-card">
+          <div class="cx-stat-card__label">{{ t('admin.overview.google') }}</div>
+          <div class="cx-stat-card__value" style="font-size: 1.15rem">
             {{
               data.settings.google.configured
                 ? t('admin.overview.configured')
@@ -54,9 +54,9 @@ onMounted(async () => {
         </v-card>
       </v-col>
       <v-col cols="12" sm="4">
-        <v-card class="pa-5">
-          <div class="text-caption text-medium-emphasis">{{ t('admin.overview.push') }}</div>
-          <div class="text-h6 font-weight-bold">
+        <v-card class="pa-4 pa-sm-5 cx-stat-card">
+          <div class="cx-stat-card__label">{{ t('admin.overview.push') }}</div>
+          <div class="cx-stat-card__value" style="font-size: 1.15rem">
             {{
               data.settings.vapid?.configured
                 ? t('admin.overview.configured')

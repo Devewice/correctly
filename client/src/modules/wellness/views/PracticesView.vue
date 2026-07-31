@@ -75,13 +75,20 @@ async function run(p) {
   align-items: flex-start;
   gap: 0.85rem;
   width: 100%;
+  min-height: 5.25rem;
   padding: 1rem;
-  border-radius: 14px;
-  border: 1px solid rgba(94, 122, 91, 0.18);
-  background: #f5ede3;
-  color: #3d3d3d;
+  border-radius: var(--cx-radius);
+  border: 1.5px solid var(--cx-border);
+  background: var(--cx-surface);
+  color: var(--cx-text);
   text-align: left;
   cursor: pointer;
+  box-shadow: var(--cx-shadow);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.practice-card:hover {
+  border-color: var(--cx-primary);
+  background: var(--cx-primary-soft);
 }
 .practice-card:disabled {
   opacity: 0.6;
@@ -99,7 +106,7 @@ async function run(p) {
   display: block;
   margin-top: 0.25rem;
   font-size: 0.8rem;
-  color: rgba(61, 61, 61, 0.72);
+  color: var(--cx-text-soft);
   line-height: 1.35;
 }
 </style>
