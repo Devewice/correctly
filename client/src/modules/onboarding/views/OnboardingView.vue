@@ -139,10 +139,7 @@ async function finish() {
                 :color="form.language === lang ? 'primary' : undefined"
                 :variant="form.language === lang ? 'flat' : 'tonal'"
                 label
-                @click="
-                  form.language = lang
-                  setLocale(lang)
-                "
+                @click="form.language = lang; setLocale(lang)"
               >
                 {{ lang }}
               </v-chip>
