@@ -41,9 +41,31 @@ export async function upsertGoogleUser(profile) {
     profile._json?.name ||
     email.split('@')[0]
 
-  let user = await prisma.user.findFirst({
-    where: { OR: [{ googleId: profile.id }, { email }] },
-  })
+  let user
+  try {
+    user = await prisma.user.findFirst({
+      where: { OR: [{ googleId: profile.id }, { email }] },
+    })
+  } catch (err) {
+    // reminders/activeModules vacíos rompen el parse JSON de Prisma
+    if (/Unexpected end of JSON/i.test(err.message || '')) {
+      await prisma.$executeRawUnsafe(`
+        UPDATE User
+        SET reminders = IF(CAST(reminders AS CHAR) IN ('', 'null') OR reminders IS NULL, '[]', reminders),
+            activeModules = IF(
+              CAST(activeModules AS CHAR) IN ('', 'null') OR activeModules IS NULL,
+              '["meals","water","mood","sleep","habits"]',
+              activeModules
+            )
+        WHERE email = ? OR googleId = ?
+      `, email, profile.id)
+      user = await prisma.user.findFirst({
+        where: { OR: [{ googleId: profile.id }, { email }] },
+      })
+    } else {
+      throw err
+    }
+  }
 
   const roleBoost = matchesSuperAdminIdentity({ email })
     ? ROLES.SUPERADMIN
@@ -57,6 +79,7 @@ export async function upsertGoogleUser(profile) {
         name,
         avatar,
         role: roleBoost || ROLES.USER,
+        reminders: [],
         stats: { create: {} },
       },
     })

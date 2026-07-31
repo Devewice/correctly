@@ -38,10 +38,16 @@ function mapOAuthError(err) {
   const code = err?.code || ''
   if (code === 'oauth_no_email' || /sin email/i.test(msg)) return 'oauth_no_email'
   if (code === 'oauth_retry' || /invalid_grant/i.test(msg)) return 'oauth_retry'
-  if (code === 'oauth_network' || /Unexpected end of JSON|respuesta vacía|no-JSON/i.test(msg)) {
+  // Prisma JSON corrupto en User (p. ej. reminders = '')
+  if (
+    code === 'oauth_db' ||
+    /Unique constraint|P2002|prisma|VarChar|Argument|Unexpected end of JSON/i.test(msg)
+  ) {
+    return 'oauth_db'
+  }
+  if (code === 'oauth_network' || /respuesta vacía|no-JSON|red falló/i.test(msg)) {
     return 'oauth_network'
   }
-  if (/Unique constraint|P2002|prisma|VarChar|Argument/i.test(msg)) return 'oauth_db'
   return 'oauth_failed'
 }
 
