@@ -133,16 +133,17 @@ async function finish() {
           <v-window-item :value="0">
             <p class="text-body-2 text-medium-emphasis mb-3">{{ t('onboarding.language') }}</p>
             <div class="d-flex ga-2 mb-6">
-              <v-chip
+              <button
                 v-for="lang in ['es', 'en', 'pt']"
                 :key="lang"
-                :color="form.language === lang ? 'primary' : undefined"
-                :variant="form.language === lang ? 'flat' : 'tonal'"
-                label
+                type="button"
+                class="select-tile"
+                :class="{ 'select-tile--on': form.language === lang }"
+                style="width: auto; min-width: 4.5rem"
                 @click="form.language = lang; setLocale(lang)"
               >
                 {{ lang }}
-              </v-chip>
+              </button>
             </div>
             <v-btn block color="primary" size="large" @click="step = 1">
               {{ t('onboarding.continue') }}
@@ -153,14 +154,14 @@ async function finish() {
             <p class="text-body-2 text-medium-emphasis mb-3">{{ t('onboarding.modules') }}</p>
             <v-row dense class="mb-6">
               <v-col v-for="key in moduleKeys" :key="key" cols="6">
-                <v-card
-                  :color="form.activeModules.includes(key) ? 'primary' : undefined"
-                  :variant="form.activeModules.includes(key) ? 'tonal' : 'outlined'"
-                  class="pa-3"
+                <button
+                  type="button"
+                  class="select-tile"
+                  :class="{ 'select-tile--on': form.activeModules.includes(key) }"
                   @click="toggleModule(key)"
                 >
-                  <div class="text-body-2">{{ t(`modules.${key}`) }}</div>
-                </v-card>
+                  {{ t(`modules.${key}`) }}
+                </button>
               </v-col>
             </v-row>
             <v-btn
@@ -228,16 +229,17 @@ async function finish() {
           <v-window-item :value="4">
             <p class="text-body-2 text-medium-emphasis mb-3">{{ t('onboarding.goalPick') }}</p>
             <div class="d-flex flex-wrap ga-2 mb-5">
-              <v-chip
+              <button
                 v-for="g in goalKeys"
                 :key="g"
-                :color="form.mainGoal === g ? 'primary' : undefined"
-                :variant="form.mainGoal === g ? 'flat' : 'tonal'"
-                label
+                type="button"
+                class="select-tile"
+                :class="{ 'select-tile--on': form.mainGoal === g }"
+                style="width: auto"
                 @click="form.mainGoal = g"
               >
                 {{ t(`onboarding.goals.${g}`) }}
-              </v-chip>
+              </button>
             </div>
 
             <template v-if="form.activeModules.includes('habits')">

@@ -91,32 +91,32 @@ onUnmounted(stop)
   <v-row dense class="mb-4">
     <v-col v-for="(p, i) in presets" :key="p.key" cols="6" sm="3">
       <div v-motion v-bind="{ ...softHover, ...withDelay(fadeUp, 60 + i * 50) }">
-        <v-card
-          class="pa-4 text-center"
-          :color="selectedKey === p.key ? 'accent' : undefined"
-          :variant="selectedKey === p.key ? 'flat' : 'tonal'"
+        <button
+          type="button"
+          class="select-tile"
+          :class="{ 'select-tile--on': selectedKey === p.key }"
           :disabled="running"
           @click="selectedKey = p.key"
         >
-          <div class="text-subtitle-2 font-weight-bold">{{ t(`meditation.durations.${p.key}`) }}</div>
-        </v-card>
+          {{ t(`meditation.durations.${p.key}`) }}
+        </button>
       </div>
     </v-col>
   </v-row>
 
   <div class="d-flex flex-wrap ga-2 mb-6">
-    <v-chip
+    <button
       v-for="opt in ['breathing', 'free', 'body_scan', 'gratitude']"
       :key="opt"
-      :color="type === opt ? 'primary' : undefined"
-      :variant="type === opt ? 'flat' : 'tonal'"
+      type="button"
+      class="select-tile"
+      :class="{ 'select-tile--on': type === opt }"
+      style="width: auto"
       :disabled="running"
-      size="small"
-      label
       @click="type = opt"
     >
       {{ t(`meditation.types.${opt}`) }}
-    </v-chip>
+    </button>
   </div>
 
   <div class="d-flex justify-center mb-4">

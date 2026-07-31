@@ -68,17 +68,17 @@ onMounted(load)
   <v-card class="pa-5 mb-6">
     <p class="text-body-2 text-medium-emphasis mb-3">{{ t('meals.whenAsk') }}</p>
     <div class="d-flex flex-wrap ga-2 mb-5">
-      <v-chip
+      <button
         v-for="type in types"
         :key="type"
-        :color="form.type === type ? 'primary' : undefined"
-        :variant="form.type === type ? 'flat' : 'tonal'"
-        size="small"
-        label
+        type="button"
+        class="select-tile"
+        :class="{ 'select-tile--on': form.type === type }"
+        style="width: auto"
         @click="form.type = type"
       >
         {{ t(`meals.types.${type}`) }}
-      </v-chip>
+      </button>
     </div>
 
     <v-text-field
@@ -92,15 +92,15 @@ onMounted(load)
     <v-row dense class="mb-5">
       <v-col v-for="(f, i) in feels" :key="f.key" cols="4">
         <div v-motion v-bind="{ ...softHover, ...withDelay(fadeUp, 60 + i * 50) }">
-          <v-card
-            class="pa-3 text-center"
-            :color="form.feel === f.key ? 'secondary' : undefined"
-            :variant="form.feel === f.key ? 'flat' : 'tonal'"
+          <button
+            type="button"
+            class="select-tile select-tile--center"
+            :class="{ 'select-tile--on': form.feel === f.key }"
             @click="form.feel = f.key"
           >
-            <div class="text-h5">{{ f.icon }}</div>
-            <div class="text-caption font-weight-medium">{{ t(`meals.feel.${f.key}`) }}</div>
-          </v-card>
+            <span class="select-tile__emoji" aria-hidden="true">{{ f.icon }}</span>
+            <span>{{ t(`meals.feel.${f.key}`) }}</span>
+          </button>
         </div>
       </v-col>
     </v-row>

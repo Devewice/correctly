@@ -25,7 +25,8 @@ const correctlyLight = {
     'on-surface': '#3D3D3D',
     'on-surface-light': '#3D3D3D',
     'on-surface-variant': '#3D3D3D',
-    'on-primary': '#FFFFFF',
+    // Texto sobre primary: oscuro (el sage es claro; blanco “desaparecía” en tonal)
+    'on-primary': '#2F3D2E',
     'on-primary-darken-1': '#FFFFFF',
     'on-secondary': '#3D3D3D',
     'on-accent': '#3D3D3D',

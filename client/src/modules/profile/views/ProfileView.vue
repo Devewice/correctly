@@ -105,14 +105,14 @@ async function save() {
       <p class="text-body-2 text-medium-emphasis mb-2">{{ t('onboarding.modules') }}</p>
       <v-row dense class="mb-4">
         <v-col v-for="key in moduleKeys" :key="key" cols="6">
-          <v-card
-            :color="form.activeModules.includes(key) ? 'primary' : undefined"
-            :variant="form.activeModules.includes(key) ? 'tonal' : 'outlined'"
-            class="pa-3"
+          <button
+            type="button"
+            class="select-tile"
+            :class="{ 'select-tile--on': form.activeModules.includes(key) }"
             @click="toggleModule(key)"
           >
-            <div class="text-body-2">{{ t(`modules.${key}`) }}</div>
-          </v-card>
+            {{ t(`modules.${key}`) }}
+          </button>
         </v-col>
       </v-row>
 

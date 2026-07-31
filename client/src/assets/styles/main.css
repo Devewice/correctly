@@ -39,6 +39,83 @@ body {
   background: rgba(47, 127, 163, 0.14) !important;
 }
 
+/*
+ * Contraste global: primary claro + on-primary blanco rompe variant="tonal"
+ * (texto blanco sobre fondo pastel → “desaparece” Ánimo, chips, etc.).
+ */
+.v-card--variant-tonal,
+.v-chip--variant-tonal,
+.v-btn--variant-tonal,
+.v-list-item--variant-tonal {
+  color: #3d3d3d !important;
+}
+.v-card--variant-tonal.bg-primary,
+.v-chip--variant-tonal.bg-primary,
+.v-btn--variant-tonal.bg-primary {
+  background: rgba(139, 168, 136, 0.24) !important;
+  color: #2f3d2e !important;
+}
+.v-card--variant-tonal.bg-secondary,
+.v-chip--variant-tonal.bg-secondary,
+.v-btn--variant-tonal.bg-secondary {
+  background: rgba(244, 203, 168, 0.45) !important;
+  color: #3d3d3d !important;
+}
+.v-card--variant-tonal .text-body-1,
+.v-card--variant-tonal .text-body-2,
+.v-card--variant-tonal .text-caption,
+.v-card--variant-tonal .text-subtitle-1,
+.v-card--variant-tonal .text-subtitle-2,
+.v-card--variant-tonal .text-h5,
+.v-card--variant-tonal .text-h6 {
+  color: inherit !important;
+}
+
+/* Tile seleccionable reutilizable (onboarding, perfil, formularios) */
+.select-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.7rem 0.75rem;
+  border: 2px solid #e4d9cb;
+  border-radius: 12px;
+  background: #faf8f5;
+  color: #3d3d3d;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+.select-tile:hover {
+  border-color: #8ba888;
+  background: #eef3ed;
+}
+.select-tile--on {
+  border-color: #5e7a5b;
+  background: #dfe9dd;
+  color: #2f3d2e;
+  box-shadow: inset 0 0 0 1px #5e7a5b;
+}
+.select-tile--center {
+  flex-direction: column;
+  gap: 0.25rem;
+  min-height: 72px;
+}
+.select-tile__emoji {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.select-tile:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
 .v-application .text-h1,
 .v-application .text-h2,
 .v-application .text-h3,

@@ -74,7 +74,7 @@ function googleLogin() {
     </div>
 
     <div v-motion v-bind="withDelay(fadeUp, 280)" class="d-flex justify-center ga-2 mb-8">
-      <v-chip
+      <button
         v-for="(lang, i) in ['es', 'en', 'pt']"
         :key="lang"
         v-motion
@@ -82,14 +82,14 @@ function googleLogin() {
           ...softHover,
           ...withDelay(fadeUp, 320 + i * 70),
         }"
-        :color="locale === lang ? 'primary' : undefined"
-        :variant="locale === lang ? 'flat' : 'tonal'"
-        size="small"
-        label
+        type="button"
+        class="select-tile"
+        :class="{ 'select-tile--on': locale === lang }"
+        style="width: auto; min-width: 3.5rem"
         @click="setLocale(lang)"
       >
         {{ lang }}
-      </v-chip>
+      </button>
     </div>
 
     <div

@@ -60,34 +60,32 @@ onMounted(load)
   <v-card class="pa-5 mb-6">
     <p class="text-body-2 text-medium-emphasis mb-3">{{ t('activity.whatAsk') }}</p>
     <div class="d-flex flex-wrap ga-2 mb-5">
-      <v-chip
+      <button
         v-for="type in types"
         :key="type"
-        :color="form.type === type ? 'primary' : undefined"
-        :variant="form.type === type ? 'flat' : 'tonal'"
-        size="small"
-        label
+        type="button"
+        class="select-tile"
+        :class="{ 'select-tile--on': form.type === type }"
+        style="width: auto"
         @click="form.type = type"
       >
         {{ t(`activity.types.${type}`) }}
-      </v-chip>
+      </button>
     </div>
 
     <p class="text-body-2 text-medium-emphasis mb-3">{{ t('activity.howAsk') }}</p>
     <v-row dense class="mb-5">
       <v-col v-for="(e, i) in efforts" :key="e.key" cols="4">
         <div v-motion v-bind="{ ...softHover, ...withDelay(fadeUp, 60 + i * 50) }">
-          <v-card
-            class="pa-3 text-center h-100"
-            :color="form.effort === e.key ? 'secondary' : undefined"
-            :variant="form.effort === e.key ? 'flat' : 'tonal'"
+          <button
+            type="button"
+            class="select-tile select-tile--center"
+            :class="{ 'select-tile--on': form.effort === e.key }"
             @click="form.effort = e.key"
           >
-            <div class="text-h5 mb-1">{{ e.icon }}</div>
-            <div class="text-caption font-weight-medium text-truncate px-1">
-              {{ t(`activity.effort.${e.key}`) }}
-            </div>
-          </v-card>
+            <span class="select-tile__emoji" aria-hidden="true">{{ e.icon }}</span>
+            <span class="text-truncate">{{ t(`activity.effort.${e.key}`) }}</span>
+          </button>
         </div>
       </v-col>
     </v-row>
