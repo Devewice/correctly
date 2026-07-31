@@ -16,6 +16,8 @@ En **Sitios web → Node.js / Deploy**:
 | **Entry file / archivo de entrada** | `server/src/index.js` |
 | **Start** (si pide) | `npm start` |
 
+> Si el build falla con `vite: command not found`, redesplega tras el fix del repo (Vite ya va en `dependencies` + `.npmrc`).
+
 Luego **Redesplegar**.
 
 ## Variables de entorno (obligatorias)

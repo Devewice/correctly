@@ -11,7 +11,7 @@
     "start": "npm run start --prefix server",
     "db:push": "npm run db:push --prefix server",
     "db:generate": "npm run db:generate --prefix server",
-    "postinstall": "npm install --prefix server && npm install --prefix client"
+    "postinstall": "npm install --prefix server --include=dev && npm install --prefix client --include=dev"
   },
   "devDependencies": {
     "concurrently": "^9.2.0"
