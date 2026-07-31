@@ -61,6 +61,29 @@ router.put('/settings/google', async (req, res) => {
       callbackUrl: google.callbackUrl,
       configured: google.configured,
       wizardDone: google.wizardDone,
+      sources: google.sources,
+    },
+  })
+})
+
+/** Borra overrides en DB para que manden las variables del panel Hostinger */
+router.post('/settings/google/use-env', async (req, res) => {
+  const { getGoogleConfig } = await import('../services/settings.js')
+  await Promise.all([
+    setSetting(KEYS.googleClientId, '', req.user.id),
+    setSetting(KEYS.googleClientSecret, '', req.user.id),
+    setSetting(KEYS.googleCallbackUrl, '', req.user.id),
+  ])
+  await refreshGoogleStrategy()
+  const google = await getGoogleConfig()
+  res.json({
+    ok: true,
+    google: {
+      clientId: google.clientId,
+      clientSecretSet: Boolean(google.clientSecret),
+      callbackUrl: google.callbackUrl,
+      configured: google.configured,
+      sources: google.sources,
     },
   })
 })
@@ -96,7 +119,10 @@ router.get('/wizard/google', async (_req, res) => {
         titleKey: 'admin.wizard.google.steps.test',
       },
     ],
-    current: settings.google,
+    current: {
+      ...settings.google,
+      sources: settings.google.sources,
+    },
   })
 })
 

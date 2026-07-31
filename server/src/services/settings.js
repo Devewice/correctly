@@ -26,20 +26,23 @@ export async function setSetting(key, value, updatedBy = null) {
   })
 }
 
+/**
+ * Prioridad: variables de entorno (panel Hostinger) > AppSetting (wizard) > default.
+ * Así un redeploy con env correcto no queda tapado por un secret viejo en la DB.
+ */
 export async function getGoogleConfig() {
-  const [clientId, clientSecret, callbackUrl, wizardDone] = await Promise.all([
-    getSetting(KEYS.googleClientId, env.google.clientId),
-    getSetting(KEYS.googleClientSecret, env.google.clientSecret),
-    getSetting(
-      KEYS.googleCallbackUrl,
-      env.google.callbackUrl || `${env.clientUrl}/api/auth/google/callback`,
-    ),
+  const [dbId, dbSecret, dbCallback, wizardDone] = await Promise.all([
+    getSetting(KEYS.googleClientId, ''),
+    getSetting(KEYS.googleClientSecret, ''),
+    getSetting(KEYS.googleCallbackUrl, ''),
     getSetting(KEYS.googleWizardDone, 'false'),
   ])
 
   const expected = `${env.clientUrl}/api/auth/google/callback`
-  let resolved = callbackUrl?.trim() || expected
-  // Evita callback localhost en producción (rompe el intercambio OAuth)
+  const clientId = (env.google.clientId || dbId || '').trim()
+  const clientSecret = (env.google.clientSecret || dbSecret || '').trim()
+
+  let resolved = (env.google.callbackUrl || dbCallback || expected).trim() || expected
   if (
     env.isProd &&
     env.clientUrl &&
@@ -50,11 +53,16 @@ export async function getGoogleConfig() {
   }
 
   return {
-    clientId: clientId?.trim() || '',
-    clientSecret: clientSecret?.trim() || '',
+    clientId,
+    clientSecret,
     callbackUrl: resolved,
-    configured: Boolean(clientId?.trim() && clientSecret?.trim()),
+    configured: Boolean(clientId && clientSecret),
     wizardDone: wizardDone === 'true',
+    sources: {
+      clientId: env.google.clientId ? 'env' : dbId ? 'db' : 'none',
+      clientSecret: env.google.clientSecret ? 'env' : dbSecret ? 'db' : 'none',
+      callbackUrl: env.google.callbackUrl ? 'env' : dbCallback ? 'db' : 'default',
+    },
   }
 }
 
@@ -133,10 +141,14 @@ export async function getAdminSettingsOverview() {
       clientId: google.clientId,
       // Nunca devolver el secret completo
       clientSecretSet: Boolean(google.clientSecret),
+      clientSecretPreview: google.clientSecret
+        ? `${google.clientSecret.slice(0, 8)}…`
+        : '',
       callbackUrl: google.callbackUrl,
       configured: google.configured,
       wizardDone: google.wizardDone,
       wizardCompleted: google.wizardDone,
+      sources: google.sources,
     },
     vapid: {
       publicKey: vapid.publicKey,

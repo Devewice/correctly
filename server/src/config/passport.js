@@ -69,6 +69,8 @@ export async function refreshGoogleStrategy() {
         clientID: cfg.clientId,
         clientSecret: cfg.clientSecret,
         callbackURL: cfg.callbackUrl,
+        // Detrás de Passenger/proxy en Hostinger
+        proxy: true,
       },
       async (_accessToken, _refreshToken, profile, done) => {
         try {
@@ -81,7 +83,9 @@ export async function refreshGoogleStrategy() {
     ),
   )
 
-  console.log('[auth] Google OAuth listo →', cfg.callbackUrl)
+  console.log(
+    `[auth] Google OAuth listo → callback=${cfg.callbackUrl} idSource=${cfg.sources?.clientId} secretSource=${cfg.sources?.clientSecret}`,
+  )
   return true
 }
 

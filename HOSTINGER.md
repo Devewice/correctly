@@ -51,24 +51,59 @@ No hace falta el `RewriteRule ^ index.html` si Passenger apunta a `/` — lo res
 | Entry | `server/src/index.js` |
 | Build | `npm run build` |
 
-### Variables
+### Variables (panel Node / Environment)
+
+Ponlas en el **panel de Hostinger** (Environment variables), no en un `.env` dentro del repo que se borra al redesplegar.
 
 ```env
 NODE_ENV=production
 CLIENT_URL=https://jeisson.click
+
+# MySQL (en Passenger suele ser localhost hacia la DB del hosting)
 DATABASE_HOST=localhost
+DATABASE_PORT=3306
 DATABASE_NAME=u301973293_correctly
 DATABASE_USER=u301973293_admin
-DATABASE_PASSWORD_B64=dTtEb0tRfiYy
-JWT_SECRET=cambia-esta-clave
+DATABASE_PASSWORD_B64=TU_PASSWORD_EN_BASE64
+
+# Sesión
+JWT_SECRET=una-cadena-larga-aleatoria
+
+# Google OAuth (producción)
+GOOGLE_CLIENT_ID=xxxxx.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=GOCSPX-xxxxx
+GOOGLE_CALLBACK_URL=https://jeisson.click/api/auth/google/callback
+
+# Web Push (opcional si ya las guardaste en Admin → Web Push)
+VAPID_PUBLIC_KEY=
+VAPID_PRIVATE_KEY=
+VAPID_SUBJECT=mailto:admin@jeisson.click
 ```
 
-Opcional: `SERVE_SPA=false` solo si algún día cambias a `PassengerBaseURI /api`.
+**No definas** `PORT` en Hostinger (Passenger lo gestiona).  
+`SERVE_SPA=false` solo si algún día usas `PassengerBaseURI /api`.
+
+### Qué se borra al redesplegar y qué no
+
+| Dónde lo guardaste | ¿Sobrevive al redeploy? |
+|--------------------|-------------------------|
+| Variables del **panel** Hostinger | Sí |
+| Filas en MySQL (`AppSetting`) vía wizard Admin | Sí |
+| Archivo `.env` dentro de `.builds/current/...` | **No** (se pisa en cada deploy) |
+
+Google y VAPID se pueden guardar **solo con el wizard Admin** (van a la DB). El `.env`/panel es respaldo o para el primer arranque.
+
+### Google Cloud (debe coincidir)
+
+- Orígenes JS: `https://jeisson.click`
+- Redirect URI: `https://jeisson.click/api/auth/google/callback`
+- Mismo Client ID / Secret que en el panel o en Admin → Google login
 
 ---
 
 ## Tras redesplegar
 
 1. https://jeisson.click/api/health → `"mode":"passenger+spa"`, `"ui":true`
-2. Login → `/onboarding`
-3. **F5** en `/onboarding` → sigue la app (no `Cannot GET`)
+2. Si el login Google falla: Admin → Google login → vuelve a pegar ID/Secret/Callback y guardar
+3. Login → `/onboarding` o `/dashboard`
+4. **F5** en `/onboarding` → sigue la app (no `Cannot GET`)

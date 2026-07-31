@@ -38,6 +38,13 @@ onMounted(async () => {
                 : t('admin.overview.pending')
             }}
           </div>
+          <div
+            v-if="data.settings.google.sources"
+            class="text-caption text-medium-emphasis mt-2"
+          >
+            {{ t('admin.overview.googleSource') }}:
+            {{ data.settings.google.sources.clientSecret }}
+          </div>
         </v-card>
       </v-col>
       <v-col cols="12" sm="4">

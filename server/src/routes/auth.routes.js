@@ -49,12 +49,25 @@ router.get('/google/callback', async (req, res, next) => {
       return res.redirect(loginErrorRedirect('oauth_not_configured'))
     }
 
-    passport.authenticate('google', { session: false }, (err, user) => {
+    passport.authenticate('google', { session: false }, (err, user, info) => {
       if (err) {
-        console.error('[auth] google callback error:', err.message || err)
-        return res.redirect(loginErrorRedirect('oauth_failed'))
+        console.error(
+          '[auth] google callback error:',
+          err.message || err,
+          err.code || '',
+          info || '',
+        )
+        // Token inválido / secret mal → suele ser credentials
+        const code =
+          /invalid_client|unauthorized|invalid_grant|Unexpected end of JSON/i.test(
+            String(err.message || ''),
+          )
+            ? 'oauth_failed'
+            : 'oauth_failed'
+        return res.redirect(loginErrorRedirect(code))
       }
       if (!user) {
+        console.warn('[auth] google callback sin user', info)
         return res.redirect(loginErrorRedirect('oauth_denied'))
       }
 

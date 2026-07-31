@@ -76,6 +76,23 @@ async function finish() {
   }
 }
 
+async function useEnvVars() {
+  busy.value = true
+  error.value = ''
+  try {
+    const data = await api('/admin/settings/google/use-env', { method: 'POST' })
+    form.clientId = data.google.clientId || ''
+    form.callbackUrl = data.google.callbackUrl || ''
+    form.clientSecret = ''
+    wizard.value = { ...wizard.value, current: { ...wizard.value.current, ...data.google } }
+    saved.value = true
+  } catch (e) {
+    error.value = e.message
+  } finally {
+    busy.value = false
+  }
+}
+
 function copy(text) {
   navigator.clipboard?.writeText(text)
 }
@@ -164,6 +181,24 @@ function copy(text) {
 
       <div v-else-if="current?.id === 'paste'" class="d-flex flex-column ga-2">
         <p class="text-body-2 mb-2">{{ t('admin.wizard.google.copy.paste') }}</p>
+        <v-alert
+          v-if="wizard.current.sources"
+          type="info"
+          variant="tonal"
+          density="comfortable"
+          class="mb-2"
+        >
+          {{ t('admin.wizard.google.sourceHint', { source: wizard.current.sources.clientSecret }) }}
+        </v-alert>
+        <v-btn
+          variant="tonal"
+          color="secondary"
+          class="align-self-start mb-2"
+          :loading="busy"
+          @click="useEnvVars"
+        >
+          {{ t('admin.wizard.google.useEnv') }}
+        </v-btn>
         <v-text-field v-model="form.clientId" label="Client ID" class="font-mono" />
         <v-text-field
           v-model="form.clientSecret"

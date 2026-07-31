@@ -68,11 +68,12 @@ export const env = {
   ),
   jwtSecret: process.env.JWT_SECRET || 'dev-secret-change-me',
   google: {
-    clientId: process.env.GOOGLE_CLIENT_ID || '',
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    callbackUrl:
+    clientId: (process.env.GOOGLE_CLIENT_ID || '').trim(),
+    clientSecret: (process.env.GOOGLE_CLIENT_SECRET || '').trim(),
+    callbackUrl: (
       process.env.GOOGLE_CALLBACK_URL ||
-      `${(process.env.CLIENT_URL || 'http://localhost:3000').replace(/\/$/, '')}/api/auth/google/callback`,
+      `${(process.env.CLIENT_URL || 'http://localhost:3000').replace(/\/$/, '')}/api/auth/google/callback`
+    ).trim(),
   },
   databaseUrl,
   dbMeta: {

@@ -50,6 +50,7 @@
       "needGoogle": "Set up Google login",
       "needGoogleHint": "A short wizard walks you through Google Cloud Console.",
       "startWizard": "Open wizard",
+      "googleSource": "Secret from",
       "needVapid": "Set up Web Push (VAPID)",
       "needVapidHint": "Without these keys, alarms only work while the app is open.",
       "startVapidWizard": "Open Push wizard",
@@ -72,6 +73,8 @@
         "jsOrigins": "Authorized JavaScript origins",
         "redirectUris": "Authorized redirect URIs",
         "tryLogin": "Try Continue with Google",
+        "useEnv": "Use Hostinger panel env vars",
+        "sourceHint": "Secret is currently loaded from: {source} (env = panel, db = wizard).",
         "steps": {
           "console": "Console",
           "oauthClient": "OAuth client",
