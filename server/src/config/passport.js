@@ -24,10 +24,10 @@ function pickAvatar(profile) {
     profile._json?.photo ||
     null
   if (!raw || typeof raw !== 'string') return null
-  return raw.length > 500 ? raw.slice(0, 500) : raw
+  return raw.length > 1000 ? raw.slice(0, 1000) : raw
 }
 
-async function upsertGoogleUser(profile) {
+export async function upsertGoogleUser(profile) {
   const email = pickEmail(profile)
   if (!email) {
     const err = new Error('Google account sin email')

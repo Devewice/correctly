@@ -28,6 +28,7 @@
       "noEmail": "Google didn't share an email. Check account permissions or the consent screen.",
       "db": "Google signed you in, but saving the user failed. Check server logs / Admin.",
       "retry": "That Google code was already used or expired. Tap Continue with Google again.",
+      "network": "The server could not reach Google (empty or blocked response). Retry; if it persists, check outbound HTTPS on the host.",
       "failed": "Google sign-in failed. Check Client ID, Secret, and Callback URL (must match Google Cloud)."
     }
   },

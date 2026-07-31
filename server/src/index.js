@@ -82,18 +82,20 @@ app.use(
     credentials: true,
   }),
 )
-// Evita SyntaxError "Unexpected end of JSON input" en GET sin body
-app.use((req, res, next) => {
-  const type = req.headers['content-type'] || ''
-  if (
-    type.includes('application/json') &&
-    (req.method === 'GET' || req.method === 'HEAD' || req.method === 'DELETE')
-  ) {
-    delete req.headers['content-type']
-  }
-  next()
-})
-app.use(express.json({ limit: '4mb' }))
+// Evita SyntaxError "Unexpected end of JSON input" en GET/DELETE sin body
+// (Passenger/proxies a veces mandan Content-Type: application/json vacío)
+app.use(
+  express.json({
+    limit: '4mb',
+    type(req) {
+      if (req.method === 'GET' || req.method === 'HEAD' || req.method === 'DELETE') {
+        return false
+      }
+      const type = req.headers['content-type'] || ''
+      return type.includes('application/json')
+    },
+  }),
+)
 app.use(cookieParser())
 app.use(passport.initialize())
 ensureUploadDirs()

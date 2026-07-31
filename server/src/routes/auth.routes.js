@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import passport from 'passport'
 import { env } from '../config/env.js'
 import {
   clearAuthCookie,
@@ -7,11 +6,14 @@ import {
   setAuthCookie,
   signToken,
 } from '../middleware/auth.js'
+import { upsertGoogleUser } from '../config/passport.js'
+import { getGoogleConfig, getPublicAuthFlags } from '../services/settings.js'
 import {
-  isGoogleAuthConfigured,
-  refreshGoogleStrategy,
-} from '../config/passport.js'
-import { getPublicAuthFlags } from '../services/settings.js'
+  buildGoogleAuthUrl,
+  exchangeGoogleCode,
+  fetchGoogleUserInfo,
+  profileFromUserInfo,
+} from '../services/googleOAuth.js'
 
 const router = Router()
 
@@ -31,11 +33,22 @@ async function rememberGoogleError(message) {
   }
 }
 
-router.get('/google', async (req, res, next) => {
+function mapOAuthError(err) {
+  const msg = err?.message || String(err)
+  const code = err?.code || ''
+  if (code === 'oauth_no_email' || /sin email/i.test(msg)) return 'oauth_no_email'
+  if (code === 'oauth_retry' || /invalid_grant/i.test(msg)) return 'oauth_retry'
+  if (code === 'oauth_network' || /Unexpected end of JSON|respuesta vacía|no-JSON/i.test(msg)) {
+    return 'oauth_network'
+  }
+  if (/Unique constraint|P2002|prisma|VarChar|Argument/i.test(msg)) return 'oauth_db'
+  return 'oauth_failed'
+}
+
+router.get('/google', async (req, res) => {
   try {
-    const ok = await refreshGoogleStrategy()
-    if (!ok && !(await isGoogleAuthConfigured())) {
-      // Navegación del navegador → redirigir, no JSON crudo
+    const cfg = await getGoogleConfig()
+    if (!cfg.configured) {
       if (req.accepts('html')) {
         return res.redirect(loginErrorRedirect('oauth_not_configured'))
       }
@@ -44,66 +57,61 @@ router.get('/google', async (req, res, next) => {
         hint: 'Configura Google OAuth en el panel admin o variables de entorno',
       })
     }
-    return passport.authenticate('google', {
-      scope: ['openid', 'email', 'profile'],
-      session: false,
-    })(req, res, next)
+
+    const url = buildGoogleAuthUrl({
+      clientId: cfg.clientId,
+      callbackUrl: cfg.callbackUrl,
+    })
+    return res.redirect(url)
   } catch (err) {
     console.error('[auth] /google', err)
+    await rememberGoogleError(err.message)
     return res.redirect(loginErrorRedirect('oauth_failed'))
   }
 })
 
-router.get('/google/callback', async (req, res, next) => {
+router.get('/google/callback', async (req, res) => {
   try {
-    const ok = await refreshGoogleStrategy()
-    if (!ok) {
+    if (req.query.error) {
+      await rememberGoogleError(`google_deny: ${req.query.error}`)
+      return res.redirect(loginErrorRedirect('oauth_denied'))
+    }
+
+    const code = typeof req.query.code === 'string' ? req.query.code : ''
+    if (!code) {
+      await rememberGoogleError('callback sin code')
+      return res.redirect(loginErrorRedirect('oauth_denied'))
+    }
+
+    const cfg = await getGoogleConfig()
+    if (!cfg.configured) {
       return res.redirect(loginErrorRedirect('oauth_not_configured'))
     }
 
-    passport.authenticate('google', { session: false }, async (err, user, info) => {
-      if (err) {
-        const msg = err.message || String(err)
-        console.error('[auth] google callback error:', msg, err.code || '', info || '')
-        await rememberGoogleError(msg)
-        if (err.code === 'oauth_no_email' || /sin email/i.test(msg)) {
-          return res.redirect(loginErrorRedirect('oauth_no_email'))
-        }
-        if (/Unique constraint|P2002/i.test(msg)) {
-          return res.redirect(loginErrorRedirect('oauth_db'))
-        }
-        if (/invalid_client|unauthorized_client/i.test(msg)) {
-          return res.redirect(loginErrorRedirect('oauth_failed'))
-        }
-        if (/invalid_grant|Malformed auth code/i.test(msg)) {
-          return res.redirect(loginErrorRedirect('oauth_retry'))
-        }
-        // Prisma / DB / avatar / etc.
-        if (/prisma|Invalid|VarChar|Argument/i.test(msg)) {
-          return res.redirect(loginErrorRedirect('oauth_db'))
-        }
-        return res.redirect(loginErrorRedirect('oauth_failed'))
-      }
-      if (!user) {
-        console.warn('[auth] google callback sin user', info)
-        await rememberGoogleError(info?.message || 'no user')
-        return res.redirect(loginErrorRedirect('oauth_denied'))
-      }
+    console.log(
+      `[auth] google callback → exchange redirect_uri=${cfg.callbackUrl} secretSource=${cfg.sources?.clientSecret}`,
+    )
 
-      try {
-        const token = signToken(user)
-        setAuthCookie(res, token)
-        const dest = user.onboardingCompleted ? 'dashboard' : 'onboarding'
-        return res.redirect(`${env.clientUrl}/${dest}?token=${token}`)
-      } catch (signErr) {
-        console.error('[auth] sign token', signErr)
-        await rememberGoogleError(signErr.message)
-        return res.redirect(loginErrorRedirect('oauth_failed'))
-      }
-    })(req, res, next)
+    const tokens = await exchangeGoogleCode({
+      code,
+      clientId: cfg.clientId,
+      clientSecret: cfg.clientSecret,
+      callbackUrl: cfg.callbackUrl,
+    })
+
+    const info = await fetchGoogleUserInfo(tokens.access_token)
+    const profile = profileFromUserInfo(info)
+    const user = await upsertGoogleUser(profile)
+
+    const token = signToken(user)
+    setAuthCookie(res, token)
+    const dest = user.onboardingCompleted ? 'dashboard' : 'onboarding'
+    return res.redirect(`${env.clientUrl}/${dest}?token=${token}`)
   } catch (err) {
-    console.error('[auth] /google/callback', err)
-    return res.redirect(loginErrorRedirect('oauth_failed'))
+    const msg = err.message || String(err)
+    console.error('[auth] google callback error:', msg, err.code || '')
+    await rememberGoogleError(msg)
+    return res.redirect(loginErrorRedirect(mapOAuthError(err)))
   }
 })
 

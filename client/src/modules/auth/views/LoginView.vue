@@ -23,6 +23,8 @@ onMounted(async () => {
     error.value = t('login.errors.db')
   } else if (oauthError === 'oauth_retry') {
     error.value = t('login.errors.retry')
+  } else if (oauthError === 'oauth_network') {
+    error.value = t('login.errors.network')
   } else if (oauthError === 'oauth_failed') {
     error.value = t('login.errors.failed')
   }

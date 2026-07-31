@@ -28,6 +28,7 @@
       "noEmail": "O Google não compartilhou o e-mail. Confira permissões da conta ou a tela de consentimento.",
       "db": "O Google autenticou, mas falhou ao salvar o usuário. Veja os logs / Admin.",
       "retry": "O código do Google já foi usado ou expirou. Toque em Continuar com Google de novo.",
+      "network": "O servidor não conseguiu falar com o Google (resposta vazia ou bloqueada). Tente de novo; se continuar, revise HTTPS de saída na Hostinger.",
       "failed": "Falha no login com Google. Confira Client ID, Secret e Callback URL (devem bater com o Google Cloud)."
     }
   },
