@@ -250,7 +250,7 @@ async function logout() {
     </v-btn>
   </v-bottom-navigation>
 
-  <v-bottom-sheet v-if="!mdAndUp" v-model="moreOpen" inset>
+  <v-bottom-sheet v-if="!mdAndUp" v-model="moreOpen">
     <v-card class="pa-4 more-sheet">
       <div
         v-motion
@@ -266,7 +266,7 @@ async function logout() {
       >
         {{ t('day.moreSubtitle') }}
       </p>
-      <InstallAppCard />
+      <InstallAppCard compact />
       <v-row dense>
         <v-col v-for="(item, i) in moreItems" :key="item.to" cols="6">
           <div
@@ -307,9 +307,11 @@ async function logout() {
   padding-bottom: env(safe-area-inset-bottom);
 }
 .more-sheet {
-  padding-bottom: max(24px, env(safe-area-inset-bottom)) !important;
-  max-height: min(85dvh, 720px);
+  padding-bottom: max(28px, calc(env(safe-area-inset-bottom) + 12px)) !important;
+  max-height: min(88dvh, 760px);
+  overflow-x: hidden;
   overflow-y: auto;
+  border-radius: 16px 16px 0 0 !important;
 }
 .more-tile {
   background: #efe6da !important;

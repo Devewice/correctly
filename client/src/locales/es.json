@@ -226,9 +226,11 @@
   "pwa": {
     "title": "Usar como app",
     "subtitle": "Instálala en el escritorio o la pantalla de inicio. Se abre sin barra del navegador.",
+    "subtitleShort": "Añádela a la pantalla de inicio y ábrela sin el navegador.",
     "install": "Instalar Correctly",
     "installed": "Correctly ya está instalada como app en este dispositivo.",
     "manual": "En Chrome/Edge: menú ⋮ → “Instalar Correctly” o “Aplicación”. En Android también puede aparecer “Añadir a la pantalla de inicio”.",
+    "manualShort": "Menú ⋮ del navegador → Instalar app o Añadir a inicio.",
     "ios1": "Toca el botón Compartir (cuadrado con flecha) en Safari.",
     "ios2": "Elige “Añadir a pantalla de inicio”.",
     "ios3": "Confirma “Añadir”. Ya aparecerá como app."

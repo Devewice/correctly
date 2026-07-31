@@ -226,9 +226,11 @@
   "pwa": {
     "title": "Use as an app",
     "subtitle": "Install it on your desktop or home screen. Opens without the browser chrome.",
+    "subtitleShort": "Add it to your home screen and open it without the browser.",
     "install": "Install Correctly",
     "installed": "Correctly is already installed as an app on this device.",
     "manual": "In Chrome/Edge: menu ⋮ → “Install Correctly” or “App”. On Android you may also see “Add to Home screen”.",
+    "manualShort": "Browser menu ⋮ → Install app or Add to Home screen.",
     "ios1": "Tap Share (square with arrow) in Safari.",
     "ios2": "Choose “Add to Home Screen”.",
     "ios3": "Confirm “Add”. It will show up like an app."
