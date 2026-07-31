@@ -45,9 +45,11 @@ router.get(
   },
 )
 
-/** Dev-only login when Google credentials are missing */
+/** Demo login — local siempre; en producción solo si ALLOW_DEMO_LOGIN=true */
 router.post('/dev-login', async (req, res) => {
-  if (env.nodeEnv === 'production') {
+  const allowDemo =
+    env.nodeEnv !== 'production' || process.env.ALLOW_DEMO_LOGIN === 'true'
+  if (!allowDemo) {
     return res.status(404).json({ error: 'Not found' })
   }
 
@@ -89,7 +91,8 @@ router.get('/me', requireAuth, (req, res) => {
 router.get('/status', (_req, res) => {
   res.json({
     googleConfigured: isGoogleAuthConfigured(),
-    devLogin: env.nodeEnv !== 'production',
+    devLogin:
+      env.nodeEnv !== 'production' || process.env.ALLOW_DEMO_LOGIN === 'true',
   })
 })
 

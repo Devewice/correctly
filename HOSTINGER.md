@@ -39,6 +39,9 @@ DATABASE_URL=mysql://u301973293_admin:y%3AZz3L%3F%3Ep6@srv1855.hstgr.io:3306/u30
 
 JWT_SECRET=cambia-esta-clave
 GOOGLE_CALLBACK_URL=https://jeisson.click/api/auth/google/callback
+
+# Mientras no tengas Google OAuth (para poder entrar):
+ALLOW_DEMO_LOGIN=true
 ```
 
 - **NO** pongas `PORT`
