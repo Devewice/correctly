@@ -57,14 +57,12 @@ router.post('/dev-login', async (req, res) => {
     return res.status(404).json({ error: 'Not found' })
   }
 
-  // Usuario demo normal (no admin). El admin demo va por /dev-login-admin.
+  // Usuario demo normal — nunca eleva a superadmin.
   const email = (req.body?.email || 'user@correctly.app').toLowerCase()
   const name = req.body?.name || 'Demo Correctly'
 
   if (matchesSuperAdminIdentity({ email })) {
-    return res.status(400).json({
-      error: 'Usa el login admin demo para cuentas superadmin',
-    })
+    return res.status(400).json({ error: 'Cuenta no permitida en login demo' })
   }
 
   let user = await prisma.user.findUnique({ where: { email } })
@@ -83,40 +81,6 @@ router.post('/dev-login', async (req, res) => {
       where: { userId: user.id },
       create: { userId: user.id },
       update: {},
-    })
-  }
-
-  const token = signToken(user)
-  setAuthCookie(res, token)
-  res.json({ token, user })
-})
-
-/** Login demo admin (demo@correctly.app) — solo si ALLOW_DEMO_LOGIN */
-router.post('/dev-login-admin', async (req, res) => {
-  const flags = await getPublicAuthFlags()
-  if (!flags.devLogin) {
-    return res.status(404).json({ error: 'Not found' })
-  }
-
-  const email = 'demo@correctly.app'
-  const name = 'Jeisson'
-
-  let user = await prisma.user.findUnique({ where: { email } })
-  if (!user) {
-    user = await prisma.user.create({
-      data: {
-        email,
-        name,
-        role: ROLES.SUPERADMIN,
-        onboardingCompleted: true,
-        language: req.body?.language || 'es',
-        stats: { create: {} },
-      },
-    })
-  } else if (user.role !== ROLES.SUPERADMIN) {
-    user = await prisma.user.update({
-      where: { id: user.id },
-      data: { role: ROLES.SUPERADMIN, name: user.name || name },
     })
   }
 

@@ -22,8 +22,7 @@
     "subtitle": "Seu bem-estar diário, em um só lugar.",
     "google": "Continuar com Google",
     "dev": "Entrar no modo demo",
-    "devAdmin": "Entrar como admin (demo)",
-    "googleUnavailable": "OAuth do Google ainda não está configurado. Use o modo demo ou o painel admin."
+    "googleUnavailable": "OAuth do Google ainda não está configurado. Use o modo demo."
   },
   "admin": {
     "badge": "Admin",

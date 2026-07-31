@@ -29,19 +29,6 @@ async function demoLogin() {
   }
 }
 
-async function adminLogin() {
-  busy.value = true
-  error.value = ''
-  try {
-    await auth.devLoginAdmin({ language: locale.value })
-    router.push('/admin')
-  } catch (e) {
-    error.value = e.message || t('common.error')
-  } finally {
-    busy.value = false
-  }
-}
-
 function googleLogin() {
   window.location.href = '/api/auth/google'
 }
@@ -105,18 +92,6 @@ function googleLogin() {
       @click="demoLogin"
     >
       {{ t('login.dev') }}
-    </v-btn>
-
-    <v-btn
-      v-if="auth.authStatus.devLogin"
-      block
-      color="accent"
-      size="large"
-      variant="flat"
-      :loading="busy"
-      @click="adminLogin"
-    >
-      {{ t('login.devAdmin') }}
     </v-btn>
 
     <v-alert v-if="error" type="error" class="mt-4" density="compact">
