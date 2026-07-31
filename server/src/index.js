@@ -123,25 +123,36 @@ app.use('/api/meditation', meditationRoutes)
 app.use('/api/weight', weightRoutes)
 app.use('/api/dashboard', dashboardRoutes)
 
-// Hostinger: / a veces llega a Node (no a Apache). Servir SPA desde server/ui.
+// Front estático + fallback SPA (history y hash)
 if (clientDist) {
-  app.use(express.static(clientDist, { index: 'index.html', maxAge: '1h' }))
-  app.use((req, res, next) => {
-    if (req.method !== 'GET' && req.method !== 'HEAD') return next()
+  const indexHtml = path.join(clientDist, 'index.html')
+  app.use(
+    '/assets',
+    express.static(path.join(clientDist, 'assets'), { maxAge: '7d', fallthrough: true }),
+  )
+  app.use(
+    express.static(clientDist, {
+      index: false,
+      fallthrough: true,
+      maxAge: '1h',
+    }),
+  )
+
+  // Express 5: comodín /*path — cualquier GET que no sea /api
+  app.get('/{*path}', (req, res, next) => {
     if (req.path.startsWith('/api')) return next()
-    return res.sendFile(path.join(clientDist, 'index.html'), (err) => {
+    res.sendFile(indexHtml, (err) => {
       if (err) next(err)
     })
   })
 } else if (env.isProd) {
   console.warn('[correctly] No se encontró UI (server/ui) — solo API')
-  console.warn('[correctly] Candidatos:', clientDistCandidates.join(' | '))
   app.get('/', (_req, res) => {
     res
       .status(503)
       .type('html')
       .send(
-        '<h1>Correctly</h1><p>UI no encontrada en el servidor Node. Redesplega tras el fix server/ui.</p><p><a href="/index.html">Probar /index.html</a> · <a href="/api/health">/api/health</a></p>',
+        '<h1>Correctly</h1><p>UI no encontrada.</p><p><a href="/api/health">/api/health</a></p>',
       )
   })
 }

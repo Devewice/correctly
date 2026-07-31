@@ -1,10 +1,16 @@
-# SPA fallback (por si Hostinger sirve solo estáticos)
+# Hostinger / Apache: SPA + API
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_URI} !^/api
-  RewriteRule . /index.html [L]
+
+  # Dejar /api al proxy Node de Hostinger
+  RewriteRule ^api(/|$) - [L]
+
+  # Archivos reales (assets, index.html, etc.)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Rutas de Vue → index.html (evita {"error":"Not Found"} al refrescar)
+  RewriteRule ^ index.html [L]
 </IfModule>

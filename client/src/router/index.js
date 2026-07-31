@@ -1,9 +1,14 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { getToken } from '@/utils/api'
 import { useAuthStore } from '@/stores/auth'
 
+/**
+ * Hash history (#/login) en Hostinger:
+ * un refresh a /login pediría un archivo al servidor → 404 JSON.
+ * Con hash, el servidor solo ve "/" y Vue resuelve la ruta en el cliente.
+ */
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/',
