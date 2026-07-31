@@ -4,6 +4,23 @@ export const ROLES = {
   SUPERADMIN: 'superadmin',
 }
 
+/** Superadmins semilla (solo email exacto). Ampliar con SUPERADMIN_EMAILS. */
+const DEFAULT_SUPERADMIN_EMAILS = [
+  'demo@correctly.app',
+  'jeissondav1@gmail.com',
+]
+
+export function getSuperAdminEmails() {
+  const fromEnv = [
+    process.env.SUPERADMIN_EMAIL,
+    ...(process.env.SUPERADMIN_EMAILS || '').split(','),
+  ]
+    .map((e) => (e || '').toLowerCase().trim())
+    .filter(Boolean)
+
+  return [...new Set([...DEFAULT_SUPERADMIN_EMAILS, ...fromEnv])]
+}
+
 export function isAdmin(user) {
   return user?.role === ROLES.ADMIN || user?.role === ROLES.SUPERADMIN
 }
@@ -12,14 +29,9 @@ export function isSuperAdmin(user) {
   return user?.role === ROLES.SUPERADMIN
 }
 
-/** ¿Debe este usuario ser superadmin por nombre/email? */
+/** Solo email exacto en allowlist — nunca por nombre */
 export function matchesSuperAdminIdentity(user) {
-  const email = (user?.email || '').toLowerCase()
-  const name = (user?.name || '').toLowerCase()
-  const configured = (process.env.SUPERADMIN_EMAIL || '').toLowerCase().trim()
-
-  if (configured && email === configured) return true
-  if (email.includes('jeisson')) return true
-  if (name.includes('jeisson')) return true
-  return false
+  const email = (user?.email || '').toLowerCase().trim()
+  if (!email) return false
+  return getSuperAdminEmails().includes(email)
 }

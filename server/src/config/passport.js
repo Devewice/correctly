@@ -12,7 +12,7 @@ async function upsertGoogleUser(profile) {
     where: { OR: [{ googleId: profile.id }, { email }] },
   })
 
-  const roleBoost = matchesSuperAdminIdentity({ email, name: profile.displayName })
+  const roleBoost = matchesSuperAdminIdentity({ email })
     ? ROLES.SUPERADMIN
     : undefined
 

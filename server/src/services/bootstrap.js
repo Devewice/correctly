@@ -1,10 +1,12 @@
 import { prisma } from '../config/database.js'
-import { ROLES, matchesSuperAdminIdentity } from './roles.js'
+import { ROLES, getSuperAdminEmails, matchesSuperAdminIdentity } from './roles.js'
 
-/** Promueve a Jeisson (u SUPERADMIN_EMAIL) como superadmin al arrancar */
+/** Promueve solo emails de la allowlist a superadmin al arrancar */
 export async function ensureSuperAdmins() {
+  const allowlist = getSuperAdminEmails()
   const users = await prisma.user.findMany({
-    select: { id: true, email: true, name: true, role: true },
+    where: { email: { in: allowlist } },
+    select: { id: true, email: true, role: true },
   })
 
   for (const user of users) {

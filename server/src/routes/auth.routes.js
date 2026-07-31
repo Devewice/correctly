@@ -57,11 +57,15 @@ router.post('/dev-login', async (req, res) => {
     return res.status(404).json({ error: 'Not found' })
   }
 
-  const email = (req.body?.email || 'demo@correctly.app').toLowerCase()
+  // Usuario demo normal (no admin). El admin demo va por /dev-login-admin.
+  const email = (req.body?.email || 'user@correctly.app').toLowerCase()
   const name = req.body?.name || 'Demo Correctly'
-  const role = matchesSuperAdminIdentity({ email, name })
-    ? ROLES.SUPERADMIN
-    : ROLES.USER
+
+  if (matchesSuperAdminIdentity({ email })) {
+    return res.status(400).json({
+      error: 'Usa el login admin demo para cuentas superadmin',
+    })
+  }
 
   let user = await prisma.user.findUnique({ where: { email } })
   if (!user) {
@@ -70,7 +74,7 @@ router.post('/dev-login', async (req, res) => {
         email,
         name,
         language: req.body?.language || 'es',
-        role,
+        role: ROLES.USER,
         stats: { create: {} },
       },
     })
@@ -80,12 +84,6 @@ router.post('/dev-login', async (req, res) => {
       create: { userId: user.id },
       update: {},
     })
-    if (matchesSuperAdminIdentity(user) && user.role !== ROLES.SUPERADMIN) {
-      user = await prisma.user.update({
-        where: { id: user.id },
-        data: { role: ROLES.SUPERADMIN },
-      })
-    }
   }
 
   const token = signToken(user)
@@ -93,14 +91,14 @@ router.post('/dev-login', async (req, res) => {
   res.json({ token, user })
 })
 
-/** Login demo como Jeisson (superadmin) — solo si ALLOW_DEMO_LOGIN */
+/** Login demo admin (demo@correctly.app) — solo si ALLOW_DEMO_LOGIN */
 router.post('/dev-login-admin', async (req, res) => {
   const flags = await getPublicAuthFlags()
   if (!flags.devLogin) {
     return res.status(404).json({ error: 'Not found' })
   }
 
-  const email = 'jeisson@correctly.app'
+  const email = 'demo@correctly.app'
   const name = 'Jeisson'
 
   let user = await prisma.user.findUnique({ where: { email } })
@@ -118,7 +116,7 @@ router.post('/dev-login-admin', async (req, res) => {
   } else if (user.role !== ROLES.SUPERADMIN) {
     user = await prisma.user.update({
       where: { id: user.id },
-      data: { role: ROLES.SUPERADMIN },
+      data: { role: ROLES.SUPERADMIN, name: user.name || name },
     })
   }
 

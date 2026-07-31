@@ -21,7 +21,7 @@
     "subtitle": "Your daily wellness, in one place.",
     "google": "Continue with Google",
     "dev": "Enter demo mode",
-    "devAdmin": "Enter as Jeisson (superadmin)",
+    "devAdmin": "Enter as admin (demo)",
     "googleUnavailable": "Google OAuth is not configured yet. Use demo mode or the admin panel."
   },
   "admin": {
