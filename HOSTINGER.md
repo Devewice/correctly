@@ -12,11 +12,15 @@ En **Sitios web → Node.js / Deploy**:
 | **Directorio raíz** | `./` |
 | **Versión Node** | `20.x` o `22.x` (24.x también ok) |
 | **Comando de build** | `npm run build` |
-| **Directorio de salida** | `client/dist` |
+| **Directorio de salida** | **`server/public`** (importante; el build copia el Vue ahí) |
 | **Entry file / archivo de entrada** | `server/src/index.js` |
 | **Start** (si pide) | `npm start` |
 
 > Si el build falla con `vite: command not found`, redesplega tras el fix del repo (Vite ya va en `dependencies` + `.npmrc`).
+
+### Por qué veías 404 en https://jeisson.click/
+
+Hostinger mueve el “output directory” fuera del proceso Node. Si el output era `client/dist`, Express no encontraba el HTML y `/` devolvía 404. Ahora el build deja el front en `server/public` junto al API.
 
 Luego **Redesplegar**.
 

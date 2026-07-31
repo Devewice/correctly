@@ -9,6 +9,7 @@ build/
 .out/
 .nuxt/
 .vite/
+server/public/
 
 # Env (nunca subir secretos)
 .env
