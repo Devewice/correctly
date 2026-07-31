@@ -8,6 +8,12 @@ import { toDateKeyInTz, nextMidnightInTz } from '../utils/dates.js'
 import { saveDailyPhotoFromDataUrl, deleteUploadFile } from '../utils/uploads.js'
 import { purgeExpiredShares } from '../services/friendsCleanup.js'
 import { XP, addXp } from '../utils/xp.js'
+import { sendPushToUser, webPushReady } from '../services/webPush.js'
+import {
+  NUDGE_DAILY_LIMIT,
+  NUDGE_MAX_LEN,
+  resolveNudgeMessage,
+} from '../data/friendNudges.js'
 
 const router = Router()
 router.use(requireAuth)
@@ -329,6 +335,106 @@ router.post('/share/:shareId/react', async (req, res) => {
     },
   })
   res.json({ share: mapShare(fresh, req.user.id) })
+})
+
+const nudgeSchema = z.object({
+  templateId: z
+    .enum(['thinking', 'call_me', 'remembered', 'morning', 'check_in', 'proud', 'laugh', 'rest'])
+    .optional(),
+  message: z.string().trim().max(NUDGE_MAX_LEN).optional(),
+})
+
+/**
+ * Toque a un amigo (push). Si no tiene notificaciones, igual se registra
+ * y devolvemos hint para que el emisor se lo diga.
+ */
+router.post('/:friendId/nudge', async (req, res) => {
+  const friendId = req.params.friendId
+  if (friendId === req.user.id) {
+    return res.status(400).json({ error: 'Cannot nudge yourself' })
+  }
+  if (!(await areFriends(req.user.id, friendId))) {
+    return res.status(403).json({ error: 'Not friends' })
+  }
+
+  const body = nudgeSchema.parse(req.body || {})
+  if (!body.templateId && !body.message) {
+    return res.status(400).json({ error: 'templateId or message required' })
+  }
+
+  const friend = await prisma.user.findUnique({
+    where: { id: friendId },
+    select: { id: true, name: true, language: true, timezone: true },
+  })
+  if (!friend) return res.status(404).json({ error: 'Friend not found' })
+
+  const tz = req.user.timezone || 'America/Bogota'
+  const dateKey = toDateKeyInTz(new Date(), tz)
+
+  const todayNudges = await prisma.reminderFire.findMany({
+    where: {
+      userId: req.user.id,
+      dateKey,
+      reminderId: { startsWith: 'fnudge:' },
+    },
+  })
+  if (todayNudges.length >= NUDGE_DAILY_LIMIT) {
+    return res.status(429).json({ error: 'daily_limit', limit: NUDGE_DAILY_LIMIT })
+  }
+  const perFriendId = `fnudge:${friendId}`
+  if (todayNudges.some((n) => n.reminderId === perFriendId)) {
+    return res.status(429).json({ error: 'friend_limit' })
+  }
+
+  const message = resolveNudgeMessage(body.templateId, body.message, friend.language)
+  if (!message) return res.status(400).json({ error: 'empty_message' })
+
+  const title =
+    friend.language === 'en'
+      ? `${req.user.name.split(' ')[0]} · Correctly`
+      : friend.language === 'pt'
+        ? `${req.user.name.split(' ')[0]} · Correctly`
+        : `${req.user.name.split(' ')[0]} · Correctly`
+
+  let pushSent = 0
+  let devices = 0
+  let pushConfigured = webPushReady()
+  if (pushConfigured) {
+    const result = await sendPushToUser(friendId, {
+      title,
+      body: message,
+      url: '/friends',
+      tag: `friend-nudge-${req.user.id}`,
+    })
+    pushSent = result.sent
+    devices = result.devices
+  }
+
+  await prisma.reminderFire.create({
+    data: {
+      userId: req.user.id,
+      reminderId: perFriendId,
+      dateKey,
+    },
+  })
+
+  const delivered = pushSent > 0
+  res.json({
+    ok: true,
+    delivered,
+    pushSent,
+    devices,
+    pushConfigured,
+    reason: delivered
+      ? 'push_ok'
+      : !pushConfigured
+        ? 'push_not_configured'
+        : devices === 0
+          ? 'no_push'
+          : 'push_failed',
+    message,
+    friend: publicUser(friend),
+  })
 })
 
 export default router

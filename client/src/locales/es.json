@@ -191,7 +191,12 @@
     "weight": "Peso"
   },
   "profile": {
-    "name": "Nombre"
+    "name": "Nombre",
+    "theme": "Apariencia",
+    "themeHint": "Claro, oscuro o según el sistema.",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "themeSystem": "Sistema"
   },
   "journal": {
     "title": "Diario",
@@ -518,6 +523,27 @@
     "listTitle": "Tus amigos",
     "listEmpty": "Todavía no tienes amigos. Comparte tu enlace.",
     "remove": "Quitar",
+    "nudge": "Tocar",
+    "nudgeTitle": "Enviar un toque",
+    "nudgeHint": "Un mensaje corto. Le llega como notificación si tiene Correctly activo.",
+    "nudgeCustom": "Mensaje personalizado",
+    "nudgeCustomPlaceholder": "Ej: Acabo de pensar en ti…",
+    "nudgeSend": "Enviar toque",
+    "nudgeSent": "Toque enviado a {name}",
+    "nudgeMissedTitle": "Se puede estar perdiendo toques",
+    "nudgeMissedBody": "{name} no tiene notificaciones activas (o la app instalada). El mensaje no le llegó ahora. Pídele que active avisos en Alarmas e instale Correctly.",
+    "nudgeLimitFriend": "Ya le enviaste un toque hoy. Mañana puedes de nuevo.",
+    "nudgeLimitDay": "Llegaste al límite de toques de hoy. Descansa y vuelve mañana.",
+    "nudgeTemplates": {
+      "thinking": "Acabo de pensar en ti",
+      "call_me": "Llámame cuando puedas",
+      "remembered": "Me acordé de ti",
+      "morning": "Buenos días suaves",
+      "check_in": "¿Cómo vas?",
+      "proud": "Estoy orgulloso/a de ti",
+      "laugh": "Necesito una risa contigo",
+      "rest": "Cuida tu noche"
+    },
     "likesStat": "Ánimos recibidos",
     "dislikesStat": "Fuerza recibida",
     "reactCheer": "Ánimo",

@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useTheme } from 'vuetify'
 import { api } from '@/shared/api/client'
 import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
 import { setLocale } from '@/plugins/i18n'
@@ -8,11 +9,29 @@ import PageHeader from '@/shared/components/PageHeader.vue'
 import InstallAppCard from '@/shared/components/InstallAppCard.vue'
 import { loadCarePrefs, saveCarePrefs } from '@/shared/utils/carePrefs'
 import { RITUALS } from '@/shared/data/rituals'
+import {
+  applyTheme,
+  loadThemeMode,
+  saveThemeMode,
+} from '@/shared/theme/themePrefs'
 
 const { t } = useI18n()
+const theme = useTheme()
 const auth = useAuthStore()
 const saved = ref(false)
 const busy = ref(false)
+const themeMode = ref(loadThemeMode())
+
+const themeOptions = [
+  { value: 'light', icon: 'mdi-white-balance-sunny' },
+  { value: 'dark', icon: 'mdi-moon-waning-crescent' },
+  { value: 'system', icon: 'mdi-theme-light-dark' },
+]
+
+function setTheme(mode) {
+  themeMode.value = saveThemeMode(mode)
+  applyTheme(theme, mode)
+}
 
 const moduleKeys = [
   'meals',
@@ -87,6 +106,33 @@ async function save() {
   <PageHeader :title="t('nav.profile')" icon="mdi-account-circle-outline" />
 
   <InstallAppCard />
+
+  <section class="cx-section">
+    <p class="cx-section-label">{{ t('profile.theme') }}</p>
+    <p class="text-body-2 text-medium-emphasis mb-3">{{ t('profile.themeHint') }}</p>
+    <div class="d-flex flex-wrap ga-2">
+      <button
+        v-for="opt in themeOptions"
+        :key="opt.value"
+        type="button"
+        class="select-tile"
+        :class="{ 'select-tile--on': themeMode === opt.value }"
+        style="width: auto"
+        @click="setTheme(opt.value)"
+      >
+        <v-icon :icon="opt.icon" size="18" class="me-1" />
+        {{
+          t(
+            opt.value === 'light'
+              ? 'profile.themeLight'
+              : opt.value === 'dark'
+                ? 'profile.themeDark'
+                : 'profile.themeSystem',
+          )
+        }}
+      </button>
+    </div>
+  </section>
 
   <v-card class="pa-4 pa-sm-5 mb-4 cx-panel--lift">
     <v-form @submit.prevent="save">

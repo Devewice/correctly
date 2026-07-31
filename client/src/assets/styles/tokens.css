@@ -53,3 +53,37 @@
   --cx-font: 'DM Sans', system-ui, sans-serif;
   --cx-font-display: 'Nunito', 'DM Sans', system-ui, sans-serif;
 }
+
+/* —— Dark —— */
+[data-theme='dark'] {
+  --cx-bg: #1a1d19;
+  --cx-surface: #242822;
+  --cx-surface-soft: #30352e;
+  --cx-surface-muted: #3a4037;
+  --cx-surface-tint: rgba(155, 184, 152, 0.14);
+
+  --cx-text: #f2efe8;
+  --cx-text-soft: rgba(242, 239, 232, 0.7);
+  --cx-text-faint: rgba(242, 239, 232, 0.45);
+
+  --cx-primary: #9bb898;
+  --cx-primary-deep: #c5d9c3;
+  --cx-primary-soft: rgba(155, 184, 152, 0.18);
+  --cx-secondary: #e8b892;
+  --cx-secondary-soft: rgba(232, 184, 146, 0.28);
+  --cx-accent: #c9b8d8;
+  --cx-accent-soft: rgba(201, 184, 216, 0.22);
+  --cx-info: #6bb3d1;
+  --cx-info-soft: rgba(107, 144, 209, 0.16);
+  --cx-success: #6bbf86;
+  --cx-success-soft: rgba(107, 191, 134, 0.16);
+  --cx-warning: #d4a84b;
+  --cx-warning-soft: rgba(212, 168, 75, 0.16);
+  --cx-error: #e07a72;
+  --cx-error-soft: rgba(224, 122, 114, 0.16);
+
+  --cx-border: rgba(197, 217, 195, 0.12);
+  --cx-border-strong: rgba(197, 217, 195, 0.2);
+  --cx-shadow: 0 2px 16px rgba(0, 0, 0, 0.28);
+  --cx-shadow-lift: 0 14px 36px rgba(0, 0, 0, 0.4);
+}

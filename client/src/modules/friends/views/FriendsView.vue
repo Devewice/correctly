@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
 import PageHeader from '@/shared/components/PageHeader.vue'
 import { fadeUp, softHover, withDelay } from '@/shared/motion/presets'
+import { FRIEND_NUDGE_TEMPLATE_IDS } from '@/shared/data/friendNudges'
 
 const { t } = useI18n()
 
@@ -20,7 +21,16 @@ const preview = ref(null)
 const imageBase64 = ref(null)
 const copied = ref(false)
 const error = ref('')
+const toast = ref('')
 const fileInput = ref(null)
+
+const nudgeOpen = ref(false)
+const nudgeFriend = ref(null)
+const nudgeTemplate = ref('thinking')
+const nudgeCustom = ref('')
+const nudgeBusy = ref(false)
+const nudgeError = ref('')
+const nudgeMissed = ref(null)
 
 const hasDraft = computed(() => Boolean(note.value.trim() || imageBase64.value))
 
@@ -134,6 +144,51 @@ async function removeFriend(id) {
   }
 }
 
+function openNudge(friend) {
+  nudgeFriend.value = friend
+  nudgeTemplate.value = 'thinking'
+  nudgeCustom.value = ''
+  nudgeError.value = ''
+  nudgeOpen.value = true
+}
+
+function pickNudgeTemplate(id) {
+  nudgeTemplate.value = id
+  nudgeCustom.value = ''
+}
+
+async function sendNudge() {
+  if (!nudgeFriend.value) return
+  nudgeError.value = ''
+  nudgeBusy.value = true
+  try {
+    const custom = nudgeCustom.value.trim()
+    const body = custom
+      ? { message: custom }
+      : { templateId: nudgeTemplate.value }
+    const r = await api(`/friends/${nudgeFriend.value.id}/nudge`, {
+      method: 'POST',
+      body,
+    })
+    nudgeOpen.value = false
+    if (r.delivered) {
+      toast.value = t('friends.nudgeSent', { name: nudgeFriend.value.name })
+      setTimeout(() => {
+        if (toast.value) toast.value = ''
+      }, 3200)
+    } else {
+      nudgeMissed.value = { name: nudgeFriend.value.name }
+    }
+  } catch (e) {
+    const code = e?.data?.error || e?.message
+    if (code === 'friend_limit') nudgeError.value = t('friends.nudgeLimitFriend')
+    else if (code === 'daily_limit') nudgeError.value = t('friends.nudgeLimitDay')
+    else nudgeError.value = e.message || t('common.error')
+  } finally {
+    nudgeBusy.value = false
+  }
+}
+
 onMounted(load)
 </script>
 
@@ -142,6 +197,9 @@ onMounted(load)
 
   <v-alert v-if="error" type="error" variant="tonal" class="mb-4" closable @click:close="error = ''">
     {{ error }}
+  </v-alert>
+  <v-alert v-if="toast" type="success" variant="tonal" class="mb-4" closable @click:close="toast = ''">
+    {{ toast }}
   </v-alert>
 
   <div v-if="loading" class="text-medium-emphasis">{{ t('common.loading') }}</div>
@@ -284,12 +342,123 @@ onMounted(load)
           </template>
           <v-list-item-title>{{ f.name }}</v-list-item-title>
           <template #append>
-            <v-btn size="small" variant="text" color="error" @click="removeFriend(f.id)">
-              {{ t('friends.remove') }}
-            </v-btn>
+            <div class="d-flex ga-1">
+              <v-btn
+                size="small"
+                variant="tonal"
+                color="primary"
+                prepend-icon="mdi-hand-wave-outline"
+                @click="openNudge(f)"
+              >
+                {{ t('friends.nudge') }}
+              </v-btn>
+              <v-btn size="small" variant="text" color="error" @click="removeFriend(f.id)">
+                {{ t('friends.remove') }}
+              </v-btn>
+            </div>
           </template>
         </v-list-item>
       </v-list>
     </section>
   </template>
+
+  <v-dialog v-model="nudgeOpen" max-width="480">
+    <v-card class="pa-4">
+      <p class="text-h6 mb-1">{{ t('friends.nudgeTitle') }}</p>
+      <p class="text-body-2 text-medium-emphasis mb-3">
+        {{ nudgeFriend?.name }} — {{ t('friends.nudgeHint') }}
+      </p>
+
+      <div class="nudge-grid mb-3">
+        <button
+          v-for="id in FRIEND_NUDGE_TEMPLATE_IDS"
+          :key="id"
+          type="button"
+          class="nudge-chip"
+          :class="{ 'nudge-chip--on': !nudgeCustom.trim() && nudgeTemplate === id }"
+          @click="pickNudgeTemplate(id)"
+        >
+          {{ t(`friends.nudgeTemplates.${id}`) }}
+        </button>
+      </div>
+
+      <v-textarea
+        v-model="nudgeCustom"
+        :label="t('friends.nudgeCustom')"
+        :placeholder="t('friends.nudgeCustomPlaceholder')"
+        rows="2"
+        maxlength="160"
+        counter="160"
+        auto-grow
+        class="mb-2"
+      />
+
+      <v-alert v-if="nudgeError" type="warning" density="compact" class="mb-3" variant="tonal">
+        {{ nudgeError }}
+      </v-alert>
+
+      <div class="d-flex justify-end ga-2">
+        <v-btn variant="text" @click="nudgeOpen = false">{{ t('common.cancel') }}</v-btn>
+        <v-btn color="primary" :loading="nudgeBusy" prepend-icon="mdi-send" @click="sendNudge">
+          {{ t('friends.nudgeSend') }}
+        </v-btn>
+      </div>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog
+    :model-value="!!nudgeMissed"
+    max-width="420"
+    @update:model-value="(v) => !v && (nudgeMissed = null)"
+  >
+    <v-card class="pa-4">
+      <p class="text-h6 mb-2">{{ t('friends.nudgeMissedTitle') }}</p>
+      <p class="text-body-2 text-medium-emphasis mb-4">
+        {{ t('friends.nudgeMissedBody', { name: nudgeMissed?.name || '' }) }}
+      </p>
+      <div class="d-flex flex-wrap justify-end ga-2">
+        <v-btn variant="tonal" rounded="xl" to="/reminders">
+          {{ t('nav.reminders') }}
+        </v-btn>
+        <v-btn color="primary" rounded="xl" @click="nudgeMissed = null">
+          {{ t('common.close') }}
+        </v-btn>
+      </div>
+    </v-card>
+  </v-dialog>
 </template>
+
+<style scoped>
+.nudge-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.nudge-chip {
+  text-align: left;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--cx-radius-md, 14px);
+  border: 1px solid var(--cx-border);
+  background: color-mix(in srgb, var(--cx-surface) 90%, var(--cx-bg));
+  color: var(--cx-text);
+  font-size: 0.82rem;
+  line-height: 1.25;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.nudge-chip--on {
+  border-color: color-mix(in srgb, var(--cx-primary) 55%, var(--cx-border));
+  background: color-mix(in srgb, var(--cx-primary-soft) 70%, var(--cx-surface));
+  font-weight: 600;
+}
+
+@media (max-width: 400px) {
+  .nudge-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

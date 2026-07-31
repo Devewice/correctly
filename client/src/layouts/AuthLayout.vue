@@ -261,4 +261,24 @@ const { t } = useI18n()
     animation: none;
   }
 }
+
+:global([data-theme='dark']) .auth-bg {
+  background: linear-gradient(180deg, #1e241c 0%, #1a1d19 40%, #242018 75%, #2a2218 100%);
+}
+
+:global([data-theme='dark']) .auth-sun {
+  background: radial-gradient(circle at 35% 35%, #e8c89a88, #c4926a55 55%, transparent 70%);
+  opacity: 0.55;
+}
+
+:global([data-theme='dark']) .auth-haze {
+  background: radial-gradient(ellipse at 50% 120%, #1a1d19ee 0%, transparent 55%);
+}
+
+:global([data-theme='dark']) .auth-hills {
+  background:
+    radial-gradient(120% 80% at 20% 100%, #9bb89844 0%, transparent 55%),
+    radial-gradient(100% 70% at 70% 100%, #4a664866 0%, transparent 50%),
+    radial-gradient(90% 60% at 50% 120%, #30352e88 0%, transparent 45%);
+}
 </style>

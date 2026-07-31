@@ -61,11 +61,11 @@ export async function sendPushToSubscription(sub, payload) {
 
 export async function sendPushToUser(userId, payload) {
   const subs = await prisma.pushSubscription.findMany({ where: { userId } })
-  if (!subs.length) return { sent: 0 }
+  if (!subs.length) return { sent: 0, devices: 0 }
   let sent = 0
   for (const sub of subs) {
     const r = await sendPushToSubscription(sub, payload)
     if (r.ok) sent += 1
   }
-  return { sent }
+  return { sent, devices: subs.length }
 }

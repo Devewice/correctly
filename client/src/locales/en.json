@@ -191,7 +191,12 @@
     "weight": "Weight"
   },
   "profile": {
-    "name": "Name"
+    "name": "Name",
+    "theme": "Appearance",
+    "themeHint": "Light, dark, or match the system.",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System"
   },
   "journal": {
     "title": "Journal",
@@ -499,6 +504,27 @@
     "listTitle": "Your friends",
     "listEmpty": "No friends yet. Share your link.",
     "remove": "Remove",
+    "nudge": "Nudge",
+    "nudgeTitle": "Send a nudge",
+    "nudgeHint": "A short message. They get a notification if Correctly alerts are on.",
+    "nudgeCustom": "Custom message",
+    "nudgeCustomPlaceholder": "e.g. I just thought of you…",
+    "nudgeSend": "Send nudge",
+    "nudgeSent": "Nudge sent to {name}",
+    "nudgeMissedTitle": "They may be missing nudges",
+    "nudgeMissedBody": "{name} doesn’t have notifications on (or the app installed). The message didn’t arrive now. Ask them to enable alerts in Reminders and install Correctly.",
+    "nudgeLimitFriend": "You already nudged them today. Try again tomorrow.",
+    "nudgeLimitDay": "You’ve hit today’s nudge limit. Rest and come back tomorrow.",
+    "nudgeTemplates": {
+      "thinking": "I just thought of you",
+      "call_me": "Call me when you can",
+      "remembered": "I remembered you",
+      "morning": "Gentle good morning",
+      "check_in": "How are you doing?",
+      "proud": "I’m proud of you",
+      "laugh": "I need a laugh with you",
+      "rest": "Take care tonight"
+    },
     "likesStat": "Cheers received",
     "dislikesStat": "Strength received",
     "alreadyToday": "You already posted today. Come back tomorrow.",
