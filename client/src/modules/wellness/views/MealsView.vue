@@ -65,7 +65,7 @@ onMounted(load)
 <template>
   <PageHeader :title="t('meals.title')" :subtitle="t('meals.subtitle')" />
 
-  <v-card class="pa-5 mb-6">
+  <v-card class="pa-4 pa-sm-5 mb-5 cx-panel--lift">
     <p class="text-body-2 text-medium-emphasis mb-3">{{ t('meals.whenAsk') }}</p>
     <div class="d-flex flex-wrap ga-2 mb-5">
       <button
@@ -110,8 +110,8 @@ onMounted(load)
     </v-btn>
   </v-card>
 
-  <v-card v-for="meal in meals" :key="meal.id" class="pa-4 mb-2">
+  <div v-for="meal in meals" :key="meal.id" class="cx-log">
     <div class="text-subtitle-2">{{ t(`meals.types.${meal.type}`) }}</div>
     <div class="text-body-2 text-medium-emphasis">{{ meal.description }}</div>
-  </v-card>
+  </div>
 </template>

@@ -143,9 +143,9 @@ function googleLogin() {
 
 <style scoped>
 .login-card {
-  backdrop-filter: blur(16px);
-  background: rgba(255, 255, 255, 0.88) !important;
-  border: 1px solid rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(18px);
+  background: color-mix(in srgb, var(--cx-surface) 90%, transparent) !important;
+  border: none !important;
   box-shadow: var(--cx-shadow-lift) !important;
 }
 

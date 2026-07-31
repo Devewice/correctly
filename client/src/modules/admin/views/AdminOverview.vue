@@ -67,11 +67,11 @@ onMounted(async () => {
       </v-col>
     </v-row>
 
-    <v-card v-if="!data.settings.google.configured" class="pa-5" color="secondary" variant="tonal">
+    <div v-if="!data.settings.google.configured" class="cx-panel cx-panel--warm">
       <div class="text-h6 font-weight-bold">{{ t('admin.overview.needGoogle') }}</div>
       <p class="text-body-2 mt-1 mb-4">{{ t('admin.overview.needGoogleHint') }}</p>
       <v-btn color="primary" to="/admin/google">{{ t('admin.overview.startWizard') }}</v-btn>
-    </v-card>
+    </div>
 
     <v-alert
       v-if="authStatus?.lastError"

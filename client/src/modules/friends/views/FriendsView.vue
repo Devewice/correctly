@@ -147,98 +147,96 @@ onMounted(load)
   <div v-if="loading" class="text-medium-emphasis">{{ t('common.loading') }}</div>
 
   <template v-else>
-    <v-row dense class="mb-4 align-stretch">
-      <v-col cols="6">
-        <v-card class="pa-3 pa-sm-4 cx-stat-card" color="secondary" variant="tonal">
-          <div class="cx-stat-card__label">{{ t('friends.likesStat') }}</div>
-          <div class="cx-stat-card__value">{{ stats.likesReceived }}</div>
-        </v-card>
-      </v-col>
-      <v-col cols="6">
-        <v-card class="pa-3 pa-sm-4 cx-stat-card" color="secondary" variant="tonal">
-          <div class="cx-stat-card__label">{{ t('friends.dislikesStat') }}</div>
-          <div class="cx-stat-card__value">{{ stats.dislikesReceived }}</div>
-        </v-card>
-      </v-col>
-    </v-row>
+    <section class="cx-section">
+      <v-row dense class="align-stretch">
+        <v-col cols="6">
+          <v-card class="pa-3 pa-sm-4 cx-stat-card" color="secondary" variant="tonal">
+            <div class="cx-stat-card__label">{{ t('friends.likesStat') }}</div>
+            <div class="cx-stat-card__value">{{ stats.likesReceived }}</div>
+          </v-card>
+        </v-col>
+        <v-col cols="6">
+          <v-card class="pa-3 pa-sm-4 cx-stat-card" color="secondary" variant="tonal">
+            <div class="cx-stat-card__label">{{ t('friends.dislikesStat') }}</div>
+            <div class="cx-stat-card__value">{{ stats.dislikesReceived }}</div>
+          </v-card>
+        </v-col>
+      </v-row>
+    </section>
 
-    <v-card class="pa-5 mb-5" variant="tonal" color="primary">
-      <div class="text-subtitle-1 font-weight-bold mb-1">{{ t('friends.inviteTitle') }}</div>
-      <p class="text-body-2 text-medium-emphasis mb-3">{{ t('friends.inviteHint') }}</p>
-      <v-text-field
-        :model-value="invite?.link || ''"
-        readonly
-        density="comfortable"
-        hide-details
-        class="mb-3"
-      />
-      <div class="d-flex flex-wrap ga-2">
-        <v-btn color="primary" :loading="busy" @click="copyLink">
-          {{ copied ? t('friends.copied') : t('friends.copyLink') }}
-        </v-btn>
-        <v-btn variant="text" :loading="busy" @click="refreshInvite">
-          {{ t('friends.newLink') }}
-        </v-btn>
+    <section class="cx-section">
+      <p class="cx-section-label">{{ t('friends.inviteTitle') }}</p>
+      <div class="cx-panel">
+        <p class="text-body-2 text-medium-emphasis mb-3">{{ t('friends.inviteHint') }}</p>
+        <v-text-field
+          :model-value="invite?.link || ''"
+          readonly
+          density="comfortable"
+          hide-details
+          class="mb-3"
+        />
+        <div class="d-flex flex-wrap ga-2">
+          <v-btn color="primary" :loading="busy" @click="copyLink">
+            {{ copied ? t('friends.copied') : t('friends.copyLink') }}
+          </v-btn>
+          <v-btn variant="text" :loading="busy" @click="refreshInvite">
+            {{ t('friends.newLink') }}
+          </v-btn>
+        </div>
       </div>
-    </v-card>
+    </section>
 
-    <v-card v-if="canPost" class="pa-4 mb-3" variant="flat" color="surface-light">
-      <div class="text-subtitle-2 font-weight-bold">{{ t('friends.checkInTitle') }}</div>
-      <p class="text-body-2 text-medium-emphasis mb-0 mt-1">{{ t('friends.checkInHint') }}</p>
-    </v-card>
+    <section v-if="canPost" class="cx-section">
+      <p class="cx-section-label">{{ t('friends.todayTitle') }}</p>
+      <p class="text-body-2 text-medium-emphasis mb-3">{{ t('friends.checkInHint') }}</p>
+      <v-card class="pa-4 pa-sm-5 cx-panel--lift">
+        <v-textarea
+          v-model="note"
+          :label="t('friends.noteLabel')"
+          :placeholder="t('friends.notePlaceholder')"
+          rows="2"
+          auto-grow
+          class="mb-3"
+        />
+        <div v-if="preview" class="mb-3">
+          <v-img :src="preview" max-height="240" cover class="rounded-lg mb-2" />
+          <v-btn size="small" variant="text" @click="clearPhoto">{{ t('friends.removePhoto') }}</v-btn>
+        </div>
+        <input ref="fileInput" type="file" accept="image/*" hidden @change="onFile" />
+        <div class="d-flex flex-wrap ga-2 align-center">
+          <v-btn variant="tonal" prepend-icon="mdi-camera-outline" @click="fileInput?.click()">
+            {{ t('friends.addPhoto') }}
+          </v-btn>
+          <v-btn color="primary" :disabled="!hasDraft" :loading="busy" @click="publish">
+            {{ t('friends.publish') }}
+          </v-btn>
+        </div>
+      </v-card>
+    </section>
 
-    <v-card v-if="canPost" class="pa-5 mb-5">
-      <div class="text-subtitle-1 font-weight-bold mb-1">{{ t('friends.todayTitle') }}</div>
-      <p class="text-body-2 text-medium-emphasis mb-4">{{ t('friends.todayHint') }}</p>
-
-      <v-textarea
-        v-model="note"
-        :label="t('friends.noteLabel')"
-        :placeholder="t('friends.notePlaceholder')"
-        rows="2"
-        auto-grow
-        class="mb-3"
-      />
-
-      <div v-if="preview" class="mb-3">
-        <v-img :src="preview" max-height="240" cover class="rounded-lg mb-2" />
-        <v-btn size="small" variant="text" @click="clearPhoto">{{ t('friends.removePhoto') }}</v-btn>
+    <section v-else-if="mine" class="cx-section">
+      <p class="cx-section-label">{{ t('friends.yourShare') }}</p>
+      <div class="cx-panel cx-panel--warm">
+        <p v-if="mine.note" class="text-body-1 mb-3">{{ mine.note }}</p>
+        <v-img v-if="mine.photoUrl" :src="mine.photoUrl" max-height="280" cover class="rounded-lg mb-3" />
+        <div class="text-caption text-medium-emphasis">
+          {{ t('friends.noDelete') }} · {{ mine.likes }} · {{ mine.dislikes }}
+        </div>
       </div>
+    </section>
 
-      <input ref="fileInput" type="file" accept="image/*" hidden @change="onFile" />
-      <div class="d-flex flex-wrap ga-2 align-center">
-        <v-btn variant="tonal" prepend-icon="mdi-camera-outline" @click="fileInput?.click()">
-          {{ t('friends.addPhoto') }}
-        </v-btn>
-        <v-btn color="primary" :disabled="!hasDraft" :loading="busy" @click="publish">
-          {{ t('friends.publish') }}
-        </v-btn>
-      </div>
-    </v-card>
-
-    <v-card v-else-if="mine" class="pa-5 mb-5" variant="tonal" color="accent">
-      <div class="text-subtitle-2 font-weight-bold mb-2">{{ t('friends.yourShare') }}</div>
-      <p v-if="mine.note" class="text-body-1 mb-3">{{ mine.note }}</p>
-      <v-img v-if="mine.photoUrl" :src="mine.photoUrl" max-height="280" cover class="rounded-lg mb-3" />
-      <div class="text-caption text-medium-emphasis">
-        {{ t('friends.noDelete') }} · 👍 {{ mine.likes }} · 👎 {{ mine.dislikes }}
-      </div>
-    </v-card>
-
-    <div class="text-subtitle-1 font-weight-bold mb-3">{{ t('friends.feedTitle') }}</div>
-
-    <v-alert v-if="!feed.length" type="info" variant="tonal" class="mb-4">
-      {{ t('friends.feedEmpty') }}
-    </v-alert>
-
-    <div
-      v-for="(share, i) in feed"
-      :key="share.id"
-      v-motion
-      v-bind="{ ...softHover, ...withDelay(fadeUp, 60 + i * 50) }"
-      class="mb-3"
-    >
-      <v-card class="pa-4">
+    <section class="cx-section">
+      <p class="cx-section-label">{{ t('friends.feedTitle') }}</p>
+      <v-alert v-if="!feed.length" type="info" variant="tonal" class="mb-0">
+        {{ t('friends.feedEmpty') }}
+      </v-alert>
+      <div
+        v-for="(share, i) in feed"
+        :key="share.id"
+        v-motion
+        v-bind="{ ...softHover, ...withDelay(fadeUp, 60 + i * 50) }"
+        class="cx-log mb-3"
+      >
         <div class="d-flex align-center ga-3 mb-3">
           <v-avatar size="40" color="primary" variant="tonal">
             <v-img v-if="share.user.avatar" :src="share.user.avatar" />
@@ -268,28 +266,30 @@ onMounted(load)
             {{ t('friends.reactStrength') }} · {{ share.dislikes }}
           </v-btn>
         </div>
-      </v-card>
-    </div>
+      </div>
+    </section>
 
-    <div class="text-subtitle-1 font-weight-bold mb-3 mt-6">{{ t('friends.listTitle') }}</div>
-    <v-alert v-if="!friends.length" type="info" variant="tonal">
-      {{ t('friends.listEmpty') }}
-    </v-alert>
-    <v-list v-else lines="two" class="bg-transparent">
-      <v-list-item v-for="f in friends" :key="f.id" class="mb-1 rounded-lg">
-        <template #prepend>
-          <v-avatar size="40" color="primary" variant="tonal">
-            <v-img v-if="f.avatar" :src="f.avatar" />
-            <span v-else>{{ f.name?.charAt(0) }}</span>
-          </v-avatar>
-        </template>
-        <v-list-item-title>{{ f.name }}</v-list-item-title>
-        <template #append>
-          <v-btn size="small" variant="text" color="error" @click="removeFriend(f.id)">
-            {{ t('friends.remove') }}
-          </v-btn>
-        </template>
-      </v-list-item>
-    </v-list>
+    <section class="cx-section">
+      <p class="cx-section-label">{{ t('friends.listTitle') }}</p>
+      <v-alert v-if="!friends.length" type="info" variant="tonal">
+        {{ t('friends.listEmpty') }}
+      </v-alert>
+      <v-list v-else>
+        <v-list-item v-for="f in friends" :key="f.id">
+          <template #prepend>
+            <v-avatar size="40" color="primary" variant="tonal">
+              <v-img v-if="f.avatar" :src="f.avatar" />
+              <span v-else>{{ f.name?.charAt(0) }}</span>
+            </v-avatar>
+          </template>
+          <v-list-item-title>{{ f.name }}</v-list-item-title>
+          <template #append>
+            <v-btn size="small" variant="text" color="error" @click="removeFriend(f.id)">
+              {{ t('friends.remove') }}
+            </v-btn>
+          </template>
+        </v-list-item>
+      </v-list>
+    </section>
   </template>
 </template>

@@ -367,27 +367,28 @@ async function logout() {
   font-size: clamp(0.65rem, 2.8vw, 0.75rem);
 }
 .more-sheet {
-  border-radius: 20px 20px 0 0 !important;
+  border-radius: 28px 28px 0 0 !important;
   max-height: min(85dvh, 720px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   background: var(--cx-bg) !important;
-  border: 1px solid var(--cx-border) !important;
+  border: none !important;
+  box-shadow: var(--cx-shadow-lift) !important;
 }
 .more-sheet__chrome {
   flex-shrink: 0;
-  padding: 10px 14px 6px;
+  padding: 12px 16px 8px;
   touch-action: pan-y;
-  background: var(--cx-surface);
-  border-bottom: 1px solid var(--cx-border);
+  background: transparent;
+  border-bottom: none;
 }
 .more-sheet__handle {
-  width: 36px;
+  width: 40px;
   height: 4px;
   border-radius: 999px;
   background: var(--cx-text-faint);
-  margin: 0 auto 10px;
+  margin: 0 auto 12px;
 }
 .more-sheet__header {
   display: flex;
@@ -412,23 +413,22 @@ async function logout() {
   align-items: center;
   gap: 10px;
   min-height: var(--cx-touch);
-  padding: 11px 13px;
+  padding: 12px 14px;
   border: none;
   border-radius: var(--cx-radius);
-  background: var(--cx-surface);
+  background: var(--cx-surface-soft);
   color: var(--cx-text);
   text-align: left;
   cursor: pointer;
-  box-shadow: var(--cx-shadow);
+  box-shadow: none;
   transition: background 0.15s ease, color 0.15s ease;
 }
 .more-row:active {
   background: var(--cx-primary-soft);
 }
 .more-row--active {
-  background: color-mix(in srgb, var(--cx-primary) 22%, var(--cx-surface));
+  background: color-mix(in srgb, var(--cx-primary) 26%, var(--cx-surface));
   color: var(--cx-primary-deep);
-  box-shadow: none;
 }
 .more-row--active .more-row__title {
   color: var(--cx-primary-deep);

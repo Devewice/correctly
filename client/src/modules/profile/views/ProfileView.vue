@@ -88,7 +88,7 @@ async function save() {
 
   <InstallAppCard />
 
-  <v-card class="pa-5 mb-4">
+  <v-card class="pa-4 pa-sm-5 mb-4 cx-panel--lift">
     <v-form @submit.prevent="save">
       <v-text-field v-model="form.name" :label="t('profile.name')" class="mb-2" />
       <v-select
@@ -162,10 +162,10 @@ async function save() {
     </v-form>
   </v-card>
 
-  <v-card class="pa-4 mt-4" variant="flat" color="surface-light">
+  <div class="cx-panel cx-panel--muted mt-2">
     <div class="text-body-2 font-weight-medium">{{ auth.user?.email }}</div>
     <div class="text-caption text-medium-emphasis mt-1">
       XP: {{ auth.user?.stats?.totalXP || 0 }} · Level {{ auth.user?.stats?.level || 1 }}
     </div>
-  </v-card>
+  </div>
 </template>

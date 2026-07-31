@@ -144,7 +144,7 @@ onUnmounted(stop)
   </v-btn>
 
   <p v-if="totalMin > 0" class="text-body-2 text-medium-emphasis mb-3">{{ t('meditation.today') }}</p>
-  <v-card v-for="log in logs.slice(0, 5)" :key="log.id" class="pa-4 mb-2">
+  <div v-for="log in logs.slice(0, 5)" :key="log.id" class="cx-log">
     {{ t(`meditation.types.${log.type}`) }}
-  </v-card>
+  </div>
 </template>

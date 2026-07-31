@@ -82,10 +82,10 @@ const latest = computed(() => logs.value[0] || null)
     {{ t('sleep.last', { feel: feelLabel(latest.quality) }) }}
   </v-alert>
 
-  <v-card v-for="log in logs.slice(0, 5)" :key="log.id" class="pa-4 mb-2">
+  <div v-for="log in logs.slice(0, 5)" :key="log.id" class="cx-log">
     <div class="font-weight-medium">{{ feelLabel(log.quality) }}</div>
     <div class="text-caption text-medium-emphasis">
       {{ new Date(log.bedTime).toLocaleDateString() }}
     </div>
-  </v-card>
+  </div>
 </template>

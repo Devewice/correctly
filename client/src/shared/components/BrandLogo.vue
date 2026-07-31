@@ -25,7 +25,7 @@ defineProps({
       <rect width="64" height="64" rx="18" fill="#7F9F7C" />
       <path
         d="M18 34c0-8.3 6.3-15 14.5-15S47 25.7 47 34"
-        stroke="#F7F4EF"
+        stroke="#F5F1EA"
         stroke-width="4.5"
         stroke-linecap="round"
       />
@@ -35,7 +35,7 @@ defineProps({
         stroke-width="3.5"
         stroke-linecap="round"
       />
-      <circle cx="32" cy="40" r="3.5" fill="#F7F4EF" />
+      <circle cx="32" cy="40" r="3.5" fill="#F5F1EA" />
     </svg>
     <div v-if="variant === 'full'" class="brand-logo__text">
       <div class="brand-logo__name">Correctly</div>

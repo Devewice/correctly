@@ -144,7 +144,7 @@ function typeTitle(type) {
     {{ t('reminders.webHint') }}
   </v-alert>
 
-  <v-card v-if="healthIssues.length" class="pa-4 mb-4" variant="outlined">
+  <v-card v-if="healthIssues.length" class="pa-4 mb-4" variant="flat" color="surface-light">
     <div class="text-subtitle-2 font-weight-bold mb-2">{{ t('reminders.healthTitle') }}</div>
     <div
       v-for="issue in healthIssues"
@@ -218,70 +218,67 @@ function typeTitle(type) {
     </div>
   </v-card>
 
-  <div class="text-subtitle-1 font-weight-bold mb-3">{{ t('reminders.listTitle') }}</div>
+  <p class="cx-section-label">{{ t('reminders.listTitle') }}</p>
 
   <div
     v-for="(item, i) in store.reminders"
     :key="item.id"
     v-motion
     v-bind="{ ...softHover, ...withDelay(fadeUp, 40 + i * 40) }"
-    class="mb-3"
+    class="cx-log mb-2"
   >
-    <v-card class="pa-4">
-      <div class="d-flex align-center justify-space-between ga-3 mb-2">
-        <div class="flex-grow-1" style="min-width: 0">
-          <div class="text-subtitle-2 font-weight-bold text-truncate">
-            {{ item.label || typeTitle(item.type) }}
-          </div>
-          <div class="text-caption text-medium-emphasis text-truncate">
-            {{ t(`reminders.hint.${item.type}`) }}
-          </div>
+    <div class="d-flex align-center justify-space-between ga-3 mb-2">
+      <div class="flex-grow-1" style="min-width: 0">
+        <div class="text-subtitle-2 font-weight-bold text-truncate">
+          {{ item.label || typeTitle(item.type) }}
         </div>
-        <v-switch
-          :model-value="item.enabled"
-          color="primary"
-          hide-details
-          density="compact"
-          class="flex-grow-0"
-          :disabled="store.busy"
-          @update:model-value="toggle(item)"
-        />
+        <div class="text-caption text-medium-emphasis text-truncate">
+          {{ t(`reminders.hint.${item.type}`) }}
+        </div>
       </div>
+      <v-switch
+        :model-value="item.enabled"
+        color="primary"
+        hide-details
+        density="compact"
+        class="flex-grow-0"
+        :disabled="store.busy"
+        @update:model-value="toggle(item)"
+      />
+    </div>
 
-      <div class="d-flex flex-wrap align-center ga-3">
-        <v-text-field
-          :model-value="item.time"
-          type="time"
-          density="compact"
-          hide-details
-          style="max-width: 140px"
-          :disabled="store.busy"
-          @update:model-value="(v) => setTime(item, v)"
-        />
-        <v-chip
-          size="small"
-          :color="item.withSound !== false ? 'accent' : undefined"
-          :variant="item.withSound !== false ? 'flat' : 'tonal'"
-          label
-          @click="toggleSound(item)"
-        >
-          {{ item.withSound !== false ? t('reminders.soundOn') : t('reminders.soundOff') }}
-        </v-chip>
-        <v-btn
-          v-if="item.type === 'custom'"
-          size="small"
-          variant="text"
-          color="error"
-          @click="removeCustom(item)"
-        >
-          {{ t('reminders.remove') }}
-        </v-btn>
-      </div>
-    </v-card>
+    <div class="d-flex flex-wrap align-center ga-3">
+      <v-text-field
+        :model-value="item.time"
+        type="time"
+        density="compact"
+        hide-details
+        style="max-width: 140px"
+        :disabled="store.busy"
+        @update:model-value="(v) => setTime(item, v)"
+      />
+      <v-chip
+        size="small"
+        :color="item.withSound !== false ? 'accent' : undefined"
+        :variant="item.withSound !== false ? 'flat' : 'tonal'"
+        @click="toggleSound(item)"
+      >
+        {{ item.withSound !== false ? t('reminders.soundOn') : t('reminders.soundOff') }}
+      </v-chip>
+      <v-btn
+        v-if="item.type === 'custom'"
+        size="small"
+        variant="text"
+        color="error"
+        @click="removeCustom(item)"
+      >
+        {{ t('reminders.remove') }}
+      </v-btn>
+    </div>
   </div>
 
-  <v-card class="pa-5 mt-4">
-    <div class="text-subtitle-1 font-weight-bold mb-3">{{ t('reminders.customTitle') }}</div>
+  <p class="cx-section-label mt-5">{{ t('reminders.customTitle') }}</p>
+  <v-card class="pa-4 pa-sm-5 cx-panel--lift">
     <v-text-field
       v-model="customLabel"
       :label="t('reminders.customLabel')"

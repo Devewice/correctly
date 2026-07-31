@@ -373,13 +373,14 @@ function pickMood(value) {
 
 <style scoped>
 .day-guide-card {
-  padding: clamp(1rem, 3.2vw, 1.4rem);
+  padding: clamp(1.1rem, 3.4vw, 1.55rem);
   border: none !important;
   background: var(--cx-surface) !important;
   box-shadow: var(--cx-shadow-lift) !important;
   overflow: visible !important;
   width: 100%;
   max-width: 100%;
+  border-radius: var(--cx-radius-lg) !important;
 }
 
 .guide-head {

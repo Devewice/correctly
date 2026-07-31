@@ -57,7 +57,7 @@ onMounted(load)
 <template>
   <PageHeader :title="t('activity.title')" :subtitle="t('activity.subtitle')" />
 
-  <v-card class="pa-5 mb-6">
+  <v-card class="pa-4 pa-sm-5 mb-5 cx-panel--lift">
     <p class="text-body-2 text-medium-emphasis mb-3">{{ t('activity.whatAsk') }}</p>
     <div class="d-flex flex-wrap ga-2 mb-5">
       <button
@@ -95,8 +95,8 @@ onMounted(load)
     </v-btn>
   </v-card>
 
-  <v-card v-for="log in logs" :key="log.id" class="pa-4 mb-2">
+  <div v-for="log in logs" :key="log.id" class="cx-log">
     <div class="text-subtitle-2">{{ t(`activity.types.${log.type}`, log.type) }}</div>
     <div class="text-caption text-medium-emphasis">{{ effortLabel(log.duration) }}</div>
-  </v-card>
+  </div>
 </template>

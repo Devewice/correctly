@@ -443,19 +443,22 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   color: var(--cx-text-soft);
 }
 .today-insight--panel {
+  padding: 0.95rem 1.05rem;
+  border-radius: var(--cx-radius);
+  background: var(--cx-surface-tint);
+  margin-bottom: 0.95rem;
+}
+.today-prefs {
+  margin-top: 0.35rem;
   padding: 0.85rem 1rem;
   border-radius: var(--cx-radius);
   background: var(--cx-surface-soft);
-  margin-bottom: 0.85rem;
-}
-.today-prefs {
-  margin-top: 0.85rem;
 }
 .today-prefs summary {
   cursor: pointer;
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--cx-primary-deep);
+  color: var(--cx-text-soft);
   list-style: none;
 }
 .today-prefs summary::-webkit-details-marker {

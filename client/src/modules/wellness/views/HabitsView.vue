@@ -32,23 +32,21 @@ onMounted(load)
 <template>
   <PageHeader :title="t('habits.title')" />
 
-  <v-card v-if="habits.length">
-    <v-list>
-      <v-list-item
-        v-for="habit in habits"
-        :key="habit.id"
-        :title="`${habit.icon} ${habit.name}`"
-      >
-        <template #append>
-          <v-btn
-            :icon="habit.completedToday ? 'mdi-check' : 'mdi-plus'"
-            :color="habit.completedToday ? 'success' : undefined"
-            :variant="habit.completedToday ? 'flat' : 'tonal'"
-            @click="toggle(habit)"
-          />
-        </template>
-      </v-list-item>
-    </v-list>
-  </v-card>
+  <v-list v-if="habits.length">
+    <v-list-item
+      v-for="habit in habits"
+      :key="habit.id"
+      :title="`${habit.icon} ${habit.name}`"
+    >
+      <template #append>
+        <v-btn
+          :icon="habit.completedToday ? 'mdi-check' : 'mdi-plus'"
+          :color="habit.completedToday ? 'success' : undefined"
+          :variant="habit.completedToday ? 'flat' : 'tonal'"
+          @click="toggle(habit)"
+        />
+      </template>
+    </v-list-item>
+  </v-list>
   <v-alert v-else type="info" variant="tonal">{{ t('habits.empty') }}</v-alert>
 </template>

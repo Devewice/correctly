@@ -60,23 +60,19 @@ onMounted(load)
     </v-col>
   </v-row>
 
-  <v-card
+  <div
     v-for="log in logs.slice(0, 8)"
     :key="log.id"
-    class="pa-3 mb-2"
-    variant="flat"
-    color="surface-light"
+    class="cx-log d-flex align-center justify-space-between"
   >
-    <div class="d-flex align-center justify-space-between">
-      <span class="font-weight-medium">
-        <span class="text-h6 me-2">{{ moods.find((m) => m.value === log.mood)?.emoji }}</span>
-        {{ t(`mood.labels.${moods.find((m) => m.value === log.mood)?.key || 'ok'}`) }}
-      </span>
-      <span class="text-caption text-medium-emphasis">
-        {{ new Date(log.loggedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
-      </span>
-    </div>
-  </v-card>
+    <span class="font-weight-medium">
+      <span class="text-h6 me-2">{{ moods.find((m) => m.value === log.mood)?.emoji }}</span>
+      {{ t(`mood.labels.${moods.find((m) => m.value === log.mood)?.key || 'ok'}`) }}
+    </span>
+    <span class="text-caption text-medium-emphasis">
+      {{ new Date(log.loggedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+    </span>
+  </div>
 </template>
 
 <style scoped>

@@ -88,24 +88,27 @@ function barHeight(ml) {
     </v-row>
     <p class="text-caption text-medium-emphasis mb-4">{{ t('stats.freezeHint') }}</p>
 
-    <v-card class="pa-4 pa-sm-5 mb-4">
-      <div class="text-h6 font-weight-bold mb-2">{{ t('stats.correlations') }}</div>
-      <template v-if="data.correlations?.length">
-        <p
-          v-for="c in data.correlations"
-          :key="c.id"
-          class="text-body-2 mb-2"
-        >
-          {{ t(c.messageKey, c.params || {}) }}
+    <section class="cx-section">
+      <p class="cx-section-label">{{ t('stats.correlations') }}</p>
+      <div class="cx-panel">
+        <template v-if="data.correlations?.length">
+          <p
+            v-for="c in data.correlations"
+            :key="c.id"
+            class="text-body-2 mb-2"
+          >
+            {{ t(c.messageKey, c.params || {}) }}
+          </p>
+        </template>
+        <p v-else class="text-body-2 text-medium-emphasis mb-0">
+          {{ t('stats.correlationsEmpty') }}
         </p>
-      </template>
-      <p v-else class="text-body-2 text-medium-emphasis mb-0">
-        {{ t('stats.correlationsEmpty') }}
-      </p>
-    </v-card>
+      </div>
+    </section>
 
-    <v-card class="pa-4 pa-sm-5 mb-4">
-      <div class="text-h6 font-weight-bold mb-4">{{ t('stats.waterWeek') }}</div>
+    <section class="cx-section">
+      <p class="cx-section-label">{{ t('stats.waterWeek') }}</p>
+      <v-card class="pa-4 pa-sm-5" variant="flat" color="surface-light">
       <div class="d-flex align-end ga-1 ga-sm-2" style="height: 140px">
         <div
           v-for="day in data.days"
@@ -132,19 +135,13 @@ function barHeight(ml) {
           </span>
         </div>
       </div>
-    </v-card>
+      </v-card>
+    </section>
 
-    <v-card class="pa-4 pa-sm-5 mb-4">
-      <div class="text-h6 font-weight-bold mb-3">{{ t('stats.days') }}</div>
+    <section class="cx-section">
+      <p class="cx-section-label">{{ t('stats.days') }}</p>
       <v-list density="compact">
-        <v-list-item
-          v-for="day in data.days"
-          :key="day.date"
-          class="mb-1"
-          rounded="lg"
-          color="surface-light"
-          variant="tonal"
-        >
+        <v-list-item v-for="day in data.days" :key="day.date">
           <template #title>
             <div class="d-flex flex-wrap align-center justify-space-between ga-2 text-body-2">
               <span class="font-weight-medium">{{ day.date.slice(5) }}</span>
@@ -157,16 +154,18 @@ function barHeight(ml) {
           </template>
         </v-list-item>
       </v-list>
-    </v-card>
+    </section>
 
-    <v-card class="pa-5" color="primary" variant="tonal">
-      <div class="text-h6 font-weight-bold mb-3">{{ t('stats.badges') }}</div>
-      <div v-if="achievements.length" class="d-flex flex-wrap ga-2">
-        <v-chip v-for="a in achievements" :key="a.id" size="small" label>
-          {{ badgeLabel(a.badgeId) }}
-        </v-chip>
+    <section class="cx-section">
+      <p class="cx-section-label">{{ t('stats.badges') }}</p>
+      <div class="cx-panel">
+        <div v-if="achievements.length" class="d-flex flex-wrap ga-2">
+          <v-chip v-for="a in achievements" :key="a.id" size="small">
+            {{ badgeLabel(a.badgeId) }}
+          </v-chip>
+        </div>
+        <p v-else class="text-body-2 text-medium-emphasis mb-0">{{ t('stats.noBadges') }}</p>
       </div>
-      <p v-else class="text-body-2 text-medium-emphasis">{{ t('stats.noBadges') }}</p>
-    </v-card>
+    </section>
   </template>
 </template>

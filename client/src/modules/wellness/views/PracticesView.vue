@@ -79,12 +79,12 @@ async function run(p) {
   padding: 1rem 1.05rem;
   border-radius: var(--cx-radius);
   border: none;
-  background: var(--cx-surface);
+  background: var(--cx-surface-soft);
   color: var(--cx-text);
   text-align: left;
   cursor: pointer;
-  box-shadow: var(--cx-shadow);
-  transition: background 0.15s ease, transform 0.12s ease;
+  box-shadow: none;
+  transition: background 0.15s ease;
 }
 .practice-card:hover {
   background: var(--cx-primary-soft);

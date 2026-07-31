@@ -48,7 +48,7 @@ onMounted(() => {
 <template>
   <PageHeader :title="t('journal.title')" :subtitle="t('journal.subtitle')" />
 
-  <v-card class="pa-4 mb-4">
+  <v-card class="pa-4 pa-sm-5 mb-4 cx-panel--lift">
     <p class="text-caption text-medium-emphasis mb-2">{{ t('journal.promptsTitle') }}</p>
     <div class="d-flex flex-wrap ga-2 mb-3">
       <button
@@ -82,12 +82,12 @@ onMounted(() => {
     </v-btn>
   </v-card>
 
-  <v-card v-for="e in entries" :key="e.id" class="pa-4 mb-2">
+  <div v-for="e in entries" :key="e.id" class="cx-log">
     <div class="text-body-2">{{ e.content }}</div>
     <div class="text-caption text-medium-emphasis mt-2">
       {{ new Date(e.loggedAt).toLocaleString() }}
     </div>
-  </v-card>
+  </div>
 
   <p v-if="!entries.length" class="text-body-2 text-medium-emphasis">
     {{ t('journal.empty') }}
