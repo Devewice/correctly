@@ -6,6 +6,7 @@ import { WATER_OPTIONS, glassesFromMl } from '@/shared/utils/water'
 import GuideStepIcon from '@/modules/dashboard/components/GuideStepIcon.vue'
 import { tAsk, pickVariantIndex } from '@/shared/utils/askVariants'
 import { JOURNAL_PROMPTS } from '@/shared/data/journalPrompts'
+import { useGuideSwipe } from '@/modules/dashboard/composables/useGuideSwipe'
 
 const props = defineProps({
   step: { type: Object, required: true },
@@ -26,6 +27,21 @@ const emit = defineEmits([
   'skip',
 ])
 const { t } = useI18n()
+
+const canSkip = computed(
+  () => !props.busy && props.step.key !== 'done' && props.step.key !== 'rest',
+)
+
+const {
+  skipHint,
+  keepHint,
+  cardStyle,
+  binders,
+  reset: resetSwipe,
+} = useGuideSwipe({
+  canSkip,
+  onSkip: (meta) => emit('skip', meta),
+})
 
 const moods = [
   { value: 1, emoji: '😢', key: 'awful' },
@@ -90,6 +106,7 @@ watch(
     selectedMood.value = null
     mealText.value = ''
     journalText.value = ''
+    resetSwipe()
   },
 )
 
@@ -118,22 +135,24 @@ function pickMood(value) {
 
 <template>
   <v-card
-    v-motion
-    :initial="{ opacity: 0, y: 20, scale: 0.98 }"
-    :enter="{
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { type: 'spring', stiffness: 160, damping: 18 },
-    }"
     class="day-guide-card cx-card-shell"
     variant="flat"
+    :style="cardStyle"
+    v-bind="binders"
   >
+    <div class="guide-stamp guide-stamp--skip" :class="{ 'guide-stamp--on': skipHint }">
+      {{ t('day.skip') }}
+    </div>
+    <div class="guide-stamp guide-stamp--keep" :class="{ 'guide-stamp--on': keepHint }">
+      {{ t('day.swipeKeep') }}
+    </div>
+
     <div class="guide-head">
       <GuideStepIcon :kind="step.key === 'done' ? 'done' : step.key" size="sm" />
       <div class="guide-head__text">
         <h2 class="guide-head__title">{{ askTitle }}</h2>
         <p v-if="contextLine" class="guide-head__context">{{ contextLine }}</p>
+        <p v-if="canSkip" class="guide-head__swipe">{{ t('day.swipeHint') }}</p>
       </div>
     </div>
 
@@ -373,14 +392,52 @@ function pickMood(value) {
 
 <style scoped>
 .day-guide-card {
+  position: relative;
   padding: clamp(1.1rem, 3.4vw, 1.55rem);
   border: none !important;
   background: var(--cx-surface) !important;
   box-shadow: var(--cx-shadow-lift) !important;
-  overflow: visible !important;
+  overflow: hidden !important;
   width: 100%;
   max-width: 100%;
   border-radius: var(--cx-radius-lg) !important;
+  user-select: none;
+}
+
+.guide-stamp {
+  position: absolute;
+  top: 1.1rem;
+  z-index: 2;
+  padding: 0.35rem 0.65rem;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: scale(0.85) rotate(-12deg);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+  pointer-events: none;
+}
+.guide-stamp--skip {
+  left: 1rem;
+  color: var(--cx-error);
+  background: var(--cx-error-soft);
+}
+.guide-stamp--keep {
+  right: 1rem;
+  color: var(--cx-primary-deep);
+  background: var(--cx-primary-soft);
+  transform: scale(0.85) rotate(12deg);
+}
+.guide-stamp--on {
+  opacity: 1;
+  transform: scale(1) rotate(-12deg);
+}
+.guide-stamp--keep.guide-stamp--on {
+  transform: scale(1) rotate(12deg);
 }
 
 .guide-head {
@@ -404,6 +461,12 @@ function pickMood(value) {
   font-size: 0.875rem;
   line-height: 1.35;
   color: var(--cx-text-soft);
+}
+.guide-head__swipe {
+  margin: 0.4rem 0 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--cx-text-faint);
 }
 
 .habit-focus {

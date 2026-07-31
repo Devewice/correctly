@@ -29,6 +29,8 @@ const busy = ref(false)
 const prefs = ref(loadCarePrefs(auth.user?.id))
 const burst = ref(false)
 const burstLabel = ref('')
+/** left = skip (Tinder pass), right = completar */
+const deckExit = ref('right')
 
 const userRef = computed(() => auth.user)
 const { steps, suggestedMealType, band, caredFor } = useDayGuide(
@@ -39,6 +41,25 @@ const { steps, suggestedMealType, band, caredFor } = useDayGuide(
 )
 
 const current = computed(() => steps.value[0] || { id: 'done', key: 'done' })
+const peek = computed(() => steps.value[1] || null)
+
+const peekTitle = computed(() => {
+  const s = peek.value
+  if (!s) return ''
+  const map = {
+    mood: 'day.moodAsk',
+    water: 'day.waterAsk',
+    meal: 'day.mealAsk',
+    habit: 'day.habitAsk',
+    sleep: 'day.sleepAsk',
+    meditation: 'day.meditationAsk',
+    activity: 'day.activityAsk',
+    journal: 'day.journalAsk',
+    rest: 'day.restTitle',
+    done: 'day.doneTitle',
+  }
+  return t(map[s.key] || 'day.doneTitle')
+})
 const progressPct = computed(() => dash.today?.progress ?? 0)
 const mods = computed(() => activeModuleSet(auth.user))
 const dayFinished = computed(
@@ -153,13 +174,16 @@ async function handleQuickAction() {
   }
 }
 
-function skip() {
+function skip(meta) {
   if (!current.value || !dash.today) return
+  // Si ya voló con el dedo, no repetir la animación CSS
+  deckExit.value = meta?.fromSwipe ? 'instant' : 'left'
   skipped.value = addDaySkip(auth.user?.id, dash.today.date, current.value.id)
 }
 
 async function withBusy(fn, burstKey) {
   busy.value = true
+  deckExit.value = 'right'
   try {
     await fn()
     if (burstKey) flashComplete(t(burstKey))
@@ -290,24 +314,33 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
       <v-col cols="12" lg="7" order="1" order-lg="2">
         <p class="cx-section-label">{{ t('day.guideTitle') }}</p>
 
-        <Transition name="guide-swap" mode="out-in">
-          <DayGuideCard
-            :key="current.id"
-            :step="current"
-            :meal-type="suggestedMealType"
-            :date-key="dash.today.date"
-            :busy="busy"
-            @mood="onMood"
-            @water="onWater"
-            @meal="onMeal"
-            @habit="onHabit"
-            @sleep="onSleep"
-            @meditation="onMeditation"
-            @activity="onActivity"
-            @journal="onJournal"
-            @skip="skip"
-          />
-        </Transition>
+        <div class="guide-deck">
+          <div v-if="peek" class="guide-deck__back" aria-hidden="true">
+            <div class="guide-deck__back-card">
+              <div class="guide-deck__back-title">{{ peekTitle }}</div>
+              <div class="guide-deck__back-meta">{{ t('day.nextUp') }}</div>
+            </div>
+          </div>
+
+          <Transition :name="`guide-${deckExit}`" mode="out-in">
+            <DayGuideCard
+              :key="current.id"
+              :step="current"
+              :meal-type="suggestedMealType"
+              :date-key="dash.today.date"
+              :busy="busy"
+              @mood="onMood"
+              @water="onWater"
+              @meal="onMeal"
+              @habit="onHabit"
+              @sleep="onSleep"
+              @meditation="onMeditation"
+              @activity="onActivity"
+              @journal="onJournal"
+              @skip="skip"
+            />
+          </Transition>
+        </div>
 
         <DayCloseSummary
           v-if="dayFinished || (progressPct >= 80 && caredFor.length)"
@@ -474,19 +507,96 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   gap: 0.4rem;
   margin-top: 0.55rem;
 }
-.guide-swap-enter-active,
-.guide-swap-leave-active {
+.guide-deck {
+  position: relative;
+  isolation: isolate;
+  min-height: 12rem;
+}
+.guide-deck__back {
+  position: absolute;
+  inset: 10px 8px -6px;
+  z-index: 0;
+  pointer-events: none;
+}
+.guide-deck__back-card {
+  height: 100%;
+  min-height: 7.5rem;
+  padding: 1.1rem 1.2rem;
+  border-radius: var(--cx-radius-lg);
+  background: var(--cx-surface-soft);
+  transform: scale(0.96);
+  opacity: 0.85;
+}
+.guide-deck__back-title {
+  font-family: var(--cx-font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cx-text-soft);
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.guide-deck__back-meta {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--cx-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.guide-deck :deep(.day-guide-card) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Tinder-like deck transitions */
+.guide-left-enter-active,
+.guide-right-enter-active {
+  transition:
+    opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.guide-left-leave-active,
+.guide-right-leave-active {
   transition:
     opacity 0.28s ease,
-    transform 0.28s ease;
+    transform 0.32s cubic-bezier(0.4, 0, 0.7, 0.2);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  pointer-events: none;
 }
-.guide-swap-enter-from {
+.guide-left-enter-from,
+.guide-right-enter-from {
   opacity: 0;
-  transform: translateY(12px) scale(0.98);
+  transform: translateY(36px) scale(0.92) rotate(-2deg);
 }
-.guide-swap-leave-to {
+.guide-left-leave-to {
   opacity: 0;
-  transform: translateY(-10px) scale(0.98);
+  transform: translateX(-120%) rotate(-14deg);
+}
+.guide-right-leave-to {
+  opacity: 0;
+  transform: translateX(120%) rotate(14deg);
+}
+.guide-instant-enter-active {
+  transition:
+    opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.guide-instant-leave-active {
+  transition: none;
+}
+.guide-instant-enter-from {
+  opacity: 0;
+  transform: translateY(36px) scale(0.92);
+}
+.guide-instant-leave-to {
+  opacity: 0;
 }
 @media (min-width: 1280px) {
   .today-view__aside {
@@ -494,8 +604,10 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .guide-swap-enter-active,
-  .guide-swap-leave-active {
+  .guide-left-enter-active,
+  .guide-right-enter-active,
+  .guide-left-leave-active,
+  .guide-right-leave-active {
     transition: none;
   }
 }
