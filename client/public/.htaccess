@@ -1,12 +1,20 @@
+# Correctly Opción A — public_html
+# 1) archivos reales  2) /api → Node  3) resto → index.html
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
 
+  # No tocar archivos existentes (assets, index.html, favicon…)
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
+  # /api lo atiende Node (Hostinger añade/ajusta el proxy al puerto)
+  # Si tu .htaccess generado por Hostinger ya proxya ^api, esta línea
+  # puede sobrescribirse; lo crítico es NO enviar /api a index.html.
   RewriteRule ^api(?:/|$) - [L]
 
+  # Vue history mode: /onboarding, /dashboard, etc.
   RewriteRule ^ index.html [L]
 </IfModule>

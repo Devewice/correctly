@@ -1,70 +1,115 @@
-# Correctly en Hostinger — Opción A
+# Correctly en Hostinger — Opción A (recomendada)
 
 ```
-/ , /login , /onboarding , /assets/*  →  Apache (public_html) + .htaccess
-/api/*                                 →  Node (Express)
+Navegador
+   │
+   ├─ / , /login , /onboarding , /assets/*  →  Apache (public_html) + index.html
+   │
+   └─ /api/*                                 →  Node (Express)
 ```
 
-## Panel Node
+Así **no hay enredo**: Vue usa rutas normales (`/onboarding`) y Apache las resuelve con `.htaccess`.
+
+---
+
+## 1. Ajustes en el panel Node
 
 | Campo | Valor |
 |-------|--------|
+| Preajuste | `Other` |
 | Build | `npm run build` |
 | **Directorio de salida** | `server/public` |
 | **Archivo de entrada** | `server/src/index.js` |
 
-El comando `npm run build` **genera solo** el `.htaccess` dentro de `server/public/`.  
-Hostinger lo copia a `public_html/.htaccess` con el resto del front.
-
-No hace falta crearlo a mano **si** tras el deploy sigue ahí.
+**No** pongas `SERVE_SPA=true` (Node solo API).
 
 ---
 
-## Variables
+## 2. Variables de entorno
 
 ```env
 NODE_ENV=production
 CLIENT_URL=https://jeisson.click
 ALLOW_DEMO_LOGIN=true
+
 DATABASE_HOST=localhost
 DATABASE_PORT=3306
 DATABASE_NAME=u301973293_correctly
 DATABASE_USER=u301973293_admin
 DATABASE_PASSWORD_B64=dTtEb0tRfiYy
+
 JWT_SECRET=cambia-esta-clave
 GOOGLE_CALLBACK_URL=https://jeisson.click/api/auth/google/callback
 ```
 
-Sin `PORT`, sin `SERVE_SPA`, sin `DATABASE_PASSWORD` con `&`.
+- **Sin** `PORT`
+- **Sin** `DATABASE_PASSWORD` con `&` (usa B64)
+- **Sin** `SERVE_SPA`
 
 ---
 
-## Si Hostinger machaca el `.htaccess`
+## 3. Paso crítico tras el primer deploy (File Manager)
 
-A veces, al activar Node, Hostinger **regenera** `.htaccess` y manda todo al proceso Node (vuelve el 404 JSON en `/onboarding`).
+Hostinger a veces **sobrescribe** `.htaccess` para mandar todo a Node.  
+Hay que dejarlo así (Opción A):
 
-Comprueba en File Manager → `public_html/.htaccess` que tenga algo como:
+1. hPanel → **Archivos** → `domains/jeisson.click/public_html/`
+2. Edita (o crea) `.htaccess` con **exactamente**:
 
 ```apache
-RewriteCond %{REQUEST_FILENAME} -f
-RewriteRule ^ - [L]
-RewriteRule ^api(?:/|$) - [L]
-RewriteRule ^ index.html [L]
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteRule ^api(?:/|$) - [L]
+
+  RewriteRule ^ index.html [L]
+</IfModule>
 ```
 
-Si lo reemplazaron por solo un `RewriteRule ^(.*)$ http://127.0.0.1:PUERTO/$1 [P,L]`:
+3. Guarda.
 
-1. Copia la línea del proxy `/api` (con el puerto que pongan ellos).
-2. Deja el bloque Opción A (archivos → api proxy → index.html).
+> La regla `^api` con `[L]` deja que el proxy de Node de Hostinger (que suelen añadir ellos) maneje `/api`.  
+> Si `/api/health` deja de funcionar, abre el `.htaccess` que Hostinger generó, copia **solo** su línea de proxy `api → 127.0.0.1:PUERTO`, y ponla **antes** del `RewriteRule ^ index.html`.
 
-El contenido “bueno” también está en el repo: `client/public/.htaccess` (se vuelve a escribir en cada build).
+Ejemplo combinado si hace falta:
+
+```apache
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Pegar aquí la línea proxy de Hostinger, ej:
+  # RewriteRule ^api/(.*)$ http://127.0.0.1:XXXX/api/$1 [P,L]
+
+  RewriteRule ^ index.html [L]
+</IfModule>
+```
 
 ---
 
-## Comprobar
+## 4. Comprobar
 
-| URL | OK |
-|-----|-----|
-| `/` | HTML login |
-| `/onboarding` + F5 | sigue HTML, no `{"error":"Not Found"}` |
-| `/api/health` | `"mode":"api-only"` |
+| URL | Esperado |
+|-----|----------|
+| https://jeisson.click/ | HTML login (no JSON) |
+| https://jeisson.click/onboarding | HTML (tras login), **F5 no da 404** |
+| https://jeisson.click/api/health | `{"ok":true,"mode":"api-only",...}` |
+
+---
+
+## Local
+
+```bash
+npm run dev          # API + Vite (proxy /api)
+# o
+SERVE_SPA=true npm run start --prefix server   # Express sirve el build
+```
