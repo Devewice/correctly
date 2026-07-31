@@ -1,6 +1,7 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useDisplay } from 'vuetify'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
 import BrandLogo from '@/shared/components/BrandLogo.vue'
@@ -10,7 +11,14 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
+const { mdAndUp, lgAndUp } = useDisplay()
 const moreOpen = ref(false)
+const drawer = ref(true)
+
+watch(mdAndUp, (v) => {
+  drawer.value = v
+  if (v) moreOpen.value = false
+})
 
 const tab = computed(() => {
   if (route.path.startsWith('/profile')) return 'profile'
@@ -30,9 +38,23 @@ const moreItems = computed(() => [
   { to: '/stats', title: t('stats.title'), icon: 'mdi-chart-bar', hint: t('day.moreHints.stats') },
 ])
 
+const contentMax = computed(() => {
+  if (lgAndUp.value) return 1100
+  if (mdAndUp.value) return 820
+  return 560
+})
+
 function go(path) {
   moreOpen.value = false
   router.push(path)
+}
+
+function openMore() {
+  if (mdAndUp.value) {
+    drawer.value = true
+    return
+  }
+  moreOpen.value = true
 }
 
 async function logout() {
@@ -42,33 +64,171 @@ async function logout() {
 </script>
 
 <template>
-  <v-app-bar elevation="0" height="64">
+  <!-- Tablet / Desktop: menú lateral -->
+  <v-navigation-drawer
+    v-if="mdAndUp"
+    v-model="drawer"
+    permanent
+    :rail="mdAndUp && !lgAndUp"
+    :width="280"
+    class="app-drawer"
+  >
+    <div class="pa-4" :class="{ 'px-2': !lgAndUp }">
+      <BrandLogo v-if="lgAndUp" :size="40" />
+      <v-avatar v-else color="primary" variant="tonal" size="40">
+        <v-icon icon="mdi-heart-pulse" />
+      </v-avatar>
+    </div>
+
+    <v-list nav density="comfortable" class="px-2">
+      <v-list-item
+        to="/dashboard"
+        prepend-icon="mdi-white-balance-sunny"
+        :title="lgAndUp ? t('nav.dashboard') : undefined"
+        :active="tab === 'today'"
+        color="primary"
+        rounded="lg"
+      />
+      <v-list-item
+        to="/profile"
+        prepend-icon="mdi-account-circle-outline"
+        :title="lgAndUp ? t('nav.profile') : undefined"
+        :active="tab === 'profile'"
+        color="primary"
+        rounded="lg"
+      />
+    </v-list>
+
+    <v-divider class="my-2" />
+
+    <v-list-subheader v-if="lgAndUp" class="px-4">
+      {{ t('day.moreTitle') }}
+    </v-list-subheader>
+
+    <v-list nav density="comfortable" class="px-2">
+      <v-list-item
+        v-for="item in moreItems"
+        :key="item.to"
+        :to="item.to"
+        :prepend-icon="item.icon"
+        :title="lgAndUp ? item.title : undefined"
+        :subtitle="lgAndUp ? item.hint : undefined"
+        :active="route.path === item.to"
+        color="primary"
+        rounded="lg"
+      />
+    </v-list>
+
+    <template #append>
+      <div class="pa-3">
+        <v-btn
+          v-if="auth.user?.role === 'superadmin'"
+          :block="lgAndUp"
+          :icon="!lgAndUp ? 'mdi-shield-crown-outline' : undefined"
+          variant="tonal"
+          color="primary"
+          class="mb-2"
+          to="/admin"
+          :prepend-icon="lgAndUp ? 'mdi-shield-crown-outline' : undefined"
+        >
+          <span v-if="lgAndUp">{{ t('admin.badge') }}</span>
+        </v-btn>
+        <v-btn
+          :block="lgAndUp"
+          :icon="!lgAndUp ? 'mdi-logout-variant' : undefined"
+          variant="text"
+          :prepend-icon="lgAndUp ? 'mdi-logout-variant' : undefined"
+          @click="logout"
+        >
+          <span v-if="lgAndUp">{{ t('common.logout') }}</span>
+        </v-btn>
+      </div>
+    </template>
+  </v-navigation-drawer>
+
+  <v-app-bar elevation="0" :height="mdAndUp ? 72 : 64">
     <v-app-bar-title class="ms-2">
-      <BrandLogo :size="36" />
+      <BrandLogo v-if="!mdAndUp" :size="36" />
+      <div v-else class="d-flex align-center ga-3">
+        <span class="text-h6 font-weight-bold text-primary-darken-1 d-none d-lg-inline">
+          {{ t('app.name') }}
+        </span>
+        <span class="text-body-2 text-medium-emphasis d-none d-lg-inline">
+          {{ t('app.tagline') }}
+        </span>
+        <span v-if="mdAndUp && !lgAndUp" class="text-subtitle-1 font-weight-bold text-primary-darken-1">
+          {{ t('app.name') }}
+        </span>
+      </div>
     </v-app-bar-title>
     <template #append>
-      <v-btn
-        v-if="auth.user?.role === 'superadmin'"
-        icon="mdi-shield-crown-outline"
-        variant="text"
-        to="/admin"
-        :aria-label="t('admin.badge')"
-      />
-      <v-btn icon="mdi-logout-variant" variant="text" :aria-label="t('common.logout')" @click="logout" />
+      <div v-if="mdAndUp" class="d-flex align-center ga-2 me-2">
+        <v-chip
+          size="small"
+          :color="tab === 'today' ? 'primary' : undefined"
+          :variant="tab === 'today' ? 'flat' : 'tonal'"
+          label
+          to="/dashboard"
+          prepend-icon="mdi-white-balance-sunny"
+        >
+          {{ t('nav.dashboard') }}
+        </v-chip>
+        <v-chip
+          size="small"
+          :color="tab === 'profile' ? 'primary' : undefined"
+          :variant="tab === 'profile' ? 'flat' : 'tonal'"
+          label
+          to="/profile"
+          prepend-icon="mdi-account-circle-outline"
+        >
+          {{ t('nav.profile') }}
+        </v-chip>
+        <v-chip
+          v-if="auth.user?.name"
+          size="small"
+          variant="tonal"
+          class="d-none d-md-inline-flex"
+        >
+          {{ auth.user.name.split(' ')[0] }}
+        </v-chip>
+      </div>
+      <template v-else>
+        <v-btn
+          v-if="auth.user?.role === 'superadmin'"
+          icon="mdi-shield-crown-outline"
+          variant="text"
+          to="/admin"
+          :aria-label="t('admin.badge')"
+        />
+        <v-btn
+          icon="mdi-logout-variant"
+          variant="text"
+          :aria-label="t('common.logout')"
+          @click="logout"
+        />
+      </template>
     </template>
   </v-app-bar>
 
   <v-main>
-    <v-container class="py-4 py-sm-6" style="max-width: 560px">
+    <v-container class="py-4 py-md-6 py-lg-8" :style="{ maxWidth: `${contentMax}px` }">
       <router-view />
     </v-container>
   </v-main>
 
-  <v-bottom-navigation :model-value="tab" grow app color="primary" elevation="8">
+  <!-- Solo móvil -->
+  <v-bottom-navigation
+    v-if="!mdAndUp"
+    :model-value="tab"
+    grow
+    app
+    color="primary"
+    elevation="8"
+  >
     <v-btn value="today" to="/dashboard" prepend-icon="mdi-white-balance-sunny">
       {{ t('nav.dashboard') }}
     </v-btn>
-    <v-btn value="more" prepend-icon="mdi-dots-grid" @click="moreOpen = true">
+    <v-btn value="more" prepend-icon="mdi-dots-grid" @click="openMore">
       {{ t('nav.more') }}
     </v-btn>
     <v-btn value="profile" to="/profile" prepend-icon="mdi-account-circle-outline">
@@ -76,7 +236,7 @@ async function logout() {
     </v-btn>
   </v-bottom-navigation>
 
-  <v-bottom-sheet v-model="moreOpen" inset>
+  <v-bottom-sheet v-if="!mdAndUp" v-model="moreOpen" inset>
     <v-card class="pa-4 pb-8">
       <div
         v-motion
@@ -117,4 +277,3 @@ async function logout() {
     </v-card>
   </v-bottom-sheet>
 </template>
-

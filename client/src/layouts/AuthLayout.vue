@@ -1,36 +1,20 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import { withDelay, fadeIn, popIn } from '@/shared/motion/presets'
+import { useI18n } from 'vue-i18n'
+import { withDelay, fadeIn, popIn, fadeUp } from '@/shared/motion/presets'
+import BrandLogo from '@/shared/components/BrandLogo.vue'
+
+const { t } = useI18n()
 </script>
 
 <template>
   <v-main class="auth-main">
     <div class="auth-bg" aria-hidden="true">
-      <div
-        v-motion
-        v-bind="withDelay(fadeIn, 0)"
-        class="auth-sun"
-      />
-      <div
-        v-motion
-        v-bind="withDelay(popIn, 80)"
-        class="auth-orb auth-orb--sage"
-      />
-      <div
-        v-motion
-        v-bind="withDelay(popIn, 160)"
-        class="auth-orb auth-orb--peach"
-      />
-      <div
-        v-motion
-        v-bind="withDelay(popIn, 240)"
-        class="auth-orb auth-orb--sky"
-      />
-      <div
-        v-motion
-        v-bind="withDelay(popIn, 320)"
-        class="auth-orb auth-orb--lavender"
-      />
+      <div v-motion v-bind="withDelay(fadeIn, 0)" class="auth-sun" />
+      <div v-motion v-bind="withDelay(popIn, 80)" class="auth-orb auth-orb--sage" />
+      <div v-motion v-bind="withDelay(popIn, 160)" class="auth-orb auth-orb--peach" />
+      <div v-motion v-bind="withDelay(popIn, 240)" class="auth-orb auth-orb--sky" />
+      <div v-motion v-bind="withDelay(popIn, 320)" class="auth-orb auth-orb--lavender" />
       <div class="auth-haze" />
       <div
         v-motion
@@ -41,6 +25,21 @@ import { withDelay, fadeIn, popIn } from '@/shared/motion/presets'
     </div>
 
     <div class="auth-center">
+      <div
+        v-motion
+        v-bind="withDelay(fadeUp, 80)"
+        class="auth-hero d-none d-md-flex"
+      >
+        <BrandLogo :size="72" stacked>
+          <template #tagline>
+            <div class="auth-hero__tag">{{ t('app.tagline') }}</div>
+          </template>
+        </BrandLogo>
+        <p class="auth-hero__copy mt-6">
+          {{ t('login.subtitle') }}
+        </p>
+      </div>
+
       <div
         v-motion
         :initial="{ opacity: 0, y: 28, scale: 0.97 }"
@@ -170,11 +169,52 @@ import { withDelay, fadeIn, popIn } from '@/shared/motion/presets'
   align-items: center;
   justify-content: center;
   padding: 24px 16px;
+  gap: 48px;
+}
+
+.auth-hero {
+  flex-direction: column;
+  justify-content: center;
+  max-width: 380px;
+  padding: 24px;
+}
+
+.auth-hero__tag {
+  font-size: 1rem;
+  color: rgba(61, 61, 61, 0.72);
+  margin-top: 6px;
+  max-width: 280px;
+  line-height: 1.4;
+}
+
+.auth-hero__copy {
+  font-size: 1.15rem;
+  line-height: 1.5;
+  color: #5e7a5b;
+  font-weight: 600;
+  max-width: 320px;
 }
 
 .auth-panel {
   width: 100%;
   max-width: 420px;
+}
+
+@media (min-width: 960px) {
+  .auth-center {
+    justify-content: center;
+    padding: 48px;
+  }
+
+  .auth-panel {
+    max-width: 440px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .auth-center {
+    gap: 80px;
+  }
 }
 
 @keyframes floatA {

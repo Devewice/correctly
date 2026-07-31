@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useDisplay } from 'vuetify'
 import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
 import { useDashboardStore } from '@/modules/dashboard/stores/useDashboardStore'
 import { useDayGuide } from '@/modules/dashboard/composables/useDayGuide'
@@ -10,6 +11,7 @@ import { fadeUp, withDelay } from '@/shared/motion/presets'
 import { glassesFromMl } from '@/shared/utils/water'
 
 const { t } = useI18n()
+const { lgAndUp } = useDisplay()
 const auth = useAuthStore()
 const dash = useDashboardStore()
 const { steps, suggestedMealType } = useDayGuide(computed(() => dash.today))
@@ -33,6 +35,32 @@ const visibleSteps = computed(() =>
 const current = computed(() => visibleSteps.value[stepIndex.value] || visibleSteps.value[0])
 
 const progressPct = computed(() => dash.today?.progress ?? 0)
+
+const chips = computed(() => {
+  if (!dash.today) return []
+  return [
+    {
+      key: 'mood',
+      label: `${
+        dash.today.summary.latestMood
+          ? moodEmoji[dash.today.summary.latestMood.mood]
+          : t('day.chipMoodPending')
+      } ${t('dashboard.mood')}`,
+    },
+    {
+      key: 'water',
+      label: t('day.chipGlasses', {
+        n: glassesFromMl(dash.today.summary.waterMl),
+      }),
+    },
+    {
+      key: 'meals',
+      label: t('day.chipMeals', {
+        n: dash.today.summary.mealsCount || 0,
+      }),
+    },
+  ]
+})
 
 watch(visibleSteps, (list) => {
   if (stepIndex.value >= list.length) stepIndex.value = Math.max(0, list.length - 1)
@@ -91,98 +119,95 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
     {{ t('common.loading') }}
   </div>
 
-  <div v-else-if="dash.today" class="pb-8">
-    <header
-      v-motion
-      v-bind="withDelay(fadeUp, 0)"
-      class="mb-5"
-    >
-      <p class="text-body-2 text-medium-emphasis mb-1">{{ t('day.todayLabel') }}</p>
-      <h1 class="text-h4 font-weight-bold">{{ greeting }}</h1>
-      <p class="text-body-2 text-medium-emphasis mt-1">
-        {{ t('dashboard.streak', { days: dash.today.stats?.currentStreak || 0 }) }}
-      </p>
-    </header>
-
-    <v-card
-      v-motion
-      v-bind="withDelay(fadeUp, 100)"
-      class="pa-4 mb-5"
-      variant="tonal"
-      color="primary"
-    >
-      <div class="d-flex align-center justify-space-between mb-2">
-        <span class="text-body-2 font-weight-medium">{{ t('day.dayProgress') }}</span>
-        <span class="text-h6 font-weight-bold">{{ progressPct }}%</span>
-      </div>
-      <v-progress-linear :model-value="progressPct" color="primary" height="10" />
-      <div class="d-flex flex-wrap ga-2 mt-3">
-        <v-chip
-          v-for="(chip, i) in [
-            {
-              key: 'mood',
-              label: `${
-                dash.today.summary.latestMood
-                  ? moodEmoji[dash.today.summary.latestMood.mood]
-                  : t('day.chipMoodPending')
-              } ${t('dashboard.mood')}`,
-            },
-            {
-              key: 'water',
-              label: t('day.chipGlasses', {
-                n: glassesFromMl(dash.today.summary.waterMl),
-              }),
-            },
-            {
-              key: 'meals',
-              label: t('day.chipMeals', {
-                n: dash.today.summary.mealsCount || 0,
-              }),
-            },
-          ]"
-          :key="chip.key"
+  <div v-else-if="dash.today" class="pb-8 pb-md-4">
+    <v-row :dense="!lgAndUp">
+      <!-- Resumen: en desktop a la izquierda -->
+      <v-col cols="12" lg="5">
+        <header
           v-motion
-          v-bind="withDelay(fadeUp, 180 + i * 60)"
-          size="small"
-          label
-          variant="flat"
-          color="surface"
+          v-bind="withDelay(fadeUp, 0)"
+          class="mb-5"
         >
-          {{ chip.label }}
-        </v-chip>
-      </div>
-    </v-card>
+          <p class="text-body-2 text-medium-emphasis mb-1">{{ t('day.todayLabel') }}</p>
+          <h1 class="text-h4 text-md-h3 font-weight-bold">{{ greeting }}</h1>
+          <p class="text-body-2 text-medium-emphasis mt-1">
+            {{ t('dashboard.streak', { days: dash.today.stats?.currentStreak || 0 }) }}
+          </p>
+        </header>
 
-    <p
-      v-motion
-      v-bind="withDelay(fadeUp, 220)"
-      class="text-caption text-medium-emphasis text-uppercase font-weight-bold mb-3"
-    >
-      {{ t('day.guideTitle') }}
-    </p>
+        <v-card
+          v-motion
+          v-bind="withDelay(fadeUp, 100)"
+          class="pa-4 pa-md-5 mb-5"
+          variant="tonal"
+          color="primary"
+        >
+          <div class="d-flex align-center justify-space-between mb-2">
+            <span class="text-body-2 font-weight-medium">{{ t('day.dayProgress') }}</span>
+            <span class="text-h6 font-weight-bold">{{ progressPct }}%</span>
+          </div>
+          <v-progress-linear :model-value="progressPct" color="primary" height="10" />
+          <div class="d-flex flex-wrap ga-2 mt-3">
+            <v-chip
+              v-for="(chip, i) in chips"
+              :key="chip.key"
+              v-motion
+              v-bind="withDelay(fadeUp, 180 + i * 60)"
+              size="small"
+              label
+              variant="flat"
+              color="surface"
+            >
+              {{ chip.label }}
+            </v-chip>
+          </div>
+        </v-card>
 
-    <DayGuideCard
-      v-if="current"
-      :key="current.id"
-      :step="current"
-      :meal-type="suggestedMealType"
-      :busy="busy"
-      @mood="onMood"
-      @water="onWater"
-      @meal="onMeal"
-      @habit="onHabit"
-      @skip="skip"
-    />
+        <v-alert
+          v-if="dash.insights[0] && lgAndUp"
+          v-motion
+          v-bind="withDelay(fadeUp, 220)"
+          type="success"
+          :title="t('dashboard.insight')"
+        >
+          {{ t(dash.insights[0].messageKey, dash.insights[0].params || {}) }}
+        </v-alert>
+      </v-col>
 
-    <v-alert
-      v-if="dash.insights[0]"
-      v-motion
-      v-bind="withDelay(fadeUp, 280)"
-      type="success"
-      class="mt-5"
-      :title="t('dashboard.insight')"
-    >
-      {{ t(dash.insights[0].messageKey, dash.insights[0].params || {}) }}
-    </v-alert>
+      <!-- Guía interactiva: en desktop a la derecha (protagonista) -->
+      <v-col cols="12" lg="7">
+        <p
+          v-motion
+          v-bind="withDelay(fadeUp, 160)"
+          class="text-caption text-medium-emphasis text-uppercase font-weight-bold mb-3"
+        >
+          {{ t('day.guideTitle') }}
+        </p>
+
+        <DayGuideCard
+          v-if="current"
+          :key="current.id"
+          :step="current"
+          :meal-type="suggestedMealType"
+          :busy="busy"
+          @mood="onMood"
+          @water="onWater"
+          @meal="onMeal"
+          @habit="onHabit"
+          @skip="skip"
+        />
+
+        <v-alert
+          v-if="dash.insights[0] && !lgAndUp"
+          v-motion
+          v-bind="withDelay(fadeUp, 280)"
+          type="success"
+          class="mt-5"
+          :title="t('dashboard.insight')"
+        >
+          {{ t(dash.insights[0].messageKey, dash.insights[0].params || {}) }}
+        </v-alert>
+      </v-col>
+    </v-row>
   </div>
 </template>

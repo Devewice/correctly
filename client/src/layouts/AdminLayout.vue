@@ -32,7 +32,7 @@ const links = [
   </v-app-bar>
 
   <v-main>
-    <v-container style="max-width: 960px" class="py-6">
+    <v-container class="py-6 py-md-8" style="max-width: 1040px">
       <v-tabs :model-value="route.path" color="primary" class="mb-6">
         <v-tab
           v-for="link in links"
