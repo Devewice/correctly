@@ -8,8 +8,10 @@ defineProps({
 <template>
   <Transition name="burst">
     <div v-if="show" class="burst" role="status">
-      <div class="burst__ring" />
-      <div class="burst__check">✓</div>
+      <div class="burst__mark">
+        <div class="burst__ring" aria-hidden="true" />
+        <span class="burst__check" aria-hidden="true">✓</span>
+      </div>
       <p v-if="label" class="burst__label">{{ label }}</p>
     </div>
   </Transition>
@@ -24,28 +26,40 @@ defineProps({
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0.75rem;
   pointer-events: none;
-  background: rgba(250, 248, 245, 0.35);
+  background: rgba(250, 248, 245, 0.4);
+  padding: 1rem;
+}
+.burst__mark {
+  position: relative;
+  width: min(88px, 22vw);
+  height: min(88px, 22vw);
+  display: grid;
+  place-items: center;
 }
 .burst__ring {
-  width: 88px;
-  height: 88px;
+  position: absolute;
+  inset: 0;
   border-radius: 50%;
-  border: 3px solid #8ba888;
+  border: 3px solid var(--cx-primary, #8ba888);
   animation: ringPop 0.55s ease-out;
 }
 .burst__check {
-  position: absolute;
-  font-size: 2rem;
+  position: relative;
+  z-index: 1;
+  font-size: clamp(1.5rem, 5vw, 2rem);
   font-weight: 700;
-  color: #5e7a5b;
+  line-height: 1;
+  color: var(--cx-primary-deep, #5e7a5b);
   animation: checkPop 0.45s ease-out;
 }
 .burst__label {
-  margin-top: 5.5rem;
-  font-size: 0.95rem;
+  margin: 0;
+  font-size: clamp(0.85rem, 3.5vw, 0.95rem);
   font-weight: 600;
-  color: #3d3d3d;
+  color: var(--cx-text, #3d3d3d);
+  text-align: center;
 }
 .burst-enter-active,
 .burst-leave-active {
@@ -61,7 +75,7 @@ defineProps({
     opacity: 0;
   }
   70% {
-    transform: scale(1.08);
+    transform: scale(1.06);
     opacity: 1;
   }
   100% {

@@ -184,3 +184,55 @@ body {
 .admin-shell .v-card {
   border-color: var(--cx-border) !important;
 }
+
+/* —— Responsive / layout estable —— */
+.v-main > .v-container {
+  overflow: visible;
+  width: 100%;
+  max-width: 100%;
+  padding-left: max(12px, env(safe-area-inset-left));
+  padding-right: max(12px, env(safe-area-inset-right));
+}
+@media (min-width: 600px) {
+  .v-main > .v-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* Stats / métricas del mismo alto en filas */
+.cx-stat-card {
+  min-height: 6.5rem;
+  height: 100%;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.cx-stat-card__label {
+  font-size: 0.75rem;
+  line-height: 1.25;
+  min-height: 2.5em;
+  color: var(--cx-text-soft);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.cx-stat-card__value {
+  font-size: clamp(1.25rem, 4vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--cx-text);
+  margin-top: 0.35rem;
+}
+
+/* Cards: sombra suave sin recortes raros */
+.cx-card-shell {
+  overflow: visible !important;
+}
+
+/* Tipografía fluida en títulos de página */
+.cx-page-title {
+  font-size: clamp(1.25rem, 4.2vw, 1.75rem);
+}

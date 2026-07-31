@@ -147,17 +147,17 @@ onMounted(load)
   <div v-if="loading" class="text-medium-emphasis">{{ t('common.loading') }}</div>
 
   <template v-else>
-    <v-row dense class="mb-4">
+    <v-row dense class="mb-4 align-stretch">
       <v-col cols="6">
-        <v-card class="pa-4" color="accent" variant="tonal">
-          <div class="text-caption text-medium-emphasis">{{ t('friends.likesStat') }}</div>
-          <div class="text-h5 font-weight-bold">{{ stats.likesReceived }}</div>
+        <v-card class="pa-3 pa-sm-4 cx-stat-card" color="secondary" variant="tonal">
+          <div class="cx-stat-card__label">{{ t('friends.likesStat') }}</div>
+          <div class="cx-stat-card__value">{{ stats.likesReceived }}</div>
         </v-card>
       </v-col>
       <v-col cols="6">
-        <v-card class="pa-4" variant="tonal">
-          <div class="text-caption text-medium-emphasis">{{ t('friends.dislikesStat') }}</div>
-          <div class="text-h5 font-weight-bold">{{ stats.dislikesReceived }}</div>
+        <v-card class="pa-3 pa-sm-4 cx-stat-card" color="secondary" variant="tonal">
+          <div class="cx-stat-card__label">{{ t('friends.dislikesStat') }}</div>
+          <div class="cx-stat-card__value">{{ stats.dislikesReceived }}</div>
         </v-card>
       </v-col>
     </v-row>

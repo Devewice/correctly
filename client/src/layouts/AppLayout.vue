@@ -362,6 +362,10 @@ async function logout() {
 .app-bottom-nav {
   padding-bottom: env(safe-area-inset-bottom);
 }
+.app-bottom-nav :deep(.v-btn) {
+  min-width: 0;
+  font-size: clamp(0.65rem, 2.8vw, 0.75rem);
+}
 .more-sheet {
   border-radius: 16px 16px 0 0 !important;
   max-height: min(85dvh, 720px);

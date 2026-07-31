@@ -42,53 +42,51 @@ function barHeight(ml) {
   <div v-if="!data" class="text-medium-emphasis">{{ t('common.loading') }}</div>
 
   <template v-else>
-    <v-row dense class="mb-4">
-      <v-col cols="6" md="3">
-        <v-card class="pa-4">
-          <div class="text-caption text-medium-emphasis">{{ t('stats.streak') }}</div>
-          <div class="text-h5 font-weight-bold">{{ data.stats?.currentStreak || 0 }}</div>
+    <v-row dense class="mb-2 align-stretch">
+      <v-col cols="6" sm="4" md="3">
+        <v-card class="pa-3 pa-sm-4 cx-stat-card">
+          <div class="cx-stat-card__label">{{ t('stats.streak') }}</div>
+          <div class="cx-stat-card__value">{{ data.stats?.currentStreak || 0 }}</div>
         </v-card>
       </v-col>
-      <v-col cols="6" md="3">
-        <v-card class="pa-4">
-          <div class="text-caption text-medium-emphasis">{{ t('stats.freeze') }}</div>
-          <div class="text-h5 font-weight-bold">
-            {{ data.stats?.streakFreezesRemaining ?? 0 }}
-          </div>
-          <div class="text-caption text-medium-emphasis mt-1">{{ t('stats.freezeHint') }}</div>
+      <v-col cols="6" sm="4" md="3">
+        <v-card class="pa-3 pa-sm-4 cx-stat-card">
+          <div class="cx-stat-card__label">{{ t('stats.freeze') }}</div>
+          <div class="cx-stat-card__value">{{ data.stats?.streakFreezesRemaining ?? 0 }}</div>
         </v-card>
       </v-col>
-      <v-col cols="6" md="3">
-        <v-card class="pa-4">
-          <div class="text-caption text-medium-emphasis">XP</div>
-          <div class="text-h5 font-weight-bold">{{ data.stats?.totalXP || 0 }}</div>
+      <v-col cols="6" sm="4" md="3">
+        <v-card class="pa-3 pa-sm-4 cx-stat-card">
+          <div class="cx-stat-card__label">XP</div>
+          <div class="cx-stat-card__value">{{ data.stats?.totalXP || 0 }}</div>
         </v-card>
       </v-col>
-      <v-col cols="6" md="3">
-        <v-card class="pa-4">
-          <div class="text-caption text-medium-emphasis">{{ t('stats.avgMood') }}</div>
-          <div class="text-h5 font-weight-bold">{{ moodLabel(data.totals.avgMood) }}</div>
+      <v-col cols="6" sm="4" md="3">
+        <v-card class="pa-3 pa-sm-4 cx-stat-card">
+          <div class="cx-stat-card__label">{{ t('stats.avgMood') }}</div>
+          <div class="cx-stat-card__value">{{ moodLabel(data.totals.avgMood) }}</div>
         </v-card>
       </v-col>
-      <v-col cols="6" md="3">
-        <v-card class="pa-4">
-          <div class="text-caption text-medium-emphasis">{{ t('stats.meditation') }}</div>
-          <div class="text-h5 font-weight-bold">{{ data.totals.meditationMin }}m</div>
+      <v-col cols="6" sm="4" md="3">
+        <v-card class="pa-3 pa-sm-4 cx-stat-card">
+          <div class="cx-stat-card__label">{{ t('stats.meditation') }}</div>
+          <div class="cx-stat-card__value">{{ data.totals.meditationMin }}m</div>
         </v-card>
       </v-col>
-      <v-col cols="6" md="3">
-        <v-card class="pa-4">
-          <div class="text-caption text-medium-emphasis">{{ t('stats.likes') }}</div>
-          <div class="text-h5 font-weight-bold">{{ data.stats?.likesReceived || 0 }}</div>
+      <v-col cols="6" sm="4" md="3">
+        <v-card class="pa-3 pa-sm-4 cx-stat-card">
+          <div class="cx-stat-card__label">{{ t('stats.likes') }}</div>
+          <div class="cx-stat-card__value">{{ data.stats?.likesReceived || 0 }}</div>
         </v-card>
       </v-col>
-      <v-col cols="6" md="3">
-        <v-card class="pa-4">
-          <div class="text-caption text-medium-emphasis">{{ t('stats.dislikes') }}</div>
-          <div class="text-h5 font-weight-bold">{{ data.stats?.dislikesReceived || 0 }}</div>
+      <v-col cols="6" sm="4" md="3">
+        <v-card class="pa-3 pa-sm-4 cx-stat-card">
+          <div class="cx-stat-card__label">{{ t('stats.dislikes') }}</div>
+          <div class="cx-stat-card__value">{{ data.stats?.dislikesReceived || 0 }}</div>
         </v-card>
       </v-col>
     </v-row>
+    <p class="text-caption text-medium-emphasis mb-4">{{ t('stats.freezeHint') }}</p>
 
     <v-card class="pa-4 pa-sm-5 mb-4">
       <div class="text-h6 font-weight-bold mb-2">{{ t('stats.correlations') }}</div>
