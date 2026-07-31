@@ -1,115 +1,75 @@
-# Correctly en Hostinger — Opción A (recomendada)
+# Correctly en Hostinger (Passenger)
 
-```
-Navegador
-   │
-   ├─ / , /login , /onboarding , /assets/*  →  Apache (public_html) + index.html
-   │
-   └─ /api/*                                 →  Node (Express)
+## Por qué veías `Cannot GET /onboarding`
+
+Hostinger usa **Passenger** con:
+
+```apache
+PassengerBaseURI /
 ```
 
-Así **no hay enredo**: Vue usa rutas normales (`/onboarding`) y Apache las resuelve con `.htaccess`.
+Eso manda **casi todas** las URLs a Node (Express), no a Apache.  
+Las reglas `RewriteRule ^ index.html` **no ganan** a Passenger → Express responde `Cannot GET /onboarding`.
+
+Por eso el server vuelve a servir el HTML de Vue (`server/ui`) cuando llega `/onboarding`.
 
 ---
 
-## 1. Ajustes en el panel Node
+## `.htaccess` recomendado
+
+**Deja el bloque Passenger** que crea Hostinger (no lo borres).  
+Puede quedar así:
+
+```apache
+PassengerAppRoot /home/u301973293/domains/jeisson.click/.builds/current/nodejs
+PassengerAppType node
+PassengerNodejs /opt/alt/alt-nodejs24/root/bin/node
+PassengerStartupFile server/src/index.js
+PassengerBaseURI /
+PassengerRestartDir /home/u301973293/domains/jeisson.click/.builds/current/nodejs/tmp
+SetEnv NODE_OPTIONS "--require /home/u301973293/domains/jeisson.click/.builds/config/preload-timestamp.js"
+SetEnv LSNODE_CONSOLE_LOG console.log
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+</IfModule>
+```
+
+No hace falta el `RewriteRule ^ index.html` si Passenger apunta a `/` — lo resuelve Node.
+
+---
+
+## Panel Node
 
 | Campo | Valor |
 |-------|--------|
-| Preajuste | `Other` |
+| Output | `server/public` |
+| Entry | `server/src/index.js` |
 | Build | `npm run build` |
-| **Directorio de salida** | `server/public` |
-| **Archivo de entrada** | `server/src/index.js` |
 
-**No** pongas `SERVE_SPA=true` (Node solo API).
-
----
-
-## 2. Variables de entorno
+### Variables
 
 ```env
 NODE_ENV=production
 CLIENT_URL=https://jeisson.click
 ALLOW_DEMO_LOGIN=true
-
 DATABASE_HOST=localhost
-DATABASE_PORT=3306
 DATABASE_NAME=u301973293_correctly
 DATABASE_USER=u301973293_admin
 DATABASE_PASSWORD_B64=dTtEb0tRfiYy
-
 JWT_SECRET=cambia-esta-clave
-GOOGLE_CALLBACK_URL=https://jeisson.click/api/auth/google/callback
 ```
 
-- **Sin** `PORT`
-- **Sin** `DATABASE_PASSWORD` con `&` (usa B64)
-- **Sin** `SERVE_SPA`
+Opcional: `SERVE_SPA=false` solo si algún día cambias a `PassengerBaseURI /api`.
 
 ---
 
-## 3. Paso crítico tras el primer deploy (File Manager)
+## Tras redesplegar
 
-Hostinger a veces **sobrescribe** `.htaccess` para mandar todo a Node.  
-Hay que dejarlo así (Opción A):
-
-1. hPanel → **Archivos** → `domains/jeisson.click/public_html/`
-2. Edita (o crea) `.htaccess` con **exactamente**:
-
-```apache
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} -d
-  RewriteRule ^ - [L]
-
-  RewriteRule ^api(?:/|$) - [L]
-
-  RewriteRule ^ index.html [L]
-</IfModule>
-```
-
-3. Guarda.
-
-> La regla `^api` con `[L]` deja que el proxy de Node de Hostinger (que suelen añadir ellos) maneje `/api`.  
-> Si `/api/health` deja de funcionar, abre el `.htaccess` que Hostinger generó, copia **solo** su línea de proxy `api → 127.0.0.1:PUERTO`, y ponla **antes** del `RewriteRule ^ index.html`.
-
-Ejemplo combinado si hace falta:
-
-```apache
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} -d
-  RewriteRule ^ - [L]
-
-  # Pegar aquí la línea proxy de Hostinger, ej:
-  # RewriteRule ^api/(.*)$ http://127.0.0.1:XXXX/api/$1 [P,L]
-
-  RewriteRule ^ index.html [L]
-</IfModule>
-```
-
----
-
-## 4. Comprobar
-
-| URL | Esperado |
-|-----|----------|
-| https://jeisson.click/ | HTML login (no JSON) |
-| https://jeisson.click/onboarding | HTML (tras login), **F5 no da 404** |
-| https://jeisson.click/api/health | `{"ok":true,"mode":"api-only",...}` |
-
----
-
-## Local
-
-```bash
-npm run dev          # API + Vite (proxy /api)
-# o
-SERVE_SPA=true npm run start --prefix server   # Express sirve el build
-```
+1. https://jeisson.click/api/health → `"mode":"passenger+spa"`, `"ui":true`
+2. Login → `/onboarding`
+3. **F5** en `/onboarding` → sigue la app (no `Cannot GET`)
