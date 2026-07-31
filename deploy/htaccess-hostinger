@@ -1,0 +1,31 @@
+# Correctly — Opción A (Hostinger)
+# Este archivo debe quedar en public_html como .htaccess
+# (el build lo copia desde client/public/.htaccess)
+#
+# Orden:
+# 1) Archivos reales (js/css/index.html) → Apache
+# 2) /api/* → proceso Node
+# 3) Resto → index.html (Vue router /onboarding, /dashboard…)
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Archivos o carpetas que existen en public_html
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # API → Node (Hostinger inyecta el puerto al añadir la app Node;
+  # si tras el deploy el proxy de /api no funciona, en hPanel → Node
+  # se regenera una regla similar. Lo importante: /api NO debe ir a index.html)
+  RewriteRule ^api(?:/(.*))?$ http://127.0.0.1:PORT_PLACEHOLDER/api/$1 [P,L]
+
+  # SPA Vue: /onboarding, /login, /dashboard → index.html
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Fallback sin mod_proxy (algunos planes):
+# Si la línea [P] falla, Hostinger suele generar su propia regla de proxy
+# para Node. En ese caso deja solo las reglas de archivos + SPA y
+# asegúrate de que Hostinger proxye únicamente /api (ver HOSTINGER.md).

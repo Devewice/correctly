@@ -28,19 +28,18 @@ router.get(
   '/google/callback',
   (req, res, next) => {
     if (!isGoogleAuthConfigured()) {
-      return res.redirect(`${env.clientUrl}/#/login?error=oauth_not_configured`)
+      return res.redirect(`${env.clientUrl}/login?error=oauth_not_configured`)
     }
     return passport.authenticate('google', {
       session: false,
-      failureRedirect: `${env.clientUrl}/#/login?error=oauth_failed`,
+      failureRedirect: `${env.clientUrl}/login?error=oauth_failed`,
     })(req, res, next)
   },
   (req, res) => {
     const token = signToken(req.user)
     setAuthCookie(res, token)
     const dest = req.user.onboardingCompleted ? 'dashboard' : 'onboarding'
-    // Hash router: token en el fragmento para que el cliente lo lea
-    res.redirect(`${env.clientUrl}/#/${dest}?token=${token}`)
+    res.redirect(`${env.clientUrl}/${dest}?token=${token}`)
   },
 )
 

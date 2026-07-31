@@ -1,18 +1,31 @@
-# Despliegue en Hostinger — jeisson.click
+# Correctly en Hostinger — Opción A (recomendada)
 
-## Configuración de build
+```
+Navegador
+   │
+   ├─ / , /login , /onboarding , /assets/*  →  Apache (public_html) + index.html
+   │
+   └─ /api/*                                 →  Node (Express)
+```
+
+Así **no hay enredo**: Vue usa rutas normales (`/onboarding`) y Apache las resuelve con `.htaccess`.
+
+---
+
+## 1. Ajustes en el panel Node
 
 | Campo | Valor |
 |-------|--------|
 | Preajuste | `Other` |
 | Build | `npm run build` |
-| Directorio de salida | `server/public` |
-| Archivo de entrada | `server/src/index.js` |
+| **Directorio de salida** | `server/public` |
+| **Archivo de entrada** | `server/src/index.js` |
 
-## Variables de entorno (MySQL con caracteres especiales)
+**No** pongas `SERVE_SPA=true` (Node solo API).
 
-Hostinger **corta** valores con `&` en el panel.  
-Tu password `u;DoKQ~&2` debe ir en **Base64**:
+---
+
+## 2. Variables de entorno
 
 ```env
 NODE_ENV=production
@@ -29,16 +42,74 @@ JWT_SECRET=cambia-esta-clave
 GOOGLE_CALLBACK_URL=https://jeisson.click/api/auth/google/callback
 ```
 
-### Importante
-1. Añade **`DATABASE_PASSWORD_B64`** = `dTtEb0tRfiYy` (es `u;DoKQ~&2` en base64)
-2. Pon **`DATABASE_HOST=localhost`** (Node corre en el mismo Hostinger)
-3. Puedes **borrar** `DATABASE_PASSWORD` y `DATABASE_URL` del panel (el server las reconstruye)
-4. Si `localhost` falla, cambia solo a: `DATABASE_HOST=srv1855.hstgr.io`
-5. **NO** pongas `PORT`
+- **Sin** `PORT`
+- **Sin** `DATABASE_PASSWORD` con `&` (usa B64)
+- **Sin** `SERVE_SPA`
 
-### Comprobar
-https://jeisson.click/api/health
+---
 
-- `"ok":true` → DB bien  
-- `"passLen":9` → password completa  
-- `"passLen"` menor → sigue truncada; revisa `DATABASE_PASSWORD_B64`
+## 3. Paso crítico tras el primer deploy (File Manager)
+
+Hostinger a veces **sobrescribe** `.htaccess` para mandar todo a Node.  
+Hay que dejarlo así (Opción A):
+
+1. hPanel → **Archivos** → `domains/jeisson.click/public_html/`
+2. Edita (o crea) `.htaccess` con **exactamente**:
+
+```apache
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteRule ^api(?:/|$) - [L]
+
+  RewriteRule ^ index.html [L]
+</IfModule>
+```
+
+3. Guarda.
+
+> La regla `^api` con `[L]` deja que el proxy de Node de Hostinger (que suelen añadir ellos) maneje `/api`.  
+> Si `/api/health` deja de funcionar, abre el `.htaccess` que Hostinger generó, copia **solo** su línea de proxy `api → 127.0.0.1:PUERTO`, y ponla **antes** del `RewriteRule ^ index.html`.
+
+Ejemplo combinado si hace falta:
+
+```apache
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Pegar aquí la línea proxy de Hostinger, ej:
+  # RewriteRule ^api/(.*)$ http://127.0.0.1:XXXX/api/$1 [P,L]
+
+  RewriteRule ^ index.html [L]
+</IfModule>
+```
+
+---
+
+## 4. Comprobar
+
+| URL | Esperado |
+|-----|----------|
+| https://jeisson.click/ | HTML login (no JSON) |
+| https://jeisson.click/onboarding | HTML (tras login), **F5 no da 404** |
+| https://jeisson.click/api/health | `{"ok":true,"mode":"api-only",...}` |
+
+---
+
+## Local
+
+```bash
+npm run dev          # API + Vite (proxy /api)
+# o
+SERVE_SPA=true npm run start --prefix server   # Express sirve el build
+```

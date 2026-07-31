@@ -52,22 +52,13 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function bootstrapFromUrl() {
-    // history: ?token=  |  hash: #/dashboard?token=
-    const searchParams = new URLSearchParams(window.location.search)
-    const hash = window.location.hash || ''
-    const hashQuery = hash.includes('?') ? hash.slice(hash.indexOf('?') + 1) : ''
-    const hashParams = new URLSearchParams(hashQuery)
-    const token = searchParams.get('token') || hashParams.get('token')
+    const params = new URLSearchParams(window.location.search)
+    const token = params.get('token')
     if (!token) return
-
     setToken(token)
-    searchParams.delete('token')
-    hashParams.delete('token')
-
-    const pathPart = hash.split('?')[0] || '#/'
-    const nextHashQs = hashParams.toString()
-    const nextSearch = searchParams.toString()
-    const url = `${window.location.pathname}${nextSearch ? `?${nextSearch}` : ''}${pathPart}${nextHashQs ? `?${nextHashQs}` : ''}`
+    params.delete('token')
+    const qs = params.toString()
+    const url = `${window.location.pathname}${qs ? `?${qs}` : ''}`
     window.history.replaceState({}, '', url)
   }
 

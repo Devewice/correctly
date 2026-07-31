@@ -44,10 +44,10 @@ GOOGLE_CLIENT_SECRET=...
 GOOGLE_CALLBACK_URL=http://localhost:3000/api/auth/google/callback
 ```
 
-## Deploy Hostinger
+## Deploy Hostinger (Opción A)
 
-Si ves **403**, el output debe ser `client/dist` y el entry `server/src/index.js`.  
-Guía completa: [`HOSTINGER.md`](./HOSTINGER.md)
+Front en Apache (`public_html`) + API Node solo en `/api`.  
+Guía: [`HOSTINGER.md`](./HOSTINGER.md)
 
 ## Repo
 

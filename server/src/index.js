@@ -11,6 +11,7 @@ import { env } from './config/env.js'
 import { checkDatabase, prisma } from './config/database.js'
 import { configurePassport } from './config/passport.js'
 import { errorHandler } from './middleware/error.js'
+import { mountSpa } from './spa.js'
 
 import authRoutes from './routes/auth.routes.js'
 import userRoutes from './routes/user.routes.js'
@@ -24,19 +25,22 @@ import journalRoutes from './routes/journal.routes.js'
 import meditationRoutes from './routes/meditation.routes.js'
 import weightRoutes from './routes/weight.routes.js'
 import dashboardRoutes from './routes/dashboard.routes.js'
-import { mountSpa } from './spa.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+/**
+ * Opción A (Hostinger): Apache sirve el Vue; Node solo /api.
+ * SERVE_SPA=true solo para local o si quieres que Express sirva el HTML.
+ */
+const serveSpa =
+  process.env.SERVE_SPA === 'true' ||
+  (!env.isProd && process.env.SERVE_SPA !== 'false')
+
 const clientDistCandidates = [
-  // Hostinger mueve server/public → public_html; server/ui se queda con Node
-  path.resolve(__dirname, '../ui'),
-  path.resolve(process.cwd(), 'server/ui'),
-  path.resolve(__dirname, '../public'),
-  path.resolve(process.cwd(), 'server/public'),
-  path.resolve(process.cwd(), 'public'),
   path.resolve(__dirname, '../../client/dist'),
   path.resolve(process.cwd(), 'client/dist'),
-  path.resolve(process.cwd(), 'dist'),
+  path.resolve(__dirname, '../public'),
+  path.resolve(process.cwd(), 'server/public'),
 ]
 const clientDist = clientDistCandidates.find((p) =>
   existsSync(path.join(p, 'index.html')),
@@ -45,7 +49,6 @@ const clientDist = clientDistCandidates.find((p) =>
 configurePassport()
 
 const app = express()
-
 app.set('trust proxy', 1)
 
 app.use(
@@ -86,8 +89,7 @@ app.use(
 
 app.get('/api/health', async (_req, res) => {
   const meta = {
-    ui: Boolean(clientDist),
-    uiPath: clientDist || null,
+    mode: serveSpa ? 'spa+api' : 'api-only',
     dbHost: env.dbMeta.host,
     dbName: env.dbMeta.name,
     dbUser: env.dbMeta.user,
@@ -104,8 +106,8 @@ app.get('/api/health', async (_req, res) => {
       error: err.message,
       hint:
         meta.passLen < 9
-          ? 'La contraseña parece truncada (Hostinger corta el &). Usa DATABASE_PASSWORD_B64=dTtEb0tRfiYy y DATABASE_HOST=localhost'
-          : 'Prueba DATABASE_HOST=localhost o DATABASE_HOST=srv1855.hstgr.io',
+          ? 'Password truncada. Usa DATABASE_PASSWORD_B64'
+          : 'Revisa DATABASE_HOST (localhost o srv1855.hstgr.io)',
       ...meta,
     })
   }
@@ -124,18 +126,25 @@ app.use('/api/meditation', meditationRoutes)
 app.use('/api/weight', weightRoutes)
 app.use('/api/dashboard', dashboardRoutes)
 
-const spaMounted = mountSpa(app, clientDist)
-if (!spaMounted && env.isProd) {
-  console.warn('[correctly] No se encontró UI (server/ui) — solo API')
+// Hostinger Opción A: no montar SPA en producción (Apache + .htaccess)
+if (serveSpa) {
+  const ok = mountSpa(app, clientDist)
+  console.log(`[correctly] SERVE_SPA=true mounted=${ok}`)
+} else {
+  console.log('[correctly] Modo API-only (Opción A Hostinger) — el front lo sirve Apache')
+  app.get('/', (_req, res) => {
+    res.json({
+      ok: true,
+      service: 'correctly-api',
+      hint: 'El frontend está en Apache (public_html). Abre https://jeisson.click/',
+    })
+  })
 }
-console.log(`[correctly] SPA mounted=${spaMounted} dist=${clientDist || 'none'}`)
 
 app.use(errorHandler)
 
 const server = app.listen(env.port, '0.0.0.0', () => {
-  console.log(`Correctly → port ${env.port} (${env.nodeEnv}) cwd=${process.cwd()}`)
-  console.log(`Static UI → ${clientDist || 'NONE'}`)
-  console.log(`DB URL set → ${Boolean(env.databaseUrl)}`)
+  console.log(`Correctly API → port ${env.port} (${env.nodeEnv}) mode=${serveSpa ? 'spa+api' : 'api-only'}`)
 })
 
 async function shutdown() {

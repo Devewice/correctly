@@ -1,14 +1,10 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { getToken } from '@/utils/api'
 import { useAuthStore } from '@/stores/auth'
 
-/**
- * Hash history (#/login) en Hostinger:
- * un refresh a /login pediría un archivo al servidor → 404 JSON.
- * Con hash, el servidor solo ve "/" y Vue resuelve la ruta en el cliente.
- */
+/** History mode — Apache (.htaccess) debe devolver index.html en /onboarding etc. */
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
@@ -115,7 +111,6 @@ router.beforeEach(async (to) => {
       : { name: 'onboarding' }
   }
 
-  // Usuario logueado sin onboarding → siempre onboarding (hash: #/onboarding)
   if (
     to.name !== 'onboarding' &&
     auth.user &&
