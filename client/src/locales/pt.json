@@ -198,33 +198,103 @@
     "themeDark": "Escuro",
     "themeSystem": "Sistema"
   },
+  "discovery": {
+    "eyebrow": "Novidade",
+    "open": "Ver",
+    "later": "Depois",
+    "dismiss": "Já sei",
+    "more": "+{n} coisa(s) a descobrir",
+    "tips": {
+      "companions": {
+        "title": "Escolha seu companheiro",
+        "body": "Um pet te acompanha no app e reflete o seu dia. Escolha o seu em Eu.",
+        "cta": "Escolher pet"
+      },
+      "theme": {
+        "title": "Claro ou escuro",
+        "body": "Você pode mudar a aparência: claro, escuro ou conforme o sistema.",
+        "cta": "Ajustar tema"
+      },
+      "friends": {
+        "title": "Amigos no Correctly",
+        "body": "Compartilhe um link, veja o dia dos amigos e envie toques.",
+        "cta": "Ir a Amigos"
+      },
+      "nudges": {
+        "title": "Toques a amigos",
+        "body": "Envie uma mensagem curta (“pensei em você”, “me liga”…) como notificação.",
+        "cta": "Experimentar toques"
+      },
+      "reminders": {
+        "title": "Lembretes suaves",
+        "body": "Ative avisos de água, ânimo ou fechamento do dia. Melhor com notificações.",
+        "cta": "Configurar lembretes"
+      }
+    }
+  },
   "companions": {
     "title": "Companheiro",
-    "hint": "Escolha um pet. Reflete o seu dia (ânimo, sono, água, refeições).",
-    "none": "Nenhum",
+    "hint": "Escolha, nomeie e personalize. Anda com você e fala do dia num balão.",
+    "none": "Sem pet",
     "tapHint": "Acenar para {name}",
     "stateHint": "{name}: {state}",
-    "states": {
-      "idle": "Tranquilo",
-      "ok": "Mais ou menos",
-      "happy": "Bem",
-      "great": "Super bem",
-      "strong": "Forte",
-      "low": "Baixo",
-      "destroyed": "Acabado",
-      "sleepy": "Com sono",
-      "hungry": "Fome",
-      "thirsty": "Sede",
-      "sick": "Malzinho",
-      "proud": "Orgulhoso",
-      "wave": "Oi!"
+    "nameLabel": "Nome",
+    "namePlaceholder": "Como se chama?",
+    "customize": "Personalizar",
+    "customizeTitle": "Misturar partes",
+    "customizeHint": "Combine corpo, orelhas, patas, cauda e cores de pets diferentes.",
+    "applyCustom": "Salvar visual",
+    "resetCustom": "Voltar ao preset",
+    "filterAll": "Todas",
+    "count": "{n} pets",
+    "partBody": "Corpo",
+    "partEars": "Orelhas",
+    "partLegs": "Patas",
+    "partTail": "Cauda",
+    "partColors": "Cores",
+    "parts": {
+      "body": { "round": "Redondo", "oval": "Oval", "bean": "Feijão", "tall": "Alto" },
+      "ears": {
+        "cat": "Gato", "dog": "Cão", "bunny": "Coelho", "fox": "Raposa", "bear": "Urso",
+        "none": "Nenhuma", "chick": "Crista", "horn": "Chifre"
+      },
+      "legs": { "stub": "Curtinhas", "walk": "Andam", "hop": "Pulam", "short": "Baixinhas" },
+      "tail": {
+        "cat": "Gato", "dog": "Cão", "fluff": "Fofa", "none": "Nenhuma", "bird": "Asinhas", "leaf": "Folhinha"
+      }
     },
-    "pets": {
-      "moka": { "name": "Moka" },
-      "pipa": { "name": "Pipa" },
-      "nori": { "name": "Nori" },
-      "luma": { "name": "Luma" },
-      "kiwi": { "name": "Kiwi" }
+    "species": {
+      "cat": "Gatos", "dog": "Cães", "bird": "Aves", "fox": "Raposas", "bunny": "Coelhos",
+      "critter": "Bichinhos", "bear": "Ursos", "panda": "Pandas", "frog": "Sapos", "owl": "Corujas",
+      "chick": "Pintinhos", "penguin": "Pinguins", "koala": "Coalas", "raccoon": "Guaxinins",
+      "squirrel": "Esquilos", "hedgehog": "Ouriços", "otter": "Lontras", "seal": "Focas",
+      "deer": "Cervos", "pig": "Porquinhos", "cow": "Vacas", "sheep": "Ovelhas", "pony": "Pôneis",
+      "elephant": "Elefantes", "lion": "Leões", "tiger": "Tigres", "monkey": "Macacos",
+      "mouse": "Ratos", "hamster": "Hamsters", "turtle": "Tartarugas", "dino": "Dinos",
+      "dragon": "Dragões", "unicorn": "Unicórnios", "axolotl": "Axolotes", "bee": "Abelhas",
+      "ladybug": "Joaninhas", "fish": "Peixes", "whale": "Baleias", "dolphin": "Golfinhos",
+      "cactus": "Cactos", "cloud": "Nuvens", "star": "Estrelas", "leaf": "Folhas",
+      "peach": "Pêssegos", "wolf": "Lobos"
+    },
+    "states": {
+      "idle": "Tranquilo", "ok": "Mais ou menos", "happy": "Bem", "great": "Super bem",
+      "strong": "Forte", "low": "Baixo", "destroyed": "Acabado", "sleepy": "Com sono",
+      "hungry": "Fome", "thirsty": "Sede", "sick": "Malzinho", "proud": "Orgulhoso", "wave": "Oi!"
+    },
+    "bubbles": {
+      "idle": "Estou aqui 🌿",
+      "ok": "Vamos indo…",
+      "happy": "Hoje está bom!",
+      "great": "Super bem com você!",
+      "strong": "Que força hoje!",
+      "low": "Dia baixinho…",
+      "destroyed": "Dia pesado…",
+      "sleepy": "Zzz… preciso descansar",
+      "hungry": "Comemos alguma coisa?",
+      "thirsty": "Um golinho de água…",
+      "sick": "Me sinto molinho",
+      "proud": "Você conseguiu!",
+      "wave": "Oi {name}!"
     }
   },
   "journal": {

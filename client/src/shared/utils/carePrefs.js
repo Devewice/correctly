@@ -4,6 +4,9 @@ const DEFAULTS = {
   lowEnergy: false,
   ritualId: null, // 'morning' | 'evening' | null
   companionPetId: 'moka', // companions id | 'none'
+  companionName: '', // sobrenombre opcional
+  /** Overrides mezclables: body, ears, legs, tail, accent, accent2 */
+  companionCustom: null,
 }
 
 export function loadCarePrefs(userId) {

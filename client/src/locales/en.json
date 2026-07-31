@@ -198,33 +198,103 @@
     "themeDark": "Dark",
     "themeSystem": "System"
   },
+  "discovery": {
+    "eyebrow": "New",
+    "open": "View",
+    "later": "Later",
+    "dismiss": "Got it",
+    "more": "+{n} more to discover",
+    "tips": {
+      "companions": {
+        "title": "Pick your companion",
+        "body": "A pet stays with you in the app and mirrors your day. Choose one in Profile.",
+        "cta": "Choose pet"
+      },
+      "theme": {
+        "title": "Light or dark",
+        "body": "You can switch appearance: light, dark, or match the system.",
+        "cta": "Set theme"
+      },
+      "friends": {
+        "title": "Friends on Correctly",
+        "body": "Share a link, see friends’ day, and send them nudges.",
+        "cta": "Open Friends"
+      },
+      "nudges": {
+        "title": "Friend nudges",
+        "body": "Send a short message (“thought of you”, “call me”…) as a notification.",
+        "cta": "Try nudges"
+      },
+      "reminders": {
+        "title": "Gentle reminders",
+        "body": "Turn on soft alerts for water, mood, or wind-down. Best with notifications on.",
+        "cta": "Set reminders"
+      }
+    }
+  },
   "companions": {
     "title": "Companion",
-    "hint": "Pick a pet. It mirrors your day (mood, sleep, water, meals).",
-    "none": "None",
+    "hint": "Pick, name, and remix. It walks with you and speaks in a bubble about your day.",
+    "none": "No pet",
     "tapHint": "Wave to {name}",
     "stateHint": "{name}: {state}",
-    "states": {
-      "idle": "Calm",
-      "ok": "Okay",
-      "happy": "Good",
-      "great": "Great",
-      "strong": "Strong",
-      "low": "Low",
-      "destroyed": "Wrecked",
-      "sleepy": "Sleepy",
-      "hungry": "Hungry",
-      "thirsty": "Thirsty",
-      "sick": "Under the weather",
-      "proud": "Proud",
-      "wave": "Hi!"
+    "nameLabel": "Name",
+    "namePlaceholder": "What should we call them?",
+    "customize": "Customize",
+    "customizeTitle": "Mix parts",
+    "customizeHint": "Combine body, ears, legs, tail, and colors from different pets.",
+    "applyCustom": "Save look",
+    "resetCustom": "Back to preset",
+    "filterAll": "All",
+    "count": "{n} pets",
+    "partBody": "Body",
+    "partEars": "Ears",
+    "partLegs": "Legs",
+    "partTail": "Tail",
+    "partColors": "Colors",
+    "parts": {
+      "body": { "round": "Round", "oval": "Oval", "bean": "Bean", "tall": "Tall" },
+      "ears": {
+        "cat": "Cat", "dog": "Dog", "bunny": "Bunny", "fox": "Fox", "bear": "Bear",
+        "none": "None", "chick": "Crest", "horn": "Horn"
+      },
+      "legs": { "stub": "Stubby", "walk": "Walk", "hop": "Hop", "short": "Short" },
+      "tail": {
+        "cat": "Cat", "dog": "Dog", "fluff": "Fluffy", "none": "None", "bird": "Wings", "leaf": "Leaf"
+      }
     },
-    "pets": {
-      "moka": { "name": "Moka" },
-      "pipa": { "name": "Pipa" },
-      "nori": { "name": "Nori" },
-      "luma": { "name": "Luma" },
-      "kiwi": { "name": "Kiwi" }
+    "species": {
+      "cat": "Cats", "dog": "Dogs", "bird": "Birds", "fox": "Foxes", "bunny": "Bunnies",
+      "critter": "Critters", "bear": "Bears", "panda": "Pandas", "frog": "Frogs", "owl": "Owls",
+      "chick": "Chicks", "penguin": "Penguins", "koala": "Koalas", "raccoon": "Raccoons",
+      "squirrel": "Squirrels", "hedgehog": "Hedgehogs", "otter": "Otters", "seal": "Seals",
+      "deer": "Deer", "pig": "Pigs", "cow": "Cows", "sheep": "Sheep", "pony": "Ponies",
+      "elephant": "Elephants", "lion": "Lions", "tiger": "Tigers", "monkey": "Monkeys",
+      "mouse": "Mice", "hamster": "Hamsters", "turtle": "Turtles", "dino": "Dinos",
+      "dragon": "Dragons", "unicorn": "Unicorns", "axolotl": "Axolotls", "bee": "Bees",
+      "ladybug": "Ladybugs", "fish": "Fish", "whale": "Whales", "dolphin": "Dolphins",
+      "cactus": "Cactus", "cloud": "Clouds", "star": "Stars", "leaf": "Leaves",
+      "peach": "Peaches", "wolf": "Wolves"
+    },
+    "states": {
+      "idle": "Calm", "ok": "Okay", "happy": "Good", "great": "Great", "strong": "Strong",
+      "low": "Low", "destroyed": "Wrecked", "sleepy": "Sleepy", "hungry": "Hungry",
+      "thirsty": "Thirsty", "sick": "Under the weather", "proud": "Proud", "wave": "Hi!"
+    },
+    "bubbles": {
+      "idle": "Right here 🌿",
+      "ok": "Getting by…",
+      "happy": "Feeling good today!",
+      "great": "Feeling great with you!",
+      "strong": "So strong today!",
+      "low": "A low day…",
+      "destroyed": "Rough day…",
+      "sleepy": "Zzz… need rest",
+      "hungry": "Did we eat?",
+      "thirsty": "A sip of water…",
+      "sick": "Feeling soft",
+      "proud": "You did it!",
+      "wave": "Hi {name}!"
     }
   },
   "journal": {

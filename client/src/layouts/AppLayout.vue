@@ -8,6 +8,7 @@ import BrandLogo from '@/shared/components/BrandLogo.vue'
 import CompanionBuddy from '@/shared/components/CompanionBuddy.vue'
 import InstallAppCard from '@/shared/components/InstallAppCard.vue'
 import SystemHealthBanner from '@/shared/components/SystemHealthBanner.vue'
+import DiscoveryGuide from '@/shared/components/DiscoveryGuide.vue'
 import { fadeUp, withDelay } from '@/shared/motion/presets'
 import { activeModuleSet } from '@/shared/utils/timeContext'
 import { syncCompanionFromPrefs } from '@/shared/companions/companionBus'
@@ -287,6 +288,7 @@ async function logout() {
       :style="{ maxWidth: `${contentMax}px` }"
     >
       <SystemHealthBanner />
+      <DiscoveryGuide />
       <router-view />
     </v-container>
   </v-main>

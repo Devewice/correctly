@@ -5,8 +5,11 @@ import { api } from '@/shared/api/client'
 import PageHeader from '@/shared/components/PageHeader.vue'
 import { fadeUp, softHover, withDelay } from '@/shared/motion/presets'
 import { FRIEND_NUDGE_TEMPLATE_IDS } from '@/shared/data/friendNudges'
+import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
+import { completeDiscoveryTip } from '@/shared/discovery/notifyDiscovery'
 
 const { t } = useI18n()
+const auth = useAuthStore()
 
 const loading = ref(true)
 const busy = ref(false)
@@ -150,6 +153,7 @@ function openNudge(friend) {
   nudgeCustom.value = ''
   nudgeError.value = ''
   nudgeOpen.value = true
+  completeDiscoveryTip(auth.user?.id, 'nudges', 'nudgeExplored')
 }
 
 function pickNudgeTemplate(id) {
