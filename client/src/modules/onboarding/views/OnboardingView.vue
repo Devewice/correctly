@@ -59,7 +59,7 @@ async function finish() {
 
 <template>
   <v-main>
-  <v-container class="fill-height py-10" style="max-width: 520px">
+  <v-container class="fill-height py-4 py-sm-10 px-3" style="max-width: 520px">
     <v-card
       v-motion
       :initial="{ opacity: 0, y: 28, scale: 0.97 }"
@@ -69,7 +69,7 @@ async function finish() {
         scale: 1,
         transition: { type: 'spring', stiffness: 120, damping: 16 },
       }"
-      class="pa-6 pa-sm-8 w-100"
+      class="pa-4 pa-sm-8 w-100"
     >
       <div
         v-motion

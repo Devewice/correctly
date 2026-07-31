@@ -152,7 +152,11 @@ async function logout() {
 
   <v-app-bar elevation="0" :height="mdAndUp ? 72 : 64">
     <v-app-bar-title class="ms-2">
-      <BrandLogo v-if="!mdAndUp" :size="36" />
+      <BrandLogo v-if="!mdAndUp" :size="32" variant="full" class="app-bar-brand">
+        <template #tagline>
+          <span class="d-none" />
+        </template>
+      </BrandLogo>
       <div v-else class="d-flex align-center ga-3">
         <span class="text-h6 font-weight-bold text-primary-darken-1 d-none d-lg-inline">
           {{ t('app.name') }}
@@ -215,7 +219,11 @@ async function logout() {
   </v-app-bar>
 
   <v-main>
-    <v-container class="py-4 py-md-6 py-lg-8" :style="{ maxWidth: `${contentMax}px` }">
+    <v-container
+      class="py-4 py-md-6 py-lg-8"
+      :class="{ 'pb-10': !mdAndUp }"
+      :style="{ maxWidth: `${contentMax}px` }"
+    >
       <SystemHealthBanner />
       <router-view />
     </v-container>
@@ -229,6 +237,7 @@ async function logout() {
     app
     color="primary"
     elevation="8"
+    class="app-bottom-nav"
   >
     <v-btn value="today" to="/dashboard" prepend-icon="mdi-white-balance-sunny">
       {{ t('nav.dashboard') }}
@@ -242,7 +251,7 @@ async function logout() {
   </v-bottom-navigation>
 
   <v-bottom-sheet v-if="!mdAndUp" v-model="moreOpen" inset>
-    <v-card class="pa-4 pb-8">
+    <v-card class="pa-4 more-sheet">
       <div
         v-motion
         v-bind="withDelay(fadeUp, 40)"
@@ -253,7 +262,7 @@ async function logout() {
       <p
         v-motion
         v-bind="withDelay(fadeUp, 90)"
-        class="text-body-2 text-medium-emphasis mb-4"
+        class="text-body-2 text-medium-emphasis mb-3"
       >
         {{ t('day.moreSubtitle') }}
       </p>
@@ -273,9 +282,11 @@ async function logout() {
               class="pa-3 h-100"
               @click="go(item.to)"
             >
-              <v-icon :icon="item.icon" color="primary" class="mb-2" />
+              <v-icon :icon="item.icon" color="primary" class="mb-1" />
               <div class="text-subtitle-2 font-weight-bold">{{ item.title }}</div>
-              <div class="text-caption text-medium-emphasis">{{ item.hint }}</div>
+              <div class="text-caption text-medium-emphasis text-truncate d-none d-sm-block">
+                {{ item.hint }}
+              </div>
             </v-card>
           </div>
         </v-col>
@@ -283,3 +294,20 @@ async function logout() {
     </v-card>
   </v-bottom-sheet>
 </template>
+
+<style scoped>
+.app-bar-brand :deep(.brand-logo__name) {
+  font-size: 1.15rem;
+}
+.app-bar-brand :deep(.brand-logo__tagline) {
+  display: none;
+}
+.app-bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.more-sheet {
+  padding-bottom: max(24px, env(safe-area-inset-bottom)) !important;
+  max-height: min(85dvh, 720px);
+  overflow-y: auto;
+}
+</style>

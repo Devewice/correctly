@@ -54,7 +54,7 @@ function saveMeal() {
       scale: 1,
       transition: { type: 'spring', stiffness: 140, damping: 16 },
     }"
-    class="pa-6 day-guide-card"
+    class="pa-4 pa-sm-6 day-guide-card"
   >
     <template v-if="step.key === 'mood'">
       <div
@@ -70,29 +70,34 @@ function saveMeal() {
       <p v-motion v-bind="withDelay(fadeUp, 120)" class="text-body-2 text-medium-emphasis mb-6">
         {{ t('day.moodHint') }}
       </p>
-      <div class="d-flex justify-space-between ga-2 mb-6">
-        <div
+      <v-row dense class="mb-6">
+        <v-col
           v-for="(m, i) in moods"
           :key="m.value"
-          v-motion
-          v-bind="{
-            ...moodHover,
-            ...withDelay(fadeUp, 160 + i * 50),
-          }"
-          class="flex-grow-1"
+          cols="4"
+          sm
         >
-          <v-btn
-            block
-            size="large"
-            :variant="selectedMood === m.value ? 'flat' : 'tonal'"
-            :color="selectedMood === m.value ? 'secondary' : undefined"
-            class="text-h5"
-            @click="selectedMood = m.value"
+          <div
+            v-motion
+            v-bind="{
+              ...moodHover,
+              ...withDelay(fadeUp, 160 + i * 50),
+            }"
           >
-            {{ m.emoji }}
-          </v-btn>
-        </div>
-      </div>
+            <v-btn
+              block
+              size="large"
+              height="52"
+              :variant="selectedMood === m.value ? 'flat' : 'tonal'"
+              :color="selectedMood === m.value ? 'secondary' : undefined"
+              class="text-h5"
+              @click="selectedMood = m.value"
+            >
+              {{ m.emoji }}
+            </v-btn>
+          </div>
+        </v-col>
+      </v-row>
       <div v-motion v-bind="{ ...softHover, ...withDelay(fadeUp, 420) }">
         <v-btn
           block

@@ -81,14 +81,18 @@ function barHeight(ml) {
       </v-col>
     </v-row>
 
-    <v-card class="pa-5 mb-4">
+    <v-card class="pa-4 pa-sm-5 mb-4">
       <div class="text-h6 font-weight-bold mb-4">{{ t('stats.waterWeek') }}</div>
-      <div class="d-flex align-end ga-2" style="height: 140px">
+      <div class="d-flex align-end ga-1 ga-sm-2" style="height: 140px">
         <div
           v-for="day in data.days"
           :key="day.date"
           class="d-flex flex-column align-center flex-grow-1 h-100"
+          style="min-width: 0"
         >
+          <div class="text-caption text-medium-emphasis mb-1">
+            {{ glassesFromMl(day.waterMl) }}
+          </div>
           <v-sheet
             color="surface-light"
             class="w-100 d-flex align-end flex-grow-1 rounded-t-lg"
@@ -101,13 +105,13 @@ function barHeight(ml) {
             />
           </v-sheet>
           <span class="text-caption text-medium-emphasis mt-1">
-            {{ glassesFromMl(day.waterMl) }} · {{ day.date.slice(5) }}
+            {{ day.date.slice(8) }}
           </span>
         </div>
       </div>
     </v-card>
 
-    <v-card class="pa-5 mb-4">
+    <v-card class="pa-4 pa-sm-5 mb-4">
       <div class="text-h6 font-weight-bold mb-3">{{ t('stats.days') }}</div>
       <v-list density="compact">
         <v-list-item
@@ -119,11 +123,13 @@ function barHeight(ml) {
           variant="tonal"
         >
           <template #title>
-            <div class="d-flex justify-space-between text-body-2">
-              <span>{{ day.date.slice(5) }}</span>
-              <span>{{ day.meals }} 🍽</span>
-              <span>{{ Math.round(day.waterMl / 100) / 10 }}L</span>
-              <span>{{ moodLabel(day.avgMood) }}</span>
+            <div class="d-flex flex-wrap align-center justify-space-between ga-2 text-body-2">
+              <span class="font-weight-medium">{{ day.date.slice(5) }}</span>
+              <div class="d-flex flex-wrap ga-3 text-medium-emphasis">
+                <span>{{ day.meals }} 🍽</span>
+                <span>{{ glassesFromMl(day.waterMl) }} 💧</span>
+                <span>{{ moodLabel(day.avgMood) }}</span>
+              </div>
             </div>
           </template>
         </v-list-item>

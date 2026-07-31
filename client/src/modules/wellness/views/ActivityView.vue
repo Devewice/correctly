@@ -84,7 +84,9 @@ onMounted(load)
             @click="form.effort = e.key"
           >
             <div class="text-h5 mb-1">{{ e.icon }}</div>
-            <div class="text-caption font-weight-medium">{{ t(`activity.effort.${e.key}`) }}</div>
+            <div class="text-caption font-weight-medium text-truncate px-1">
+              {{ t(`activity.effort.${e.key}`) }}
+            </div>
           </v-card>
         </div>
       </v-col>

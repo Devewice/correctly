@@ -42,6 +42,12 @@
       "vapid": "Web Push",
       "users": "Users"
     },
+    "navShort": {
+      "overview": "Home",
+      "google": "Google",
+      "vapid": "Push",
+      "users": "Users"
+    },
     "overview": {
       "users": "Users",
       "google": "Google login",

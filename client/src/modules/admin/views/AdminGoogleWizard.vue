@@ -173,7 +173,7 @@ function copy(text) {
             {{ u }} · {{ t('admin.wizard.copy') }}
           </v-btn>
         </div>
-        <div class="d-flex ga-2">
+        <div class="d-flex flex-wrap ga-2">
           <v-btn variant="tonal" @click="prev">{{ t('admin.wizard.back') }}</v-btn>
           <v-btn color="primary" @click="next">{{ t('admin.wizard.next') }}</v-btn>
         </div>
@@ -208,7 +208,7 @@ function copy(text) {
         />
         <v-text-field v-model="form.callbackUrl" label="Callback URL" />
         <v-alert v-if="error" type="error" variant="tonal" density="compact">{{ error }}</v-alert>
-        <div class="d-flex ga-2 mt-2">
+        <div class="d-flex flex-wrap ga-2 mt-2">
           <v-btn variant="tonal" @click="prev">{{ t('admin.wizard.back') }}</v-btn>
           <v-btn
             color="primary"
@@ -226,7 +226,7 @@ function copy(text) {
         <v-btn color="on-surface" href="/api/auth/google" class="align-self-start">
           {{ t('admin.wizard.google.tryLogin') }}
         </v-btn>
-        <div class="d-flex ga-2">
+        <div class="d-flex flex-wrap ga-2">
           <v-btn variant="tonal" @click="prev">{{ t('admin.wizard.back') }}</v-btn>
           <v-btn color="primary" :loading="busy" @click="finish">
             {{ t('admin.wizard.finish') }}

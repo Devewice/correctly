@@ -61,7 +61,8 @@ const { t } = useI18n()
 .auth-main {
   position: relative;
   min-height: 100dvh;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   background: #e8f0e6;
 }
 
@@ -166,10 +167,18 @@ const { t } = useI18n()
   z-index: 1;
   min-height: 100dvh;
   display: flex;
-  align-items: center;
+  align-items: safe center;
   justify-content: center;
   padding: 24px 16px;
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
   gap: 48px;
+}
+
+@media (max-height: 700px) {
+  .auth-center {
+    align-items: flex-start;
+    padding-top: 20px;
+  }
 }
 
 .auth-hero {

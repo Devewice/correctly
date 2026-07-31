@@ -47,14 +47,14 @@ onMounted(load)
     <v-col v-for="(m, i) in moods" :key="m.value" cols="4" sm>
       <div v-motion v-bind="{ ...moodHover, ...withDelay(fadeUp, 50 + i * 40) }">
         <v-card
-          class="pa-3 text-center"
+          class="pa-3 text-center mood-pick"
           :color="selected === m.value ? 'secondary' : undefined"
           :variant="selected === m.value ? 'flat' : 'tonal'"
           :disabled="busy"
           @click="save(m.value)"
         >
           <div class="text-h4">{{ m.emoji }}</div>
-          <div class="text-caption mt-1">{{ t(`mood.labels.${m.key}`) }}</div>
+          <div class="text-caption mt-1 text-truncate">{{ t(`mood.labels.${m.key}`) }}</div>
         </v-card>
       </div>
     </v-col>
@@ -72,3 +72,9 @@ onMounted(load)
     </div>
   </v-card>
 </template>
+
+<style scoped>
+.mood-pick {
+  min-height: 76px;
+}
+</style>

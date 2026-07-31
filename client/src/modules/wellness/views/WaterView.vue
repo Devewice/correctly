@@ -57,14 +57,14 @@ onMounted(load)
   </div>
 
   <v-row dense>
-    <v-col v-for="(opt, i) in WATER_OPTIONS" :key="opt.ml" cols="4">
+    <v-col v-for="(opt, i) in WATER_OPTIONS" :key="opt.ml" cols="12" sm="4">
       <div v-motion v-bind="{ ...softHover, ...withDelay(fadeUp, 120 + i * 60) }">
         <v-btn
           block
           color="info"
           variant="tonal"
           size="large"
-          height="72"
+          height="56"
           class="text-body-2"
           :loading="busy"
           @click="add(opt.ml)"

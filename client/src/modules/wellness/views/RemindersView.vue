@@ -229,17 +229,20 @@ function typeTitle(type) {
   >
     <v-card class="pa-4">
       <div class="d-flex align-center justify-space-between ga-3 mb-2">
-        <div>
-          <div class="text-subtitle-2 font-weight-bold">
+        <div class="flex-grow-1" style="min-width: 0">
+          <div class="text-subtitle-2 font-weight-bold text-truncate">
             {{ item.label || typeTitle(item.type) }}
           </div>
-          <div class="text-caption text-medium-emphasis">{{ t(`reminders.hint.${item.type}`) }}</div>
+          <div class="text-caption text-medium-emphasis text-truncate">
+            {{ t(`reminders.hint.${item.type}`) }}
+          </div>
         </div>
         <v-switch
           :model-value="item.enabled"
           color="primary"
           hide-details
           density="compact"
+          class="flex-grow-0"
           :disabled="store.busy"
           @update:model-value="toggle(item)"
         />

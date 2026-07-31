@@ -52,7 +52,7 @@ function googleLogin() {
 </script>
 
 <template>
-  <v-card class="login-card pa-8 text-center" elevation="0">
+  <v-card class="login-card pa-5 pa-sm-8 text-center" elevation="0">
     <div
       v-motion
       v-bind="withDelay(fadeUp, 80)"

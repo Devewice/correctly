@@ -7,6 +7,16 @@ body,
 
 body {
   margin: 0;
+  overflow-x: hidden;
+}
+
+/* URLs largas en wizards admin / campos mono */
+.font-mono,
+.v-btn[style*='monospace'] {
+  word-break: break-all;
+  white-space: normal !important;
+  height: auto !important;
+  min-height: 40px;
 }
 
 .v-application {
