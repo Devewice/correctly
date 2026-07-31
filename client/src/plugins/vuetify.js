@@ -55,7 +55,7 @@ export function createCorrectlyVuetify() {
       VCard: {
         rounded: 'xl',
         elevation: 0,
-        border: true,
+        border: false,
         color: 'surface',
       },
       VSheet: { rounded: 'xl' },

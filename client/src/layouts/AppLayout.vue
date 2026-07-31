@@ -412,22 +412,26 @@ async function logout() {
   align-items: center;
   gap: 10px;
   min-height: var(--cx-touch);
-  padding: 10px 12px;
-  border: 1.5px solid var(--cx-border);
-  border-radius: var(--cx-radius-sm);
+  padding: 11px 13px;
+  border: none;
+  border-radius: var(--cx-radius);
   background: var(--cx-surface);
   color: var(--cx-text);
   text-align: left;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  box-shadow: var(--cx-shadow);
+  transition: background 0.15s ease, color 0.15s ease;
 }
 .more-row:active {
   background: var(--cx-primary-soft);
 }
 .more-row--active {
-  border-color: var(--cx-primary-deep);
-  background: var(--cx-primary-soft);
-  box-shadow: inset 0 0 0 1px var(--cx-primary-deep);
+  background: color-mix(in srgb, var(--cx-primary) 22%, var(--cx-surface));
+  color: var(--cx-primary-deep);
+  box-shadow: none;
+}
+.more-row--active .more-row__title {
+  color: var(--cx-primary-deep);
 }
 .more-row__icon {
   flex-shrink: 0;

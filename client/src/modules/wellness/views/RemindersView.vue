@@ -307,7 +307,8 @@ function typeTitle(type) {
 .reminders-push-card {
   background: var(--cx-primary-soft) !important;
   color: var(--cx-text) !important;
-  border: 1px solid var(--cx-border-strong) !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 .reminders-push-card__hint {
   color: var(--cx-text-soft) !important;

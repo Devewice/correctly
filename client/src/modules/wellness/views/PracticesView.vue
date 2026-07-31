@@ -76,18 +76,17 @@ async function run(p) {
   gap: 0.85rem;
   width: 100%;
   min-height: 5.25rem;
-  padding: 1rem;
+  padding: 1rem 1.05rem;
   border-radius: var(--cx-radius);
-  border: 1.5px solid var(--cx-border);
+  border: none;
   background: var(--cx-surface);
   color: var(--cx-text);
   text-align: left;
   cursor: pointer;
   box-shadow: var(--cx-shadow);
-  transition: border-color 0.15s ease, background 0.15s ease;
+  transition: background 0.15s ease, transform 0.12s ease;
 }
 .practice-card:hover {
-  border-color: var(--cx-primary);
   background: var(--cx-primary-soft);
 }
 .practice-card:disabled {

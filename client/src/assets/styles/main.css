@@ -71,7 +71,7 @@ body {
   color: var(--cx-primary-deep);
 }
 .cx-card-shell {
-  border: 1px solid var(--cx-border) !important;
+  border: none !important;
   border-radius: var(--cx-radius-lg) !important;
   background: var(--cx-surface) !important;
   box-shadow: var(--cx-shadow) !important;
@@ -81,7 +81,7 @@ body {
   padding: var(--cx-space-3);
   border-radius: var(--cx-radius);
   background: var(--cx-primary-soft);
-  border: 1px solid var(--cx-border);
+  border: none;
   color: var(--cx-text);
 }
 .cx-meta {
@@ -112,11 +112,17 @@ body {
 
 /* —— Cards —— */
 .v-card {
-  border-color: var(--cx-border) !important;
+  border-color: transparent !important;
+  box-shadow: var(--cx-shadow) !important;
 }
 .v-card--variant-outlined,
 .v-card--border {
   border-color: var(--cx-border) !important;
+  box-shadow: none !important;
+}
+.v-card--variant-tonal,
+.v-card--variant-flat {
+  box-shadow: none !important;
 }
 
 /* —— Alerts / notifications —— */
@@ -192,17 +198,17 @@ body {
   border-radius: var(--cx-radius) !important;
 }
 
-/* —— Select tiles —— */
+/* —— Select tiles (fill, never heavy frames) —— */
 .select-tile {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   min-height: var(--cx-touch);
-  padding: 0.7rem 0.85rem;
-  border: 1.5px solid var(--cx-border-strong);
-  border-radius: var(--cx-radius-sm);
-  background: var(--cx-surface);
+  padding: 0.65rem 0.9rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--cx-surface-soft);
   color: var(--cx-text);
   font-size: 0.875rem;
   font-weight: 600;
@@ -210,24 +216,23 @@ body {
   text-align: center;
   cursor: pointer;
   transition:
-    border-color 0.15s ease,
-    background 0.15s ease,
-    box-shadow 0.15s ease;
+    background 0.16s ease,
+    color 0.16s ease,
+    transform 0.12s ease;
 }
-.select-tile:hover {
-  border-color: var(--cx-primary);
-  background: var(--cx-primary-soft);
+.select-tile:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--cx-primary) 14%, var(--cx-surface-soft));
 }
 .select-tile--on {
-  border-color: var(--cx-primary-deep);
-  background: color-mix(in srgb, var(--cx-primary) 22%, var(--cx-surface));
-  color: var(--cx-text);
-  box-shadow: inset 0 0 0 1px var(--cx-primary-deep);
+  background: color-mix(in srgb, var(--cx-primary) 28%, var(--cx-surface));
+  color: var(--cx-primary-deep);
+  box-shadow: none;
 }
 .select-tile--center {
   flex-direction: column;
   gap: 0.3rem;
   min-height: 4.75rem;
+  border-radius: var(--cx-radius);
 }
 .select-tile__emoji {
   font-size: 1.5rem;
@@ -236,6 +241,49 @@ body {
 .select-tile:disabled {
   opacity: 0.55;
   cursor: default;
+}
+
+/* Mood / emoji pickers share the soft language */
+.mood-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  width: 100%;
+  min-height: 4.75rem;
+  padding: 0.65rem 0.35rem;
+  border: none;
+  border-radius: var(--cx-radius);
+  background: var(--cx-surface-soft);
+  color: var(--cx-text);
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    transform 0.12s ease;
+}
+.mood-tile:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--cx-primary) 12%, var(--cx-surface-soft));
+}
+.mood-tile--selected {
+  background: color-mix(in srgb, var(--cx-secondary) 55%, var(--cx-surface));
+  color: var(--cx-text);
+  box-shadow: none;
+}
+.mood-tile:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.mood-tile__emoji {
+  font-size: clamp(1.55rem, 5vw, 1.9rem);
+  line-height: 1.1;
+}
+.mood-tile__label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.15;
+  color: inherit;
+  text-align: center;
 }
 
 /* —— Stat cards —— */
@@ -283,9 +331,10 @@ body {
 }
 
 .v-bottom-navigation {
-  border-top: 1px solid var(--cx-border) !important;
-  background: var(--cx-surface) !important;
-  box-shadow: 0 -4px 20px rgba(47, 50, 46, 0.06) !important;
+  border-top: none !important;
+  background: color-mix(in srgb, var(--cx-surface) 92%, transparent) !important;
+  box-shadow: 0 -8px 24px rgba(47, 50, 46, 0.06) !important;
+  backdrop-filter: blur(10px);
 }
 .v-bottom-navigation .v-btn {
   min-width: 0 !important;
@@ -309,12 +358,13 @@ body {
 /* —— Admin —— */
 .admin-shell .v-tabs {
   background: var(--cx-surface);
-  border: 1px solid var(--cx-border);
+  border: none;
   border-radius: var(--cx-radius);
-  padding: 0.2rem;
+  padding: 0.25rem;
+  box-shadow: var(--cx-shadow);
 }
 .admin-shell .v-card {
-  border-color: var(--cx-border) !important;
+  border: none !important;
   box-shadow: var(--cx-shadow) !important;
 }
 

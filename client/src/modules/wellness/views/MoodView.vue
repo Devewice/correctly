@@ -60,9 +60,15 @@ onMounted(load)
     </v-col>
   </v-row>
 
-  <v-card v-for="log in logs.slice(0, 8)" :key="log.id" class="pa-4 mb-2">
+  <v-card
+    v-for="log in logs.slice(0, 8)"
+    :key="log.id"
+    class="pa-3 mb-2"
+    variant="flat"
+    color="surface-light"
+  >
     <div class="d-flex align-center justify-space-between">
-      <span>
+      <span class="font-weight-medium">
         <span class="text-h6 me-2">{{ moods.find((m) => m.value === log.mood)?.emoji }}</span>
         {{ t(`mood.labels.${moods.find((m) => m.value === log.mood)?.key || 'ok'}`) }}
       </span>
@@ -75,60 +81,14 @@ onMounted(load)
 
 <style scoped>
 .mood-tile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  width: 100%;
   min-height: 5.5rem;
-  padding: 0.75rem 0.4rem;
-  border: 1.5px solid var(--cx-border-strong);
-  border-radius: var(--cx-radius);
-  background: var(--cx-surface-soft);
-  color: var(--cx-text);
-  cursor: pointer;
-  transition:
-    border-color 0.15s ease,
-    background 0.15s ease;
 }
-
-.mood-tile:hover:not(:disabled) {
-  border-color: var(--cx-primary);
-  background: var(--cx-primary-soft);
-}
-
-.mood-tile--selected {
-  border-color: var(--cx-primary-deep);
-  background: var(--cx-secondary-soft);
-  box-shadow: inset 0 0 0 1px var(--cx-primary-deep);
-}
-
-.mood-tile:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-
-.mood-tile__emoji {
-  font-size: 2rem;
-  line-height: 1.1;
-}
-
-.mood-tile__label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  line-height: 1.2;
-  color: var(--cx-text);
-  text-align: center;
-}
-
 @media (min-width: 600px) {
   .mood-tile {
-    min-height: 6.25rem;
+    min-height: 6.1rem;
   }
-
   .mood-tile__emoji {
-    font-size: 2.35rem;
+    font-size: 2.25rem;
   }
 }
 </style>

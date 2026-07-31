@@ -21,6 +21,7 @@ const { t } = useI18n()
       prepend-icon="mdi-arrow-left"
       :to="backTo"
       size="small"
+      density="comfortable"
     >
       {{ t('nav.dashboard') }}
     </v-btn>
@@ -31,11 +32,12 @@ const { t } = useI18n()
 
 <style scoped>
 .cx-page-header {
-  margin-bottom: 1.35rem;
+  margin-bottom: 1.2rem;
 }
 .cx-page-header__back {
-  margin: 0 0 0.35rem -0.35rem;
-  min-height: 36px !important;
+  margin: 0 0 0.2rem -0.45rem;
+  min-height: 34px !important;
   font-weight: 600;
+  opacity: 0.9;
 }
 </style>

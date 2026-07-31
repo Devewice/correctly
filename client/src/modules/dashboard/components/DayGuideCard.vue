@@ -373,10 +373,10 @@ function pickMood(value) {
 
 <style scoped>
 .day-guide-card {
-  padding: clamp(0.9rem, 3vw, 1.25rem);
-  border: 1px solid var(--cx-border) !important;
+  padding: clamp(1rem, 3.2vw, 1.4rem);
+  border: none !important;
   background: var(--cx-surface) !important;
-  box-shadow: var(--cx-shadow) !important;
+  box-shadow: var(--cx-shadow-lift) !important;
   overflow: visible !important;
   width: 100%;
   max-width: 100%;
@@ -409,10 +409,10 @@ function pickMood(value) {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem 0.9rem;
+  padding: 0.8rem 0.95rem;
   border-radius: var(--cx-radius);
   background: var(--cx-surface-soft);
-  border: 1px solid var(--cx-border);
+  border: none;
 }
 
 .habit-focus__icon {
@@ -436,57 +436,9 @@ function pickMood(value) {
   color: var(--cx-text-soft) !important;
 }
 
-.mood-tile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.3rem;
-  width: 100%;
-  min-height: 4.5rem;
-  padding: 0.55rem 0.3rem;
-  border: 1.5px solid var(--cx-border-strong);
-  border-radius: var(--cx-radius-sm);
-  background: var(--cx-surface-soft);
-  color: var(--cx-text);
-  cursor: pointer;
-  transition:
-    border-color 0.15s ease,
-    background 0.15s ease;
-}
-
-.mood-tile:hover:not(:disabled) {
-  border-color: var(--cx-primary);
-  background: var(--cx-primary-soft);
-}
-
-.mood-tile--selected {
-  border-color: var(--cx-primary-deep);
-  background: var(--cx-secondary-soft);
-  box-shadow: inset 0 0 0 1px var(--cx-primary-deep);
-}
-
-.mood-tile:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-
-.mood-tile__emoji {
-  font-size: clamp(1.5rem, 5vw, 1.85rem);
-  line-height: 1.1;
-}
-
-.mood-tile__label {
-  font-size: 0.7rem;
-  font-weight: 600;
-  line-height: 1.15;
-  color: var(--cx-text);
-  text-align: center;
-}
-
 @media (min-width: 600px) {
   .mood-tile {
-    min-height: 5rem;
+    min-height: 5.1rem;
   }
 }
 </style>

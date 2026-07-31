@@ -85,13 +85,13 @@ const { canPrompt, isApp, showIosHelp, promptInstall } = usePwaInstall()
 .install-card {
   background: var(--cx-secondary-soft) !important;
   color: var(--cx-text) !important;
-  border: 1px solid var(--cx-border) !important;
+  border: none !important;
   border-radius: var(--cx-radius) !important;
   width: 100%;
+  box-shadow: none !important;
 }
 .install-card--done {
   background: var(--cx-success-soft) !important;
-  border-color: color-mix(in srgb, var(--cx-success) 35%, transparent) !important;
 }
 .install-card__body {
   flex: 1 1 auto;

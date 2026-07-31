@@ -259,7 +259,10 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
     :class="`today-view--${band}`"
   >
     <header v-motion v-bind="withDelay(fadeUp, 0)" class="today-view__header">
-      <h1 class="cx-page-title">{{ greeting }}</h1>
+      <div class="today-view__title-row">
+        <h1 class="cx-page-title">{{ greeting }}</h1>
+        <span class="today-view__pct" aria-label="progress">{{ progressPct }}%</span>
+      </div>
       <p class="cx-meta today-view__meta">
         <span>{{ t(`day.band.${band}`) }}</span>
         <span aria-hidden="true">·</span>
@@ -269,10 +272,21 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
           <span>{{ t('day.freezeLeft', { n: freezes }) }}</span>
         </template>
       </p>
+      <v-progress-linear
+        class="today-view__bar mt-3"
+        :model-value="progressPct"
+        color="primary"
+        height="6"
+        rounded
+      />
+      <div v-if="chips.length" class="today-progress__chips">
+        <span v-for="chip in chips" :key="chip.key" class="today-progress__chip">
+          {{ chip.label }}
+        </span>
+      </div>
     </header>
 
     <v-row :dense="!lgAndUp">
-      <!-- Card interactiva SIEMPRE primero -->
       <v-col cols="12" lg="7" order="1" order-lg="2">
         <p class="cx-section-label">{{ t('day.guideTitle') }}</p>
 
@@ -305,20 +319,7 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
       </v-col>
 
       <v-col cols="12" lg="5" order="2" order-lg="1" class="today-view__aside">
-        <div class="cx-soft-panel">
-          <div class="today-progress__top">
-            <span class="today-progress__label">{{ t('day.dayProgress') }}</span>
-            <span class="today-progress__pct">{{ progressPct }}%</span>
-          </div>
-          <v-progress-linear :model-value="progressPct" color="primary" height="8" rounded />
-          <div v-if="chips.length" class="today-progress__chips">
-            <span v-for="chip in chips" :key="chip.key" class="today-progress__chip">
-              {{ chip.label }}
-            </span>
-          </div>
-        </div>
-
-        <p v-if="insightText" class="today-insight">{{ insightText }}</p>
+        <p v-if="insightText" class="today-insight today-insight--panel">{{ insightText }}</p>
 
         <details class="today-prefs">
           <summary>{{ t('day.dayPrefs') }}</summary>
@@ -347,7 +348,7 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
         </details>
 
         <v-btn
-          class="mt-2"
+          class="mt-1"
           variant="text"
           size="small"
           to="/practices"
@@ -392,7 +393,21 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   --today-glow: rgba(42, 115, 150, 0.2);
 }
 .today-view__header {
-  margin-bottom: 1rem;
+  margin-bottom: 1.15rem;
+}
+.today-view__title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.today-view__pct {
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+  font-family: var(--cx-font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--cx-primary-deep);
 }
 .today-view__meta {
   display: flex;
@@ -400,42 +415,38 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   gap: 0.25rem 0.35rem;
   margin-top: 0.35rem;
 }
+.today-view__bar {
+  max-width: 20rem;
+}
 .today-view__aside {
-  margin-top: 0.25rem;
-}
-.today-progress__top {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.45rem;
-}
-.today-progress__label {
-  font-size: 0.8125rem;
-  font-weight: 600;
-}
-.today-progress__pct {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--cx-primary-deep);
+  margin-top: 0.35rem;
 }
 .today-progress__chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 0.65rem;
+  gap: 0.4rem;
+  margin-top: 0.7rem;
 }
 .today-progress__chip {
-  padding: 0.15rem 0.55rem;
+  padding: 0.28rem 0.7rem;
   border-radius: 999px;
-  background: var(--cx-surface);
+  background: var(--cx-surface-soft);
   font-size: 0.75rem;
   font-weight: 600;
-  border: 1px solid var(--cx-border);
+  color: var(--cx-text-soft);
+  border: none;
 }
 .today-insight {
-  margin: 0.85rem 0 0;
-  font-size: 0.8125rem;
-  line-height: 1.4;
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
   color: var(--cx-text-soft);
+}
+.today-insight--panel {
+  padding: 0.85rem 1rem;
+  border-radius: var(--cx-radius);
+  background: var(--cx-surface-soft);
+  margin-bottom: 0.85rem;
 }
 .today-prefs {
   margin-top: 0.85rem;

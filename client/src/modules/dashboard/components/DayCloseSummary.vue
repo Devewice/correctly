@@ -54,7 +54,8 @@ const labels = computed(() =>
     var(--cx-surface) 55%,
     var(--cx-surface-soft) 100%
   ) !important;
-  border: 1px solid var(--cx-border) !important;
+  border: none !important;
+  box-shadow: var(--cx-shadow) !important;
 }
 .day-close__phrase {
   margin: 0;

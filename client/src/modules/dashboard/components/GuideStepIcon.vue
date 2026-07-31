@@ -63,7 +63,7 @@ defineProps({
   margin: 0;
   border-radius: 12px;
   background: var(--cx-surface-soft);
-  border: 1px solid var(--cx-border);
+  border: none;
 }
 .guide-icon--sm .guide-icon__emoji {
   font-size: 1.55rem;

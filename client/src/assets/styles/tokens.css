@@ -29,14 +29,14 @@
   --cx-error: #b54f48;
   --cx-error-soft: rgba(181, 79, 72, 0.14);
 
-  /* Borders / depth */
-  --cx-border: rgba(79, 107, 76, 0.16);
-  --cx-border-strong: rgba(79, 107, 76, 0.28);
-  --cx-radius-sm: 10px;
-  --cx-radius: 14px;
-  --cx-radius-lg: 20px;
-  --cx-shadow: 0 2px 12px rgba(47, 50, 46, 0.05);
-  --cx-shadow-lift: 0 8px 24px rgba(47, 50, 46, 0.08);
+  /* Borders / depth — hairlines, never “frame” controls */
+  --cx-border: rgba(79, 107, 76, 0.1);
+  --cx-border-strong: rgba(79, 107, 76, 0.16);
+  --cx-radius-sm: 12px;
+  --cx-radius: 16px;
+  --cx-radius-lg: 22px;
+  --cx-shadow: 0 1px 10px rgba(47, 50, 46, 0.04);
+  --cx-shadow-lift: 0 10px 28px rgba(47, 50, 46, 0.07);
 
   /* Space / type */
   --cx-space-1: 0.35rem;
