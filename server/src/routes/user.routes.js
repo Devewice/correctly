@@ -100,4 +100,32 @@ router.get('/achievements', async (req, res) => {
   res.json({ achievements })
 })
 
+const reminderItem = z.object({
+  id: z.string().min(1).max(40),
+  type: z.enum(['water', 'mood', 'sleep', 'meals', 'habits', 'summary', 'friends', 'custom']),
+  time: z.string().regex(/^\d{2}:\d{2}$/),
+  enabled: z.boolean(),
+  withSound: z.boolean().optional(),
+  label: z.string().max(80).optional().nullable(),
+})
+
+const remindersSchema = z.object({
+  reminders: z.array(reminderItem).max(24),
+})
+
+router.get('/reminders', (req, res) => {
+  const list = Array.isArray(req.user.reminders) ? req.user.reminders : []
+  res.json({ reminders: list })
+})
+
+router.put('/reminders', async (req, res) => {
+  const { reminders } = remindersSchema.parse(req.body)
+  const user = await prisma.user.update({
+    where: { id: req.user.id },
+    data: { reminders },
+    include: { stats: true },
+  })
+  res.json({ reminders: user.reminders, user })
+})
+
 export default router

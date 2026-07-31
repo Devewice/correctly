@@ -21,6 +21,8 @@ model User {
   sleepTime            String?  @db.VarChar(5)
   mainGoal             String?
   activeModules        Json     @default("[\"meals\",\"water\",\"mood\",\"sleep\",\"habits\"]")
+  /** Alarmas/recordatorios web: [{ id, type, time, enabled, withSound, label? }] */
+  reminders            Json     @default("[]")
   onboardingCompleted  Boolean  @default(false)
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
@@ -40,6 +42,42 @@ model User {
   medicationLogs  MedicationLog[]
   journalEntries  JournalEntry[]
   achievements    Achievement[]
+  friendInvites   FriendInvite[]  @relation("InviteCreator")
+  friendshipsA    Friendship[]    @relation("FriendA")
+  friendshipsB    Friendship[]    @relation("FriendB")
+  dailyShares     DailyShare[]
+  shareReactions  DailyShareReaction[]
+  pushSubscriptions PushSubscription[]
+  reminderFires   ReminderFire[]
+}
+
+/** Suscripción Web Push del navegador/dispositivo */
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String   @db.VarChar(500)
+  p256dh    String   @db.VarChar(200)
+  auth      String   @db.VarChar(100)
+  userAgent String?  @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, endpoint])
+  @@index([userId])
+}
+
+/** Evita enviar el mismo recordatorio dos veces el mismo día */
+model ReminderFire {
+  id         String   @id @default(cuid())
+  userId     String
+  reminderId String   @db.VarChar(40)
+  dateKey    String   @db.VarChar(10)
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, reminderId, dateKey])
+  @@index([dateKey])
 }
 
 model UserStats {
@@ -50,7 +88,67 @@ model UserStats {
   bestStreak               Int     @default(0)
   streakFreezesRemaining   Int     @default(1)
   lastLogDate              String? @db.VarChar(10) // YYYY-MM-DD
+  likesReceived            Int     @default(0)
+  dislikesReceived         Int     @default(0)
   user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/** Código/enlace para agregar amigos (copiar enlace) */
+model FriendInvite {
+  id        String    @id @default(cuid())
+  code      String    @unique @db.VarChar(24)
+  creatorId String
+  expiresAt DateTime?
+  usedAt    DateTime?
+  usedById  String?
+  createdAt DateTime  @default(now())
+  creator   User      @relation("InviteCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@index([creatorId])
+}
+
+/** Amistad aceptada (par ordenado userAId < userBId) */
+model Friendship {
+  id        String   @id @default(cuid())
+  userAId   String
+  userBId   String
+  createdAt DateTime @default(now())
+  userA     User     @relation("FriendA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB     User     @relation("FriendB", fields: [userBId], references: [id], onDelete: Cascade)
+
+  @@unique([userAId, userBId])
+  @@index([userAId])
+  @@index([userBId])
+}
+
+/** Foto o nota del día — una por usuario; caduca a medianoche */
+model DailyShare {
+  id        String   @id @default(cuid())
+  userId    String
+  dateKey   String   @db.VarChar(10) // YYYY-MM-DD (timezone del usuario)
+  note      String?  @db.VarChar(500)
+  photoUrl  String?  @db.VarChar(500)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reactions DailyShareReaction[]
+
+  @@unique([userId, dateKey])
+  @@index([expiresAt])
+  @@index([dateKey])
+}
+
+model DailyShareReaction {
+  id        String   @id @default(cuid())
+  shareId   String
+  userId    String
+  type      String   // like | dislike
+  createdAt DateTime @default(now())
+  share     DailyShare @relation(fields: [shareId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([shareId, userId])
+  @@index([userId])
 }
 
 model Goal {

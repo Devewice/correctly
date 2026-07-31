@@ -1,35 +1,56 @@
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
 import PageHeader from '@/shared/components/PageHeader.vue'
+import { fadeUp, softHover, withDelay } from '@/shared/motion/presets'
 
 const { t } = useI18n()
 const logs = ref([])
 const busy = ref(false)
-const form = reactive({ weight: null, notes: '' })
 
 const latest = computed(() => logs.value[0] || null)
-const delta = computed(() => {
-  if (logs.value.length < 2) return null
-  return Math.round((logs.value[0].weight - logs.value[1].weight) * 10) / 10
-})
+
+/** Sin balanza mental: solo sensación relativa o un punto suave de partida */
+const relative = [
+  { key: 'lighter', delta: -0.4, icon: '🍃' },
+  { key: 'same', delta: 0, icon: '🙂' },
+  { key: 'heavier', delta: 0.4, icon: '🪨' },
+]
+
+const starters = [
+  { key: 'soft', weight: 58, icon: '🌱' },
+  { key: 'mid', weight: 72, icon: '🌿' },
+  { key: 'strong', weight: 88, icon: '🌳' },
+]
 
 async function load() {
   const data = await api('/weight')
   logs.value = data.logs
-  if (latest.value) form.weight = latest.value.weight
 }
 
-async function save() {
-  if (!form.weight) return
+async function saveRelative(opt) {
+  if (!latest.value) return
+  busy.value = true
+  try {
+    const next = Math.round((latest.value.weight + opt.delta) * 10) / 10
+    await api('/weight', {
+      method: 'POST',
+      body: { weight: next, notes: t(`weight.feel.${opt.key}`) },
+    })
+    await load()
+  } finally {
+    busy.value = false
+  }
+}
+
+async function saveStarter(opt) {
   busy.value = true
   try {
     await api('/weight', {
       method: 'POST',
-      body: { weight: Number(form.weight), notes: form.notes || undefined },
+      body: { weight: opt.weight, notes: t(`weight.start.${opt.key}`) },
     })
-    form.notes = ''
     await load()
   } finally {
     busy.value = false
@@ -42,45 +63,52 @@ onMounted(load)
 <template>
   <PageHeader :title="t('weight.title')" :subtitle="t('weight.subtitle')" />
 
-  <v-card v-if="latest" class="pa-5 mb-6" color="secondary" variant="tonal">
-    <div class="text-caption text-medium-emphasis">{{ t('weight.latest') }}</div>
-    <div class="text-h3 font-weight-bold">
-      {{ latest.weight }} <span class="text-h6">kg</span>
-    </div>
-    <div
-      v-if="delta !== null"
-      class="text-body-2 mt-1"
-      :class="delta <= 0 ? 'text-success' : 'text-medium-emphasis'"
-    >
-      {{ delta > 0 ? '+' : '' }}{{ delta }} kg
-    </div>
-  </v-card>
+  <template v-if="latest">
+    <v-alert type="info" variant="tonal" class="mb-5">
+      {{ t('weight.softLatest') }}
+    </v-alert>
 
-  <v-card class="pa-5 mb-6">
-    <v-form @submit.prevent="save">
-      <v-text-field
-        v-model.number="form.weight"
-        type="number"
-        step="0.1"
-        :min="20"
-        :max="400"
-        :label="t('weight.value')"
-        required
-        class="mb-2"
-      />
-      <v-text-field v-model="form.notes" :label="t('weight.notes')" class="mb-3" />
-      <v-btn type="submit" block color="primary" size="large" :loading="busy">
-        {{ t('weight.save') }}
-      </v-btn>
-    </v-form>
-  </v-card>
+    <p class="text-body-2 text-medium-emphasis mb-3">{{ t('weight.ask') }}</p>
+    <v-row dense>
+      <v-col v-for="(opt, i) in relative" :key="opt.key" cols="12" sm="4">
+        <div v-motion v-bind="{ ...softHover, ...withDelay(fadeUp, 60 + i * 60) }">
+          <v-card
+            class="pa-5 text-center h-100"
+            color="secondary"
+            variant="tonal"
+            :disabled="busy"
+            @click="saveRelative(opt)"
+          >
+            <div class="text-h3 mb-2">{{ opt.icon }}</div>
+            <div class="text-subtitle-1 font-weight-bold">{{ t(`weight.feel.${opt.key}`) }}</div>
+            <div class="text-caption text-medium-emphasis mt-1">
+              {{ t(`weight.feelHint.${opt.key}`) }}
+            </div>
+          </v-card>
+        </div>
+      </v-col>
+    </v-row>
+  </template>
 
-  <v-card v-for="log in logs" :key="log.id" class="pa-4 mb-2">
-    <div class="d-flex justify-space-between align-center">
-      <span class="font-weight-medium">{{ log.weight }} kg</span>
-      <span class="text-caption text-medium-emphasis">
-        {{ new Date(log.loggedAt).toLocaleDateString() }}
-      </span>
-    </div>
-  </v-card>
+  <template v-else>
+    <p class="text-body-2 text-medium-emphasis mb-3">{{ t('weight.startAsk') }}</p>
+    <v-row dense>
+      <v-col v-for="(opt, i) in starters" :key="opt.key" cols="12" sm="4">
+        <div v-motion v-bind="{ ...softHover, ...withDelay(fadeUp, 60 + i * 60) }">
+          <v-card
+            class="pa-5 text-center h-100"
+            variant="tonal"
+            :disabled="busy"
+            @click="saveStarter(opt)"
+          >
+            <div class="text-h3 mb-2">{{ opt.icon }}</div>
+            <div class="text-subtitle-1 font-weight-bold">{{ t(`weight.start.${opt.key}`) }}</div>
+            <div class="text-caption text-medium-emphasis mt-1">
+              {{ t(`weight.startHint.${opt.key}`) }}
+            </div>
+          </v-card>
+        </div>
+      </v-col>
+    </v-row>
+  </template>
 </template>

@@ -26,7 +26,13 @@ import meditationRoutes from './routes/meditation.routes.js'
 import weightRoutes from './routes/weight.routes.js'
 import dashboardRoutes from './routes/dashboard.routes.js'
 import adminRoutes from './routes/admin.routes.js'
+import friendsRoutes from './routes/friends.routes.js'
+import pushRoutes from './routes/push.routes.js'
 import { ensureSuperAdmins } from './services/bootstrap.js'
+import { startFriendsCleanupJob } from './services/friendsCleanup.js'
+import { setupWebPush } from './services/webPush.js'
+import { startReminderPushJob } from './services/reminderPushJob.js'
+import { ensureUploadDirs, uploadsRoot } from './utils/uploads.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -76,9 +82,11 @@ app.use(
     credentials: true,
   }),
 )
-app.use(express.json({ limit: '1mb' }))
+app.use(express.json({ limit: '4mb' }))
 app.use(cookieParser())
 app.use(passport.initialize())
+ensureUploadDirs()
+app.use('/uploads', express.static(uploadsRoot, { maxAge: '1d', fallthrough: false }))
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -123,6 +131,8 @@ app.use('/api/journal', journalRoutes)
 app.use('/api/meditation', meditationRoutes)
 app.use('/api/weight', weightRoutes)
 app.use('/api/dashboard', dashboardRoutes)
+app.use('/api/friends', friendsRoutes)
+app.use('/api/push', pushRoutes)
 app.use('/api/admin', adminRoutes)
 
 if (serveSpa) {
@@ -152,6 +162,8 @@ const server = app.listen(env.port, '0.0.0.0', async () => {
   try {
     await configurePassport()
     await ensureSuperAdmins()
+    startFriendsCleanupJob()
+    if (setupWebPush()) startReminderPushJob()
   } catch (err) {
     console.warn('[bootstrap]', err.message)
   }

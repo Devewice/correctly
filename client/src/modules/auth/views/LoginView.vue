@@ -19,6 +19,8 @@ function googleLogin() {
     error.value = t('login.googleUnavailable')
     return
   }
+  const redirect = new URLSearchParams(window.location.search).get('redirect')
+  if (redirect) sessionStorage.setItem('correctly_redirect', redirect)
   window.location.href = '/api/auth/google'
 }
 </script>

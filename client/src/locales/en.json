@@ -158,16 +158,201 @@
       "meals": "Look back at meals",
       "water": "Add another glass",
       "mood": "See how I've felt",
-      "habits": "My daily habits"
+      "habits": "My daily habits",
+      "friends": "Daily notes and photos with friends",
+      "reminders": "Gentle web nudges"
     }
+  },
+  "pwa": {
+    "title": "Use as an app",
+    "subtitle": "Install it on your desktop or home screen. Opens without the browser chrome.",
+    "install": "Install Correctly",
+    "installed": "Correctly is already installed as an app on this device.",
+    "manual": "In Chrome/Edge: menu ⋮ → “Install Correctly” or “App”. On Android you may also see “Add to Home screen”.",
+    "ios1": "Tap Share (square with arrow) in Safari.",
+    "ios2": "Choose “Add to Home Screen”.",
+    "ios3": "Confirm “Add”. It will show up like an app."
+  },
+  "health": {
+    "later": "Not now",
+    "recheck": "Check again",
+    "gotIt": "Got it",
+    "moreIssues": "+{n} more thing(s) to enable",
+    "actions": {
+      "enableNotifications": "Enable notifications",
+      "enablePush": "Enable background alerts",
+      "openReminders": "Open alarms",
+      "openProfile": "How to install",
+      "reload": "Reload"
+    },
+    "issues": {
+      "offline": {
+        "title": "You're offline",
+        "body": "Some things won't save until you're back online."
+      },
+      "storage": {
+        "title": "Storage blocked",
+        "body": "The browser won't save your session. Allow cookies/storage for this site."
+      },
+      "serviceWorker": {
+        "title": "Background engine missing",
+        "body": "Install and alerts need a service worker. Reload or open Correctly over HTTPS."
+      },
+      "serviceWorkerUnsupported": {
+        "title": "Limited browser",
+        "body": "No service worker support. Try Chrome, Edge, or a recent Safari."
+      },
+      "swPending": {
+        "title": "Almost ready — reload once",
+        "body": "The service worker just installed. Reload so alerts work properly."
+      },
+      "notificationsDenied": {
+        "title": "Notifications blocked",
+        "body": "Alarms can't notify you. Site settings → Notifications → Allow, then come back."
+      },
+      "notificationsDefault": {
+        "title": "Turn on notifications",
+        "body": "You have alarms on, but the browser permission is still missing."
+      },
+      "notificationsUnsupported": {
+        "title": "No notifications here",
+        "body": "This browser can't show notifications. Use another one or install Correctly as an app."
+      },
+      "pushUnsupported": {
+        "title": "No background alerts",
+        "body": "This browser doesn't support Web Push. Alarms only work while the app is open."
+      },
+      "pushServer": {
+        "title": "Server push not configured",
+        "body": "VAPID keys are missing on the server. Keep the app open or installed for now."
+      },
+      "pushNotSubscribed": {
+        "title": "Enable background alerts",
+        "body": "You have alarms, but this device isn't subscribed to Web Push yet."
+      },
+      "pushCheckFail": {
+        "title": "Couldn't check push",
+        "body": "Check your connection or open Alarms to try again."
+      },
+      "iosInstall": {
+        "title": "On iPhone: install as an app",
+        "body": "Safari works best for push after you add Correctly to the Home Screen."
+      }
+    }
+  },
+  "reminders": {
+    "title": "Soft alarms",
+    "subtitle": "On-time nudges with browser notifications.",
+    "webHint": "With Web Push you can get nudges in the background (when the browser allows it). On iPhone you need “Add to Home Screen”.",
+    "pushTitle": "Web Push (background)",
+    "pushHint": "The server notifies you at the set time — useful if the tab is closed but the browser/PWA is available.",
+    "pushEnable": "Enable Web Push",
+    "pushDisable": "Disable on this device",
+    "pushTest": "Send test",
+    "pushOn": "Active on {n} device(s)",
+    "pushOff": "Not enabled on this device yet",
+    "pushUnsupported": "This browser doesn't support Web Push.",
+    "pushNotConfigured": "Web Push isn't configured on the server yet (missing VAPID keys).",
+    "pushEnabled": "Web Push enabled on this device",
+    "pushDisabled": "Web Push disabled here",
+    "pushTestSent": "Test sent — you should see a notification",
+    "pushFail": "Couldn't enable or send. Check browser permissions.",
+    "healthTitle": "What still needs enabling to work properly",
+    "permTitle": "Browser notifications",
+    "permDefault": "You haven't allowed notifications yet. One tap is enough.",
+    "permGranted": "Notifications on. We'll nudge you when it's time.",
+    "permDenied": "The browser blocked notifications. Enable them in site settings.",
+    "permUnsupported": "This browser doesn't support web notifications.",
+    "allow": "Allow notifications",
+    "testSound": "Test sound",
+    "listTitle": "Your nudges",
+    "soundOn": "With sound",
+    "soundOff": "Silent",
+    "remove": "Remove",
+    "customTitle": "Another nudge",
+    "customLabel": "What to remember",
+    "customPlaceholder": "e.g. vitamins",
+    "addCustom": "Add",
+    "open": "Open",
+    "notifyTitle": "Correctly",
+    "types": {
+      "water": "Water",
+      "mood": "Mood",
+      "meals": "Meals",
+      "habits": "Habits",
+      "sleep": "Wind down",
+      "summary": "Day wrap-up",
+      "friends": "Friends",
+      "custom": "Custom"
+    },
+    "hint": {
+      "water": "A glass when it's time",
+      "mood": "How are you feeling?",
+      "meals": "Log what you ate",
+      "habits": "A habit for today",
+      "sleep": "Before bedtime",
+      "summary": "Check how the day is going",
+      "friends": "Note or photo of the day",
+      "custom": "Your own reminder"
+    },
+    "msg": {
+      "water": "A glass of water? 💧",
+      "mood": "How are you feeling right now?",
+      "meals": "If you already ate, log it in one tap",
+      "habits": "A moment for your habits",
+      "sleep": "Nice time to slow down 🌙",
+      "summary": "How's your day going? Take a look",
+      "friends": "A note or photo for your friends?",
+      "custom": "Your Correctly reminder"
+    }
+  },
+  "friends": {
+    "title": "Friends",
+    "subtitle": "Share a note or photo of the day. It expires at midnight.",
+    "inviteTitle": "Your invite link",
+    "inviteHint": "Copy and send it. When they open it, you become friends.",
+    "copyLink": "Copy link",
+    "copied": "Copied!",
+    "copyFail": "Could not copy. Select the link manually.",
+    "newLink": "New link",
+    "todayTitle": "Your moment today",
+    "todayHint": "One post per day. Note, photo, or both. You can't delete it.",
+    "noteLabel": "Note (optional)",
+    "notePlaceholder": "How the day is going…",
+    "addPhoto": "Add photo",
+    "removePhoto": "Remove photo",
+    "publish": "Post",
+    "yourShare": "Your post today",
+    "noDelete": "It clears itself at midnight",
+    "feedTitle": "Today with friends",
+    "feedEmpty": "No friend posts yet today.",
+    "listTitle": "Your friends",
+    "listEmpty": "No friends yet. Share your link.",
+    "remove": "Remove",
+    "likesStat": "Likes received",
+    "dislikesStat": "Dislikes received",
+    "alreadyToday": "You already posted today. Come back tomorrow.",
+    "badImage": "Pick an image",
+    "imageTooBig": "Max 2.5 MB",
+    "joinTitle": "Add friend",
+    "joinSubtitle": "Pairing you up…",
+    "joinOk": "You're now friends with {name}",
+    "joinAlready": "You were already friends with {name}",
+    "badCode": "Invalid link"
   },
   "meals": {
     "title": "What I ate",
-    "add": "Add a meal",
-    "description": "What was it? One short line",
-    "satisfaction": "How full do you feel?",
-    "quality": "How good did it feel?",
-    "save": "Save",
+    "subtitle": "No calories, no pressure. Just notice.",
+    "whenAsk": "Was it…?",
+    "feelAsk": "How did it feel?",
+    "description": "What was it? (optional)",
+    "placeholder": "e.g. toast with eggs",
+    "save": "Done",
+    "feel": {
+      "yummy": "Yummy",
+      "good": "Fine",
+      "heavy": "Heavy"
+    },
     "types": {
       "breakfast": "Breakfast",
       "mid_morning": "Mid-morning",
@@ -188,14 +373,31 @@
   },
   "mood": {
     "title": "How do you feel?",
-    "save": "Save how I feel"
+    "subtitle": "One tap is enough. No analysis.",
+    "ask": "Pick what feels closest right now",
+    "labels": {
+      "awful": "Rough",
+      "low": "Low",
+      "ok": "Okay",
+      "good": "Good",
+      "great": "Great"
+    }
   },
   "sleep": {
     "title": "How I slept",
-    "bed": "I went to sleep",
-    "wake": "I woke up",
-    "quality": "How well did you sleep?",
-    "save": "Save sleep"
+    "subtitle": "No exact hours. Just how it felt.",
+    "ask": "How was your sleep?",
+    "last": "Last time: {feel}",
+    "feel": {
+      "great": "Rested",
+      "ok": "So-so",
+      "rough": "Rough night"
+    },
+    "feelHint": {
+      "great": "I woke up with energy",
+      "ok": "Neither great nor bad",
+      "rough": "Hard to sleep or too short"
+    }
   },
   "habits": {
     "title": "My habits",
@@ -203,24 +405,37 @@
   },
   "meditation": {
     "title": "A breath",
-    "subtitle": "Just a few minutes to come back to your body.",
+    "subtitle": "No mental stopwatch. Just come back to your body.",
+    "ask": "How long do you want to pause?",
     "start": "Start",
     "stop": "Stop",
     "inhale": "Inhale",
     "exhale": "Exhale",
-    "today": "Today: {min} min of calm",
+    "today": "You paused a little today",
+    "durations": {
+      "short": "A moment",
+      "medium": "A breath",
+      "long": "Take it slow",
+      "deep": "A longer pause"
+    },
     "types": {
       "breathing": "Breathing",
       "free": "Free",
-      "body_scan": "Body scan",
+      "body_scan": "Body",
       "gratitude": "Gratitude"
     }
   },
   "activity": {
     "title": "I moved",
-    "duration": "How many minutes?",
-    "notes": "Anything to remember?",
-    "save": "Save",
+    "subtitle": "No stopwatch. Just what you did.",
+    "whatAsk": "What did you do?",
+    "howAsk": "About how much?",
+    "save": "Done",
+    "effort": {
+      "bit": "A little",
+      "while": "A while",
+      "lot": "Quite a bit"
+    },
     "types": {
       "walk": "Walk",
       "run": "Run",
@@ -229,20 +444,34 @@
       "bike": "Bike",
       "swim": "Swim",
       "other": "Something else"
-    },
-    "intensity": {
-      "light": "Easy",
-      "moderate": "Normal",
-      "intense": "Hard"
     }
   },
   "weight": {
     "title": "How I am",
-    "subtitle": "Only if you want. No pressure.",
-    "latest": "Last time",
-    "value": "Weight",
-    "notes": "Optional note",
-    "save": "Save"
+    "subtitle": "No scale obsession. Just a feeling.",
+    "softLatest": "You already have a soft starting point. Just say how you feel today.",
+    "ask": "Compared with last time…",
+    "startAsk": "Pick a soft starting feel (no numbers).",
+    "feel": {
+      "lighter": "Lighter",
+      "same": "About the same",
+      "heavier": "Heavier"
+    },
+    "feelHint": {
+      "lighter": "I feel a bit lighter",
+      "same": "More or less the same",
+      "heavier": "I feel a bit heavier"
+    },
+    "start": {
+      "soft": "Light",
+      "mid": "In the middle",
+      "strong": "Sturdier"
+    },
+    "startHint": {
+      "soft": "A soft baseline",
+      "mid": "A middle point",
+      "strong": "A firmer baseline"
+    }
   },
   "stats": {
     "title": "How my week is going",
@@ -253,7 +482,9 @@
     "waterWeek": "Glasses of water",
     "days": "Day by day",
     "badges": "Little wins",
-    "noBadges": "Keep going one day at a time — wins show up on their own."
+    "noBadges": "Keep going one day at a time — wins show up on their own.",
+    "likes": "Friend likes",
+    "dislikes": "Friend dislikes"
   },
   "badges": {
     "first_step": "First step",

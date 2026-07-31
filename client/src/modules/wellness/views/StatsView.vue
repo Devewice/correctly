@@ -67,6 +67,18 @@ function barHeight(ml) {
           <div class="text-h5 font-weight-bold">{{ data.totals.meditationMin }}m</div>
         </v-card>
       </v-col>
+      <v-col cols="6" md="3">
+        <v-card class="pa-4">
+          <div class="text-caption text-medium-emphasis">{{ t('stats.likes') }}</div>
+          <div class="text-h5 font-weight-bold">{{ data.stats?.likesReceived || 0 }}</div>
+        </v-card>
+      </v-col>
+      <v-col cols="6" md="3">
+        <v-card class="pa-4">
+          <div class="text-caption text-medium-emphasis">{{ t('stats.dislikes') }}</div>
+          <div class="text-h5 font-weight-bold">{{ data.stats?.dislikesReceived || 0 }}</div>
+        </v-card>
+      </v-col>
     </v-row>
 
     <v-card class="pa-5 mb-4">

@@ -5,6 +5,8 @@ import { useDisplay } from 'vuetify'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
 import BrandLogo from '@/shared/components/BrandLogo.vue'
+import InstallAppCard from '@/shared/components/InstallAppCard.vue'
+import SystemHealthBanner from '@/shared/components/SystemHealthBanner.vue'
 import { fadeUp, softHover, withDelay } from '@/shared/motion/presets'
 
 const { t } = useI18n()
@@ -36,6 +38,8 @@ const moreItems = computed(() => [
   { to: '/activity', title: t('activity.title'), icon: 'mdi-run', hint: t('day.moreHints.activity') },
   { to: '/weight', title: t('weight.title'), icon: 'mdi-scale-bathroom', hint: t('day.moreHints.weight') },
   { to: '/stats', title: t('stats.title'), icon: 'mdi-chart-bar', hint: t('day.moreHints.stats') },
+  { to: '/friends', title: t('friends.title'), icon: 'mdi-account-group-outline', hint: t('day.moreHints.friends') },
+  { to: '/reminders', title: t('reminders.title'), icon: 'mdi-bell-ring-outline', hint: t('day.moreHints.reminders') },
 ])
 
 const contentMax = computed(() => {
@@ -212,6 +216,7 @@ async function logout() {
 
   <v-main>
     <v-container class="py-4 py-md-6 py-lg-8" :style="{ maxWidth: `${contentMax}px` }">
+      <SystemHealthBanner />
       <router-view />
     </v-container>
   </v-main>
@@ -252,6 +257,7 @@ async function logout() {
       >
         {{ t('day.moreSubtitle') }}
       </p>
+      <InstallAppCard />
       <v-row dense>
         <v-col v-for="(item, i) in moreItems" :key="item.to" cols="6">
           <div

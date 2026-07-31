@@ -61,6 +61,21 @@ export const appRoutes = [
         name: 'profile',
         component: () => import('@/modules/profile/views/ProfileView.vue'),
       },
+      {
+        path: 'reminders',
+        name: 'reminders',
+        component: () => import('@/modules/wellness/views/RemindersView.vue'),
+      },
+      {
+        path: 'friends',
+        name: 'friends',
+        component: () => import('@/modules/friends/views/FriendsView.vue'),
+      },
+      {
+        path: 'friends/join',
+        name: 'friends-join',
+        component: () => import('@/modules/friends/views/FriendsJoinView.vue'),
+      },
     ],
   },
   {

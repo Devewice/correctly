@@ -37,6 +37,9 @@ Thumbs.db
 *.db
 *.db-journal
 
+# Uploads de fotos del día
+server/uploads/
+
 # Coverage / cache
 coverage/
 .cache/

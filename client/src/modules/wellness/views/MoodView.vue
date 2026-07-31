@@ -3,17 +3,19 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
 import PageHeader from '@/shared/components/PageHeader.vue'
+import { fadeUp, moodHover, withDelay } from '@/shared/motion/presets'
 
 const { t } = useI18n()
 const selected = ref(null)
 const logs = ref([])
 const busy = ref(false)
+
 const moods = [
-  { value: 1, emoji: '😢' },
-  { value: 2, emoji: '😕' },
-  { value: 3, emoji: '😐' },
-  { value: 4, emoji: '🙂' },
-  { value: 5, emoji: '😄' },
+  { value: 1, emoji: '😢', key: 'awful' },
+  { value: 2, emoji: '😕', key: 'low' },
+  { value: 3, emoji: '😐', key: 'ok' },
+  { value: 4, emoji: '🙂', key: 'good' },
+  { value: 5, emoji: '😄', key: 'great' },
 ]
 
 async function load() {
@@ -21,11 +23,11 @@ async function load() {
   logs.value = data.logs
 }
 
-async function save() {
-  if (!selected.value) return
+async function save(value) {
+  selected.value = value
   busy.value = true
   try {
-    await api('/mood', { method: 'POST', body: { mood: selected.value } })
+    await api('/mood', { method: 'POST', body: { mood: value } })
     selected.value = null
     await load()
   } finally {
@@ -37,37 +39,33 @@ onMounted(load)
 </script>
 
 <template>
-  <PageHeader :title="t('mood.title')" />
+  <PageHeader :title="t('mood.title')" :subtitle="t('mood.subtitle')" />
 
-  <div class="d-flex justify-space-between ga-2 mb-6">
-    <v-btn
-      v-for="m in moods"
-      :key="m.value"
-      :color="selected === m.value ? 'secondary' : undefined"
-      :variant="selected === m.value ? 'flat' : 'tonal'"
-      size="x-large"
-      class="text-h4"
-      @click="selected = m.value"
-    >
-      {{ m.emoji }}
-    </v-btn>
-  </div>
+  <p class="text-body-2 text-medium-emphasis mb-4">{{ t('mood.ask') }}</p>
 
-  <v-btn
-    block
-    color="primary"
-    size="large"
-    class="mb-8"
-    :disabled="!selected"
-    :loading="busy"
-    @click="save"
-  >
-    {{ t('mood.save') }}
-  </v-btn>
+  <v-row dense class="mb-6">
+    <v-col v-for="(m, i) in moods" :key="m.value" cols="4" sm>
+      <div v-motion v-bind="{ ...moodHover, ...withDelay(fadeUp, 50 + i * 40) }">
+        <v-card
+          class="pa-3 text-center"
+          :color="selected === m.value ? 'secondary' : undefined"
+          :variant="selected === m.value ? 'flat' : 'tonal'"
+          :disabled="busy"
+          @click="save(m.value)"
+        >
+          <div class="text-h4">{{ m.emoji }}</div>
+          <div class="text-caption mt-1">{{ t(`mood.labels.${m.key}`) }}</div>
+        </v-card>
+      </div>
+    </v-col>
+  </v-row>
 
-  <v-card v-for="log in logs" :key="log.id" class="pa-4 mb-2">
+  <v-card v-for="log in logs.slice(0, 8)" :key="log.id" class="pa-4 mb-2">
     <div class="d-flex align-center justify-space-between">
-      <span class="text-h5">{{ moods.find((m) => m.value === log.mood)?.emoji }}</span>
+      <span>
+        <span class="text-h6 me-2">{{ moods.find((m) => m.value === log.mood)?.emoji }}</span>
+        {{ t(`mood.labels.${moods.find((m) => m.value === log.mood)?.key || 'ok'}`) }}
+      </span>
       <span class="text-caption text-medium-emphasis">
         {{ new Date(log.loggedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
       </span>

@@ -5,6 +5,7 @@ import { api } from '@/shared/api/client'
 import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
 import { setLocale } from '@/plugins/i18n'
 import PageHeader from '@/shared/components/PageHeader.vue'
+import InstallAppCard from '@/shared/components/InstallAppCard.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -43,6 +44,8 @@ async function save() {
 <template>
   <PageHeader :title="t('nav.profile')" />
 
+  <InstallAppCard />
+
   <v-card class="pa-5 mb-4">
     <v-form @submit.prevent="save">
       <v-text-field v-model="form.name" label="Name" class="mb-2" />
@@ -75,6 +78,9 @@ async function save() {
     <div class="text-body-2">{{ auth.user?.email }}</div>
     <div class="text-caption text-medium-emphasis">
       XP: {{ auth.user?.stats?.totalXP || 0 }} · Level {{ auth.user?.stats?.level || 1 }}
+    </div>
+    <div class="text-caption text-medium-emphasis mt-1">
+      👍 {{ auth.user?.stats?.likesReceived || 0 }} · 👎 {{ auth.user?.stats?.dislikesReceived || 0 }}
     </div>
   </v-card>
 </template>

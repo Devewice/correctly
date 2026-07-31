@@ -3,10 +3,19 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
 import PageHeader from '@/shared/components/PageHeader.vue'
+import { fadeUp, softHover, withDelay } from '@/shared/motion/presets'
 
 const { t } = useI18n()
-const presets = [5, 10, 15, 20]
-const selected = ref(5)
+
+/** Duraciones amigables → minutos aproximados por detrás */
+const presets = [
+  { key: 'short', min: 5 },
+  { key: 'medium', min: 10 },
+  { key: 'long', min: 15 },
+  { key: 'deep', min: 20 },
+]
+
+const selectedKey = ref('short')
 const type = ref('breathing')
 const running = ref(false)
 const remaining = ref(0)
@@ -16,18 +25,15 @@ const phase = ref('inhale')
 let timer = null
 let phaseTimer = null
 
+const selectedMin = computed(() => presets.find((p) => p.key === selectedKey.value)?.min || 5)
+
 const progress = computed(() => {
-  const total = selected.value * 60
+  const total = selectedMin.value * 60
   if (!total) return 0
   return Math.round(((total - remaining.value) / total) * 100)
 })
 
-const clock = computed(() => {
-  if (!running.value) return `${selected.value}:00`
-  const m = Math.floor(remaining.value / 60)
-  const s = String(remaining.value % 60).padStart(2, '0')
-  return `${m}:${s}`
-})
+const phaseLabel = computed(() => (running.value ? t(`meditation.${phase.value}`) : t('meditation.start')))
 
 async function load() {
   const data = await api('/meditation')
@@ -47,7 +53,7 @@ function startPhaseCycle() {
 }
 
 function start() {
-  remaining.value = selected.value * 60
+  remaining.value = selectedMin.value * 60
   running.value = true
   startPhaseCycle()
   clearInterval(timer)
@@ -59,7 +65,7 @@ function start() {
       running.value = false
       await api('/meditation', {
         method: 'POST',
-        body: { duration: selected.value, type: type.value, feeling: 'calmer' },
+        body: { duration: selectedMin.value, type: type.value, feeling: 'calmer' },
       })
       await load()
     }
@@ -80,19 +86,23 @@ onUnmounted(stop)
 <template>
   <PageHeader :title="t('meditation.title')" :subtitle="t('meditation.subtitle')" />
 
-  <div class="d-flex flex-wrap ga-2 mb-4">
-    <v-chip
-      v-for="m in presets"
-      :key="m"
-      :color="selected === m ? 'accent' : undefined"
-      :variant="selected === m ? 'flat' : 'tonal'"
-      :disabled="running"
-      label
-      @click="selected = m"
-    >
-      {{ m }} min
-    </v-chip>
-  </div>
+  <p class="text-body-2 text-medium-emphasis mb-3">{{ t('meditation.ask') }}</p>
+
+  <v-row dense class="mb-4">
+    <v-col v-for="(p, i) in presets" :key="p.key" cols="6" sm="3">
+      <div v-motion v-bind="{ ...softHover, ...withDelay(fadeUp, 60 + i * 50) }">
+        <v-card
+          class="pa-4 text-center"
+          :color="selectedKey === p.key ? 'accent' : undefined"
+          :variant="selectedKey === p.key ? 'flat' : 'tonal'"
+          :disabled="running"
+          @click="selectedKey = p.key"
+        >
+          <div class="text-subtitle-2 font-weight-bold">{{ t(`meditation.durations.${p.key}`) }}</div>
+        </v-card>
+      </div>
+    </v-col>
+  </v-row>
 
   <div class="d-flex flex-wrap ga-2 mb-6">
     <v-chip
@@ -118,16 +128,13 @@ onUnmounted(stop)
         transition: 'transform 1s ease',
       }"
     >
-      <div class="text-center">
-        <div class="text-h4 font-weight-bold">{{ clock }}</div>
-        <div v-if="running" class="text-caption text-medium-emphasis text-uppercase">
-          {{ t(`meditation.${phase}`) }}
-        </div>
+      <div class="text-center px-2">
+        <div class="text-h6 font-weight-bold">{{ phaseLabel }}</div>
       </div>
     </v-avatar>
   </div>
 
-  <v-progress-linear :model-value="progress" color="accent" class="mb-6" />
+  <v-progress-linear v-if="running" :model-value="progress" color="accent" class="mb-6" />
 
   <v-btn v-if="!running" block color="primary" size="large" class="mb-6" @click="start">
     {{ t('meditation.start') }}
@@ -136,8 +143,8 @@ onUnmounted(stop)
     {{ t('meditation.stop') }}
   </v-btn>
 
-  <p class="text-body-2 text-medium-emphasis mb-3">{{ t('meditation.today', { min: totalMin }) }}</p>
-  <v-card v-for="log in logs" :key="log.id" class="pa-4 mb-2">
-    {{ log.duration }} min · {{ t(`meditation.types.${log.type}`) }}
+  <p v-if="totalMin > 0" class="text-body-2 text-medium-emphasis mb-3">{{ t('meditation.today') }}</p>
+  <v-card v-for="log in logs.slice(0, 5)" :key="log.id" class="pa-4 mb-2">
+    {{ t(`meditation.types.${log.type}`) }}
   </v-card>
 </template>

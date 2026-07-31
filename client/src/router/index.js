@@ -28,6 +28,15 @@ router.beforeEach(async (to) => {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
 
+  // Tras Google OAuth: volver al enlace de amigos u otra ruta pendiente
+  if (auth.user) {
+    const pending = sessionStorage.getItem('correctly_redirect')
+    if (pending && pending.startsWith('/')) {
+      sessionStorage.removeItem('correctly_redirect')
+      if (pending !== to.fullPath) return pending
+    }
+  }
+
   if (needsSuper && auth.user?.role !== 'superadmin') {
     return { name: 'dashboard' }
   }

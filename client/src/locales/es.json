@@ -158,16 +158,201 @@
       "meals": "Repasar lo que comí",
       "water": "Sumar otro vaso",
       "mood": "Ver cómo me he sentido",
-      "habits": "Mis hábitos del día"
+      "habits": "Mis hábitos del día",
+      "friends": "Notas y foto del día con amigos",
+      "reminders": "Toques a tiempo (web)"
     }
+  },
+  "pwa": {
+    "title": "Usar como app",
+    "subtitle": "Instálala en el escritorio o la pantalla de inicio. Se abre sin barra del navegador.",
+    "install": "Instalar Correctly",
+    "installed": "Correctly ya está instalada como app en este dispositivo.",
+    "manual": "En Chrome/Edge: menú ⋮ → “Instalar Correctly” o “Aplicación”. En Android también puede aparecer “Añadir a la pantalla de inicio”.",
+    "ios1": "Toca el botón Compartir (cuadrado con flecha) en Safari.",
+    "ios2": "Elige “Añadir a pantalla de inicio”.",
+    "ios3": "Confirma “Añadir”. Ya aparecerá como app."
+  },
+  "health": {
+    "later": "Ahora no",
+    "recheck": "Revisar de nuevo",
+    "gotIt": "Entendido",
+    "moreIssues": "+{n} cosa(s) más por activar",
+    "actions": {
+      "enableNotifications": "Activar notificaciones",
+      "enablePush": "Activar avisos en segundo plano",
+      "openReminders": "Ir a alarmas",
+      "openProfile": "Cómo instalar",
+      "reload": "Recargar"
+    },
+    "issues": {
+      "offline": {
+        "title": "Sin conexión",
+        "body": "Algunas cosas no se guardarán hasta que vuelva internet."
+      },
+      "storage": {
+        "title": "Almacenamiento bloqueado",
+        "body": "El navegador no deja guardar tu sesión. Quita el modo estricto / bloqueo de cookies para este sitio."
+      },
+      "serviceWorker": {
+        "title": "Falta el motor en segundo plano",
+        "body": "Para instalar la app y recibir avisos hace falta el service worker. Recarga o abre Correctly en HTTPS."
+      },
+      "serviceWorkerUnsupported": {
+        "title": "Este navegador es limitado",
+        "body": "No soporta service workers. Prueba Chrome, Edge o Safari reciente."
+      },
+      "swPending": {
+        "title": "Casi listo: recarga una vez",
+        "body": "El service worker se acaba de instalar. Recarga para que los avisos funcionen bien."
+      },
+      "notificationsDenied": {
+        "title": "Notificaciones bloqueadas",
+        "body": "Las alarmas no pueden avisar. En el candado del sitio → Notificaciones → Permitir, y vuelve."
+      },
+      "notificationsDefault": {
+        "title": "Activa las notificaciones",
+        "body": "Tienes alarmas encendidas, pero aún no diste permiso al navegador."
+      },
+      "notificationsUnsupported": {
+        "title": "Sin notificaciones aquí",
+        "body": "Este navegador no muestra notificaciones. Usa otro o instala Correctly como app."
+      },
+      "pushUnsupported": {
+        "title": "Sin avisos en segundo plano",
+        "body": "Este navegador no soporta Web Push. Las alarmas solo suenan con la app abierta."
+      },
+      "pushServer": {
+        "title": "Push del servidor no configurado",
+        "body": "Faltan claves VAPID en el servidor. Mientras tanto, deja la app abierta o instalada."
+      },
+      "pushNotSubscribed": {
+        "title": "Activa avisos en segundo plano",
+        "body": "Tienes alarmas, pero este dispositivo aún no está suscrito a Web Push."
+      },
+      "pushCheckFail": {
+        "title": "No se pudo comprobar el push",
+        "body": "Revisa tu conexión o entra a Alarmas para reintentar."
+      },
+      "iosInstall": {
+        "title": "En iPhone: instálala como app",
+        "body": "Safari solo deja push bien si añades Correctly a la pantalla de inicio."
+      }
+    }
+  },
+  "reminders": {
+    "title": "Alarmas suaves",
+    "subtitle": "Toques a tiempo con notificaciones del navegador.",
+    "webHint": "Con Web Push te llegan aunque la pestaña esté en segundo plano (si el navegador lo permite). En iPhone hace falta “Añadir a pantalla de inicio”.",
+    "pushTitle": "Web Push (segundo plano)",
+    "pushHint": "El servidor te avisa a la hora configurada. Ideal si cierras la pestaña pero dejas el navegador instalado/abierto.",
+    "pushEnable": "Activar Web Push",
+    "pushDisable": "Desactivar en este dispositivo",
+    "pushTest": "Enviar prueba",
+    "pushOn": "Activo en {n} dispositivo(s)",
+    "pushOff": "Aún no activado en este dispositivo",
+    "pushUnsupported": "Este navegador no soporta Web Push.",
+    "pushNotConfigured": "Web Push aún no está configurado en el servidor (faltan claves VAPID).",
+    "pushEnabled": "Web Push activado en este dispositivo",
+    "pushDisabled": "Web Push desactivado aquí",
+    "pushTestSent": "Prueba enviada — debería aparecer una notificación",
+    "pushFail": "No se pudo activar o enviar. Revisa permisos del navegador.",
+    "healthTitle": "Qué falta activar para que funcione bien",
+    "permTitle": "Notificaciones del navegador",
+    "permDefault": "Aún no has permitido notificaciones. Un toque y listo.",
+    "permGranted": "Notificaciones activas. Cuando llegue la hora, te avisamos.",
+    "permDenied": "El navegador bloqueó las notificaciones. Actívalas en ajustes del sitio.",
+    "permUnsupported": "Este navegador no soporta notificaciones web.",
+    "allow": "Permitir notificaciones",
+    "testSound": "Probar sonido",
+    "listTitle": "Tus toques",
+    "soundOn": "Con sonido",
+    "soundOff": "Sin sonido",
+    "remove": "Quitar",
+    "customTitle": "Otro toque",
+    "customLabel": "Qué quieres recordar",
+    "customPlaceholder": "Ej: tomar vitaminas",
+    "addCustom": "Añadir",
+    "open": "Abrir",
+    "notifyTitle": "Correctly",
+    "types": {
+      "water": "Agua",
+      "mood": "Ánimo",
+      "meals": "Comida",
+      "habits": "Hábitos",
+      "sleep": "Hora de bajar el ritmo",
+      "summary": "Cierre del día",
+      "friends": "Amigos",
+      "custom": "Personalizado"
+    },
+    "hint": {
+      "water": "Un vasito cuando toque",
+      "mood": "¿Cómo te sientes?",
+      "meals": "Contar qué comiste",
+      "habits": "Un hábito del día",
+      "sleep": "Antes de dormir",
+      "summary": "Mirar cómo va el día",
+      "friends": "Nota o foto del día",
+      "custom": "Tu propio recordatorio"
+    },
+    "msg": {
+      "water": "¿Un vasito de agua? 💧",
+      "mood": "¿Cómo te sientes ahora?",
+      "meals": "Si ya comiste, cuéntalo en un toque",
+      "habits": "Un momentito para tus hábitos",
+      "sleep": "Buena hora para ir bajando el ritmo 🌙",
+      "summary": "¿Cómo va tu día? Échale un vistazo",
+      "friends": "¿Una nota o foto para tus amigos?",
+      "custom": "Tu recordatorio de Correctly"
+    }
+  },
+  "friends": {
+    "title": "Amigos",
+    "subtitle": "Comparte una nota o foto del día. Caduca a medianoche.",
+    "inviteTitle": "Tu enlace para emparejar",
+    "inviteHint": "Cópialo y envíaselo a alguien. Al abrirlo, os hacéis amigos.",
+    "copyLink": "Copiar enlace",
+    "copied": "¡Copiado!",
+    "copyFail": "No se pudo copiar. Selecciona el enlace a mano.",
+    "newLink": "Nuevo enlace",
+    "todayTitle": "Tu momento de hoy",
+    "todayHint": "Una sola publicación al día. Nota, foto, o las dos. No se puede borrar.",
+    "noteLabel": "Nota (opcional)",
+    "notePlaceholder": "Cómo va el día…",
+    "addPhoto": "Añadir foto",
+    "removePhoto": "Quitar foto",
+    "publish": "Publicar",
+    "yourShare": "Tu publicación de hoy",
+    "noDelete": "Se borra sola a medianoche",
+    "feedTitle": "Hoy con amigos",
+    "feedEmpty": "Aún no hay publicaciones de amigos hoy.",
+    "listTitle": "Tus amigos",
+    "listEmpty": "Todavía no tienes amigos. Comparte tu enlace.",
+    "remove": "Quitar",
+    "likesStat": "Likes recibidos",
+    "dislikesStat": "Dislikes recibidos",
+    "alreadyToday": "Ya publicaste hoy. Vuelve mañana.",
+    "badImage": "Elige una imagen",
+    "imageTooBig": "Máximo 2.5 MB",
+    "joinTitle": "Añadir amigo",
+    "joinSubtitle": "Te estamos emparejando…",
+    "joinOk": "Ahora eres amigo de {name}",
+    "joinAlready": "Ya eras amigo de {name}",
+    "badCode": "Enlace inválido"
   },
   "meals": {
     "title": "Qué comí",
-    "add": "Añadir comida",
-    "description": "¿Qué fue? En una frase",
-    "satisfaction": "¿Qué tan saciado?",
-    "quality": "¿Qué tan bien comiste?",
-    "save": "Guardar",
+    "subtitle": "Sin calorías ni presión. Solo contar.",
+    "whenAsk": "¿Fue…?",
+    "feelAsk": "¿Cómo te sentó?",
+    "description": "¿Qué fue? (opcional)",
+    "placeholder": "Ej: arepa con queso",
+    "save": "Listo",
+    "feel": {
+      "yummy": "Rico",
+      "good": "Bien",
+      "heavy": "Pesado"
+    },
     "types": {
       "breakfast": "Desayuno",
       "mid_morning": "Media mañana",
@@ -188,14 +373,31 @@
   },
   "mood": {
     "title": "¿Cómo te sientes?",
-    "save": "Guardar cómo me siento"
+    "subtitle": "Un toque basta. Sin análisis.",
+    "ask": "Elige lo que más se parece ahora",
+    "labels": {
+      "awful": "Mal",
+      "low": "Bajo",
+      "ok": "Regular",
+      "good": "Bien",
+      "great": "Genial"
+    }
   },
   "sleep": {
     "title": "Cómo dormí",
-    "bed": "Me fui a dormir",
-    "wake": "Me desperté",
-    "quality": "¿Qué tan bien dormiste?",
-    "save": "Guardar sueño"
+    "subtitle": "Sin horas exactas. Solo cómo te sentiste.",
+    "ask": "¿Cómo fue tu sueño?",
+    "last": "Última vez: {feel}",
+    "feel": {
+      "great": "Descansé",
+      "ok": "Más o menos",
+      "rough": "Mal dormí"
+    },
+    "feelHint": {
+      "great": "Me desperté con energía",
+      "ok": "Ni bien ni mal",
+      "rough": "Me costó o me quedé corto"
+    }
   },
   "habits": {
     "title": "Mis hábitos",
@@ -203,24 +405,37 @@
   },
   "meditation": {
     "title": "Un respiro",
-    "subtitle": "Solo unos minutos para volver al cuerpo.",
+    "subtitle": "Sin cronómetro mental. Solo volver al cuerpo.",
+    "ask": "¿Cuánto quieres pausar?",
     "start": "Empezar",
     "stop": "Parar",
     "inhale": "Inhala",
     "exhale": "Exhala",
-    "today": "Hoy: {min} min de calma",
+    "today": "Hoy pausaste un ratito",
+    "durations": {
+      "short": "Un momentito",
+      "medium": "Un respiro",
+      "long": "Con calma",
+      "deep": "Más largo"
+    },
     "types": {
       "breathing": "Respiración",
       "free": "Libre",
-      "body_scan": "Body scan",
+      "body_scan": "Cuerpo",
       "gratitude": "Gratitud"
     }
   },
   "activity": {
     "title": "Me moví",
-    "duration": "¿Cuántos minutos?",
-    "notes": "¿Algo que quieras recordar?",
-    "save": "Guardar",
+    "subtitle": "Sin cronómetro. Solo lo que hiciste.",
+    "whatAsk": "¿Qué hiciste?",
+    "howAsk": "¿Cuánto más o menos?",
+    "save": "Listo",
+    "effort": {
+      "bit": "Un ratito",
+      "while": "Un rato",
+      "lot": "Bastante"
+    },
     "types": {
       "walk": "Caminar",
       "run": "Correr",
@@ -229,20 +444,34 @@
       "bike": "Bici",
       "swim": "Nadar",
       "other": "Otra cosa"
-    },
-    "intensity": {
-      "light": "Suave",
-      "moderate": "Normal",
-      "intense": "Fuerte"
     }
   },
   "weight": {
     "title": "Cómo estoy",
-    "subtitle": "Solo si quieres. Sin presión ni obsesión.",
-    "latest": "Última vez",
-    "value": "Peso",
-    "notes": "Nota opcional",
-    "save": "Guardar"
+    "subtitle": "Sin báscula mental. Solo una sensación.",
+    "softLatest": "Ya tienes un punto de partida suave. Solo di cómo te sientes hoy.",
+    "ask": "Respecto a la última vez…",
+    "startAsk": "Elige una sensación aproximada para empezar (sin números).",
+    "feel": {
+      "lighter": "Más liviano",
+      "same": "Igual",
+      "heavier": "Más pesado"
+    },
+    "feelHint": {
+      "lighter": "Me siento un poquito más ligero",
+      "same": "Más o menos igual",
+      "heavier": "Me siento un poquito más pesado"
+    },
+    "start": {
+      "soft": "Liviano",
+      "mid": "En el medio",
+      "strong": "Más robusto"
+    },
+    "startHint": {
+      "soft": "Una base suave",
+      "mid": "Un punto medio",
+      "strong": "Una base más firme"
+    }
   },
   "stats": {
     "title": "Cómo va mi semana",
@@ -253,7 +482,9 @@
     "waterWeek": "Vasos de agua",
     "days": "Día a día",
     "badges": "Logritos",
-    "noBadges": "Sigue un día a la vez; los logros llegan solos."
+    "noBadges": "Sigue un día a la vez; los logros llegan solos.",
+    "likes": "Likes de amigos",
+    "dislikes": "Dislikes de amigos"
   },
   "badges": {
     "first_step": "Primer paso",

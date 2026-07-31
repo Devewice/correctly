@@ -83,6 +83,15 @@ export const env = {
     usedB64: Boolean(process.env.DATABASE_PASSWORD_B64?.trim()),
   },
   isProd: (process.env.NODE_ENV || 'development') === 'production',
+  vapid: {
+    publicKey: process.env.VAPID_PUBLIC_KEY || '',
+    privateKey: process.env.VAPID_PRIVATE_KEY || '',
+    subject: process.env.VAPID_SUBJECT || 'mailto:admin@correctly.app',
+  },
+}
+
+export function isWebPushConfigured() {
+  return Boolean(env.vapid.publicKey && env.vapid.privateKey)
 }
 
 /** @deprecated usar services/settings getGoogleConfig / passport.isGoogleAuthConfigured */
