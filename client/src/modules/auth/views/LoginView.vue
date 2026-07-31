@@ -36,12 +36,15 @@ onMounted(async () => {
   try {
     await auth.fetchStatus()
   } catch {
-    /* status opcional */
+    error.value = t('login.errors.serverDown')
   }
 })
 
 function googleLogin() {
-  if (!auth.authStatus.googleConfigured) {
+  if (auth.authStatus.statusError) {
+    error.value = t('login.errors.serverDown')
+    // Igual intentamos: a veces el OAuth responde aunque /status falle
+  } else if (auth.authStatus.googleConfigured === false) {
     error.value = t('login.googleUnavailable')
     return
   }
@@ -100,7 +103,8 @@ function googleLogin() {
         block
         color="primary"
         size="x-large"
-        :disabled="!auth.authStatus.googleConfigured"
+        :disabled="auth.authStatus.googleConfigured === false && !auth.authStatus.statusError"
+        :loading="!auth.authStatus.statusLoaded"
         @click="googleLogin"
       >
         <v-icon start icon="mdi-google" />
@@ -109,12 +113,20 @@ function googleLogin() {
     </div>
 
     <p
-      v-if="!auth.authStatus.googleConfigured"
+      v-if="auth.authStatus.googleConfigured === false && !auth.authStatus.statusError"
       v-motion
       v-bind="withDelay(fadeUp, 500)"
       class="text-caption text-medium-emphasis mt-4"
     >
       {{ t('login.googleUnavailable') }}
+    </p>
+    <p
+      v-else-if="auth.authStatus.statusError"
+      v-motion
+      v-bind="withDelay(fadeUp, 500)"
+      class="text-caption text-medium-emphasis mt-4"
+    >
+      {{ t('login.errors.serverDown') }}
     </p>
 
     <v-alert

@@ -29,7 +29,8 @@
       "db": "Google signed you in, but saving the user failed. Check server logs / Admin.",
       "retry": "That Google code was already used or expired. Tap Continue with Google again.",
       "network": "The server could not reach Google (empty or blocked response). Retry; if it persists, check outbound HTTPS on the host.",
-      "failed": "Google sign-in failed. Check Client ID, Secret, and Callback URL (must match Google Cloud)."
+      "failed": "Google sign-in failed. Check Client ID, Secret, and Callback URL (must match Google Cloud).",
+      "serverDown": "The server is not responding (maybe a redeploy). Wait a minute and reload, or try Continue with Google again."
     }
   },
   "admin": {

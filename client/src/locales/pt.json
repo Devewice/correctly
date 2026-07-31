@@ -29,7 +29,8 @@
       "db": "O Google autenticou, mas falhou ao salvar o usuário. Veja os logs / Admin.",
       "retry": "O código do Google já foi usado ou expirou. Toque em Continuar com Google de novo.",
       "network": "O servidor não conseguiu falar com o Google (resposta vazia ou bloqueada). Tente de novo; se continuar, revise HTTPS de saída na Hostinger.",
-      "failed": "Falha no login com Google. Confira Client ID, Secret e Callback URL (devem bater com o Google Cloud)."
+      "failed": "Falha no login com Google. Confira Client ID, Secret e Callback URL (devem bater com o Google Cloud).",
+      "serverDown": "O servidor não responde agora (possível redeploy). Espere um minuto e recarregue, ou toque Continuar com Google de novo."
     }
   },
   "admin": {

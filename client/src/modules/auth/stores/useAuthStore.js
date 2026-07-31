@@ -6,12 +6,34 @@ import { setLocale } from '@/plugins/i18n'
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
   const loading = ref(true)
-  const authStatus = ref({ googleConfigured: false, devLogin: false })
+  const authStatus = ref({
+    googleConfigured: null,
+    statusLoaded: false,
+    statusError: false,
+    devLogin: false,
+  })
 
   const isAuthenticated = computed(() => !!user.value)
 
   async function fetchStatus() {
-    authStatus.value = await api('/auth/status')
+    try {
+      const data = await api('/auth/status')
+      authStatus.value = {
+        ...data,
+        statusLoaded: true,
+        statusError: false,
+        googleConfigured: Boolean(data.googleConfigured),
+      }
+    } catch {
+      authStatus.value = {
+        ...authStatus.value,
+        statusLoaded: true,
+        statusError: true,
+        // No asumir "no configurado" si el API no responde
+        googleConfigured: authStatus.value.googleConfigured,
+      }
+      throw new Error('status_unavailable')
+    }
   }
 
   async function fetchMe() {
