@@ -34,20 +34,17 @@ DATABASE_HOST=srv1855.hstgr.io
 DATABASE_PORT=3306
 DATABASE_NAME=u301973293_correctly
 DATABASE_USER=u301973293_admin
-DATABASE_PASSWORD=y:Zz3L?>p6
-DATABASE_URL=mysql://u301973293_admin:y%3AZz3L%3F%3Ep6@srv1855.hstgr.io:3306/u301973293_correctly
+DATABASE_PASSWORD=TU_PASSWORD_AQUI
+DATABASE_URL=mysql://u301973293_admin:PASSWORD_ENCODED@srv1855.hstgr.io:3306/u301973293_correctly
 
 JWT_SECRET=cambia-esta-clave
 GOOGLE_CALLBACK_URL=https://jeisson.click/api/auth/google/callback
-
-# Mientras no tengas Google OAuth (para poder entrar):
 ALLOW_DEMO_LOGIN=true
 ```
 
 - **NO** pongas `PORT`
-- **NO** uses `localhost` en MySQL (salvo que Hostinger te lo indique)
-
-Si la contraseña falla, en hPanel → MySQL → restablece la clave del usuario `u301973293_admin` y actualiza las dos variables.
+- Caracteres especiales en la contraseña van **URL-encoded** en `DATABASE_URL` (`;`→`%3B`, `&`→`%26`, `:`→`%3A`, `?`→`%3F`, `>`→`%3E`)
+- MySQL remoto con acceso `%` ya está bien para `u301973293_correctly`
 
 ---
 
