@@ -26,7 +26,12 @@ import weightRoutes from './routes/weight.routes.js'
 import dashboardRoutes from './routes/dashboard.routes.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const clientDist = path.resolve(__dirname, '../../client/dist')
+const clientDistCandidates = [
+  path.resolve(__dirname, '../../client/dist'),
+  path.resolve(process.cwd(), 'client/dist'),
+  path.resolve(process.cwd(), 'dist'),
+]
+const clientDist = clientDistCandidates.find((p) => existsSync(path.join(p, 'index.html')))
 
 configurePassport()
 
@@ -93,22 +98,22 @@ app.use('/api/weight', weightRoutes)
 app.use('/api/dashboard', dashboardRoutes)
 
 // Hostinger / production: serve Vue build from the same Node process
-if (existsSync(clientDist)) {
+if (clientDist) {
   app.use(express.static(clientDist, { index: false, maxAge: '1h' }))
   app.get(/^(?!\/api).*/, (_req, res) => {
     res.sendFile(path.join(clientDist, 'index.html'))
   })
 } else if (env.isProd) {
-  console.warn(`[correctly] No se encontró ${clientDist} — solo API activa`)
+  console.warn('[correctly] No se encontró client/dist/index.html — solo API')
+  console.warn('[correctly] Candidatos:', clientDistCandidates.join(' | '))
 }
 
 app.use(errorHandler)
 
 const server = app.listen(env.port, '0.0.0.0', () => {
-  console.log(`Correctly → http://0.0.0.0:${env.port} (${env.nodeEnv})`)
-  if (existsSync(clientDist)) {
-    console.log(`Static UI → ${clientDist}`)
-  }
+  console.log(`Correctly → port ${env.port} (${env.nodeEnv}) cwd=${process.cwd()}`)
+  console.log(`Static UI → ${clientDist || 'NONE'}`)
+  console.log(`DB URL set → ${Boolean(env.databaseUrl)}`)
 })
 
 async function shutdown() {

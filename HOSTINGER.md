@@ -1,62 +1,58 @@
-# Despliegue en Hostinger (jeisson.click)
+# Despliegue en Hostinger — jeisson.click
 
-El **403** aparece si Hostinger busca `index.html` en la raíz y el build real está en `client/dist`, o si el tipo de app no arranca Express.
-
-## Configuración recomendada (API + Vue juntos)
-
-En **Sitios web → Node.js / Deploy**:
+## Ajustes correctos en el panel
 
 | Campo | Valor |
 |-------|--------|
-| **Tipo / Framework** | `Express` o `Other` (no solo Vite/Vue estático) |
-| **Directorio raíz** | `./` |
-| **Versión Node** | `20.x` o `22.x` (24.x también ok) |
-| **Comando de build** | `npm run build` |
-| **Directorio de salida** | `client/dist` |
-| **Entry file / archivo de entrada** | `server/src/index.js` |
-| **Start** (si pide) | `npm start` |
+| Preajuste | `Other` o `Express` |
+| Rama | `main` |
+| Node | `20.x` / `22.x` / `24.x` |
+| Directorio raíz | `./` |
+| Comando de build | `npm run build` |
+| Directorio de salida | `client/dist` |
+| Archivo de entrada | `server/src/index.js` |
 
-> Si el build falla con `vite: command not found`, redesplega tras el fix del repo (Vite ya va en `dependencies` + `.npmrc`).
+---
 
-Luego **Redesplegar**.
+## Variables de entorno (copia esto)
 
-## Variables de entorno (obligatorias)
-
-En el panel de Hostinger → Environment variables:
+**Importante:**
+1. **NO pongas `PORT`** — Hostinger lo asigna solo. Si fijas `PORT=3000`, la web da **404**.
+2. `DATABASE_URL` debe llevar la contraseña **codificada**, no la palabra `PASSWORD`.
+3. `GOOGLE_CALLBACK_URL` **sin** `:3000`.
 
 ```env
 NODE_ENV=production
-PORT=3000
 CLIENT_URL=https://jeisson.click
-DATABASE_URL=mysql://u301973293_admin:TU_PASSWORD@srv1855.hstgr.io:3306/u301973293_correctly
-JWT_SECRET=una-cadena-larga-aleatoria
-```
 
-> Codifica caracteres especiales de la contraseña en la URL (`:` → `%3A`, `?` → `%3F`, `>` → `%3E`).
+DATABASE_HOST=srv1855.hstgr.io
+DATABASE_PORT=3306
+DATABASE_NAME=u301973293_correctly
+DATABASE_USER=u301973293_admin
+DATABASE_PASSWORD=y:Zz3L?>p6
 
-Opcional Google:
+DATABASE_URL=mysql://u301973293_admin:y%3AZz3L%3F%3Ep6@srv1855.hstgr.io:3306/u301973293_correctly
 
-```env
-GOOGLE_CLIENT_ID=...
-GOOGLE_CLIENT_SECRET=...
+JWT_SECRET=pon-aqui-una-clave-larga-aleatoria
+
 GOOGLE_CALLBACK_URL=https://jeisson.click/api/auth/google/callback
 ```
 
-## Si solo usas front estático (sin API Node)
+> Contraseña URL-encoded: `y:Zz3L?>p6` → `y%3AZz3L%3F%3Ep6`  
+> (`:` = `%3A`, `?` = `%3F`, `>` = `%3E`)
 
-| Campo | Valor |
-|-------|--------|
-| Framework | `Vue` o `Vite` |
-| Build | `npm run build` |
-| **Output directory** | **`client/dist`** ← crítico |
+### Quitar del panel
+- ~~`PORT=3000`~~ ← bórrala
+- ~~`DATABASE_URL=...PASSWORD@...`~~ ← cámbiala por la de arriba
+- ~~`GOOGLE_CALLBACK_URL=https://jeisson.click:3000/...`~~ ← quita el `:3000`
 
-Sin Express, `/api/*` no funcionará en el mismo dominio.
+---
 
-## Comprobar
+## Después de guardar
+1. Guarda variables
+2. **Redesplegar**
+3. Prueba:
+   - https://jeisson.click/api/health → `{"ok":true,...}`
+   - https://jeisson.click/ → login Correctly
 
-1. `https://jeisson.click/api/health` → `{"ok":true,"db":"up",...}`
-2. `https://jeisson.click/` → login de Correctly
-
-## 403 tras redesplegar
-
-Hostinger a veces deja un `.htaccess` viejo. **Redesplega** de nuevo con el entry `server/src/index.js` para regenerarlo.
+Si `/api/health` falla, el Node no arrancó (mira logs del despliegue / runtime).
