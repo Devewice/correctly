@@ -1,6 +1,14 @@
 /* Correctly — PWA + Web Push */
-const CACHE = 'correctly-shell-v2'
-const SHELL = ['/', '/dashboard', '/manifest.webmanifest', '/favicon.svg', '/icon-192.png']
+const CACHE = 'correctly-shell-v3'
+const SHELL = [
+  '/',
+  '/dashboard',
+  '/manifest.webmanifest',
+  '/favicon.svg',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/apple-touch-icon.png',
+]
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
