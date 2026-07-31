@@ -21,7 +21,12 @@
     "title": "Bienvenido a Correctly",
     "subtitle": "Tu bienestar diario, en un solo lugar.",
     "google": "Continuar con Google",
-    "googleUnavailable": "El inicio con Google aún no está configurado. Vuelve en un momento."
+    "googleUnavailable": "El inicio con Google aún no está configurado. Vuelve en un momento.",
+    "errors": {
+      "notConfigured": "Google aún no está configurado. Revisa el wizard en Admin.",
+      "denied": "No se completó el acceso con Google. Intenta de nuevo.",
+      "failed": "Falló el login con Google. Revisa Client ID, Secret y la Callback URL en el wizard (deben coincidir con Google Cloud)."
+    }
   },
   "admin": {
     "badge": "Admin",
@@ -30,11 +35,13 @@
     "nav": {
       "overview": "Resumen",
       "google": "Google login",
+      "vapid": "Web Push",
       "users": "Usuarios"
     },
     "overview": {
       "users": "Usuarios",
       "google": "Login Google",
+      "push": "Web Push",
       "wizard": "Wizard Google",
       "configured": "Activo",
       "pending": "Pendiente",
@@ -43,6 +50,9 @@
       "needGoogle": "Configura el login con Google",
       "needGoogleHint": "Un asistente corto te guía paso a paso en Google Cloud Console.",
       "startWizard": "Abrir wizard",
+      "needVapid": "Configura Web Push (VAPID)",
+      "needVapidHint": "Sin estas claves, las alarmas solo funcionan con la app abierta.",
+      "startVapidWizard": "Abrir wizard Push",
       "superadmins": "Superadministradores"
     },
     "users": {
@@ -77,6 +87,42 @@
           "origins": "Copia estas URLs en la consola de Google (haz clic para copiar).",
           "paste": "Pega aquí el Client ID y el Client Secret que te dio Google.",
           "test": "Prueba el botón de Google. Si funciona, marca el wizard como listo."
+        }
+      },
+      "vapid": {
+        "title": "Wizard · Web Push (VAPID)",
+        "subtitle": "Claves para que las alarmas lleguen en segundo plano.",
+        "generateBtn": "Generar claves ahora",
+        "haveKeys": "Ya tengo claves",
+        "publicKey": "VAPID Public Key",
+        "privateKey": "VAPID Private Key",
+        "subject": "Subject (mailto:…)",
+        "envTitle": "Opcional en Hostinger (.env)",
+        "openReminders": "Ir a Alarmas",
+        "sendTest": "Enviar push de prueba",
+        "testOk": "Enviado a {n} dispositivo(s). Debe aparecer una notificación.",
+        "testFail": "No se pudo enviar. Activa Web Push en Alarmas desde este dispositivo primero.",
+        "steps": {
+          "explain": "Qué es",
+          "generate": "Generar",
+          "paste": "Guardar",
+          "hostinger": "Hostinger",
+          "test": "Probar"
+        },
+        "copy": {
+          "explain": "VAPID es la identidad de Correctly para enviar notificaciones Web Push. Sin estas claves, el navegador no acepta avisos en segundo plano.",
+          "pointPublic": "Public key: la usa el navegador al suscribirse (se puede ver).",
+          "pointPrivate": "Private key: solo el servidor la usa. No la compartas ni la subas a Git.",
+          "pointSubject": "Subject: un contacto mailto: (ej. mailto:admin@jeisson.click).",
+          "generate": "Puedes generar un par de claves aquí mismo. Se crean en el servidor y las pegas/guardas en el siguiente paso.",
+          "generateHint": "Si regeneras claves después, los usuarios deben volver a Activar Web Push.",
+          "paste": "Revisa o pega las claves y guárdalas. Quedan en la base de datos (con fallback al .env).",
+          "hostinger": "Si quieres, también puedes ponerlas en el .env de Hostinger. No es obligatorio si ya las guardaste aquí.",
+          "hostingerOptional": "Guardar en este wizard basta para producción. El .env es solo respaldo o preferencia.",
+          "test": "Activa Web Push en Alarmas en este dispositivo y prueba un envío. Si llega la notificación, marca el wizard como listo.",
+          "test1": "Abre Alarmas suaves en Correctly.",
+          "test2": "Pulsa Activar Web Push y acepta el permiso.",
+          "test3": "Vuelve aquí y pulsa Enviar push de prueba."
         }
       }
     }

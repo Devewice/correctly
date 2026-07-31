@@ -42,12 +42,12 @@ onMounted(async () => {
       </v-col>
       <v-col cols="12" sm="4">
         <v-card class="pa-5">
-          <div class="text-caption text-medium-emphasis">{{ t('admin.overview.wizard') }}</div>
+          <div class="text-caption text-medium-emphasis">{{ t('admin.overview.push') }}</div>
           <div class="text-h6 font-weight-bold">
             {{
-              data.settings.google.wizardCompleted
-                ? t('admin.overview.done')
-                : t('admin.overview.notDone')
+              data.settings.vapid?.configured
+                ? t('admin.overview.configured')
+                : t('admin.overview.pending')
             }}
           </div>
         </v-card>
@@ -58,6 +58,17 @@ onMounted(async () => {
       <div class="text-h6 font-weight-bold">{{ t('admin.overview.needGoogle') }}</div>
       <p class="text-body-2 mt-1 mb-4">{{ t('admin.overview.needGoogleHint') }}</p>
       <v-btn color="primary" to="/admin/google">{{ t('admin.overview.startWizard') }}</v-btn>
+    </v-card>
+
+    <v-card
+      v-if="!data.settings.vapid?.configured"
+      class="pa-5"
+      color="accent"
+      variant="tonal"
+    >
+      <div class="text-h6 font-weight-bold">{{ t('admin.overview.needVapid') }}</div>
+      <p class="text-body-2 mt-1 mb-4">{{ t('admin.overview.needVapidHint') }}</p>
+      <v-btn color="primary" to="/admin/vapid">{{ t('admin.overview.startVapidWizard') }}</v-btn>
     </v-card>
 
     <v-card class="pa-5">

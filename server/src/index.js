@@ -30,7 +30,7 @@ import friendsRoutes from './routes/friends.routes.js'
 import pushRoutes from './routes/push.routes.js'
 import { ensureSuperAdmins } from './services/bootstrap.js'
 import { startFriendsCleanupJob } from './services/friendsCleanup.js'
-import { setupWebPush } from './services/webPush.js'
+import { refreshWebPush } from './services/webPush.js'
 import { startReminderPushJob } from './services/reminderPushJob.js'
 import { ensureUploadDirs, uploadsRoot } from './utils/uploads.js'
 
@@ -82,6 +82,17 @@ app.use(
     credentials: true,
   }),
 )
+// Evita SyntaxError "Unexpected end of JSON input" en GET sin body
+app.use((req, res, next) => {
+  const type = req.headers['content-type'] || ''
+  if (
+    type.includes('application/json') &&
+    (req.method === 'GET' || req.method === 'HEAD' || req.method === 'DELETE')
+  ) {
+    delete req.headers['content-type']
+  }
+  next()
+})
 app.use(express.json({ limit: '4mb' }))
 app.use(cookieParser())
 app.use(passport.initialize())
@@ -163,7 +174,8 @@ const server = app.listen(env.port, '0.0.0.0', async () => {
     await configurePassport()
     await ensureSuperAdmins()
     startFriendsCleanupJob()
-    if (setupWebPush()) startReminderPushJob()
+    const pushOk = await refreshWebPush()
+    if (pushOk) startReminderPushJob()
   } catch (err) {
     console.warn('[bootstrap]', err.message)
   }

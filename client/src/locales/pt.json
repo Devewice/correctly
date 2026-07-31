@@ -21,7 +21,12 @@
     "title": "Bem-vindo ao Correctly",
     "subtitle": "Seu bem-estar diário, em um só lugar.",
     "google": "Continuar com Google",
-    "googleUnavailable": "O login com Google ainda não está configurado. Tente novamente em breve."
+    "googleUnavailable": "O login com Google ainda não está configurado. Tente novamente em breve.",
+    "errors": {
+      "notConfigured": "O Google ainda não está configurado. Veja o wizard no Admin.",
+      "denied": "O acesso com Google não foi concluído. Tente de novo.",
+      "failed": "Falha no login com Google. Confira Client ID, Secret e Callback URL no wizard (devem bater com o Google Cloud)."
+    }
   },
   "admin": {
     "badge": "Admin",
@@ -30,11 +35,13 @@
     "nav": {
       "overview": "Resumo",
       "google": "Login Google",
+      "vapid": "Web Push",
       "users": "Usuários"
     },
     "overview": {
       "users": "Usuários",
       "google": "Login Google",
+      "push": "Web Push",
       "wizard": "Wizard Google",
       "configured": "Ativo",
       "pending": "Pendente",
@@ -43,6 +50,9 @@
       "needGoogle": "Configure o login com Google",
       "needGoogleHint": "Um assistente curto guia você no Google Cloud Console.",
       "startWizard": "Abrir wizard",
+      "needVapid": "Configure o Web Push (VAPID)",
+      "needVapidHint": "Sem essas chaves, os alarmes só funcionam com o app aberto.",
+      "startVapidWizard": "Abrir wizard Push",
       "superadmins": "Superadmins"
     },
     "users": {
@@ -77,6 +87,42 @@
           "origins": "Copie estas URLs no console do Google (clique para copiar).",
           "paste": "Cole aqui o Client ID e o Client Secret do Google.",
           "test": "Teste o botão do Google. Se funcionar, marque o wizard como pronto."
+        }
+      },
+      "vapid": {
+        "title": "Wizard · Web Push (VAPID)",
+        "subtitle": "Chaves para os alarmes chegarem em segundo plano.",
+        "generateBtn": "Gerar chaves agora",
+        "haveKeys": "Já tenho chaves",
+        "publicKey": "VAPID Public Key",
+        "privateKey": "VAPID Private Key",
+        "subject": "Subject (mailto:…)",
+        "envTitle": "Opcional no Hostinger (.env)",
+        "openReminders": "Ir às Alarmes",
+        "sendTest": "Enviar push de teste",
+        "testOk": "Enviado para {n} dispositivo(s). Deve aparecer uma notificação.",
+        "testFail": "Não foi possível enviar. Ative o Web Push em Alarmes neste dispositivo primeiro.",
+        "steps": {
+          "explain": "O que é",
+          "generate": "Gerar",
+          "paste": "Salvar",
+          "hostinger": "Hostinger",
+          "test": "Testar"
+        },
+        "copy": {
+          "explain": "VAPID é a identidade do Correctly para enviar notificações Web Push. Sem essas chaves, o navegador não aceita avisos em segundo plano.",
+          "pointPublic": "Public key: o navegador usa ao se inscrever (pode ser vista).",
+          "pointPrivate": "Private key: só o servidor usa. Não compartilhe nem envie ao Git.",
+          "pointSubject": "Subject: um contato mailto: (ex. mailto:admin@jeisson.click).",
+          "generate": "Você pode gerar um par de chaves aqui. Elas são criadas no servidor; salve no próximo passo.",
+          "generateHint": "Se regenerar depois, os usuários precisam Ativar Web Push de novo.",
+          "paste": "Revise ou cole as chaves e salve. Ficam no banco (com fallback no .env).",
+          "hostinger": "Se quiser, também coloque no .env do Hostinger. Não é obrigatório se já salvou aqui.",
+          "hostingerOptional": "Salvar neste wizard basta para produção. O .env é só backup ou preferência.",
+          "test": "Ative o Web Push em Alarmes neste dispositivo e teste o envio. Se a notificação chegar, marque o wizard como pronto.",
+          "test1": "Abra Alarmes suaves no Correctly.",
+          "test2": "Toque em Ativar Web Push e aceite a permissão.",
+          "test3": "Volte aqui e toque em Enviar push de teste."
         }
       }
     }

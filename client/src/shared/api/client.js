@@ -10,21 +10,33 @@ export function setToken(token) {
 }
 
 export async function api(path, options = {}) {
-  const headers = {
-    'Content-Type': 'application/json',
-    ...(options.headers || {}),
-  }
+  const headers = { ...(options.headers || {}) }
   const token = getToken()
   if (token) headers.Authorization = `Bearer ${token}`
+
+  let body = options.body
+  if (body !== undefined && body !== null && !(body instanceof FormData)) {
+    headers['Content-Type'] = headers['Content-Type'] || 'application/json'
+    body = typeof body === 'string' ? body : JSON.stringify(body)
+  }
 
   const res = await fetch(`/api${path}`, {
     credentials: 'include',
     ...options,
     headers,
-    body: options.body ? JSON.stringify(options.body) : undefined,
+    body,
   })
 
-  const data = await res.json().catch(() => ({}))
+  const text = await res.text()
+  let data = {}
+  if (text) {
+    try {
+      data = JSON.parse(text)
+    } catch {
+      data = { error: text.slice(0, 200) || 'Invalid response' }
+    }
+  }
+
   if (!res.ok) {
     const err = new Error(data.error || 'Request failed')
     err.status = res.status

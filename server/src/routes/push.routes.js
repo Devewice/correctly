@@ -2,25 +2,28 @@ import { Router } from 'express'
 import { z } from 'zod'
 import { prisma } from '../config/database.js'
 import { requireAuth } from '../middleware/auth.js'
-import { env, isWebPushConfigured } from '../config/env.js'
+import { getVapidConfig } from '../services/settings.js'
+import { webPushReady } from '../services/webPush.js'
 
 const router = Router()
 
-router.get('/vapid-public-key', (_req, res) => {
-  if (!isWebPushConfigured()) {
+router.get('/vapid-public-key', async (_req, res) => {
+  const cfg = await getVapidConfig()
+  if (!cfg.configured) {
     return res.status(503).json({ configured: false, error: 'Web Push not configured' })
   }
-  res.json({ configured: true, publicKey: env.vapid.publicKey })
+  res.json({ configured: true, publicKey: cfg.publicKey })
 })
 
 router.use(requireAuth)
 
 router.get('/status', async (req, res) => {
+  const cfg = await getVapidConfig()
   const count = await prisma.pushSubscription.count({
     where: { userId: req.user.id },
   })
   res.json({
-    configured: isWebPushConfigured(),
+    configured: cfg.configured && webPushReady(),
     subscribed: count > 0,
     devices: count,
   })
@@ -36,7 +39,8 @@ const subSchema = z.object({
 })
 
 router.post('/subscribe', async (req, res) => {
-  if (!isWebPushConfigured()) {
+  const cfg = await getVapidConfig()
+  if (!cfg.configured || !webPushReady()) {
     return res.status(503).json({ error: 'Web Push not configured' })
   }
   const data = subSchema.parse(req.body)
@@ -76,10 +80,10 @@ router.delete('/subscribe', async (req, res) => {
   res.json({ ok: true })
 })
 
-/** Prueba inmediata al dispositivo actual (o a todos del usuario) */
 router.post('/test', async (req, res) => {
   const { sendPushToUser } = await import('../services/webPush.js')
-  if (!isWebPushConfigured()) {
+  const cfg = await getVapidConfig()
+  if (!cfg.configured || !webPushReady()) {
     return res.status(503).json({ error: 'Web Push not configured' })
   }
   const result = await sendPushToUser(req.user.id, {

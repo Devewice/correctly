@@ -71,7 +71,11 @@ export async function runReminderPushTick() {
   return { sent, users: users.length }
 }
 
+let jobStarted = false
+
 export function startReminderPushJob() {
+  if (jobStarted) return
+  jobStarted = true
   const tick = () => {
     runReminderPushTick()
       .then((r) => {

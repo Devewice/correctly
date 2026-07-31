@@ -11,6 +11,7 @@ const auth = useAuthStore()
 const links = [
   { to: '/admin', key: 'overview', icon: 'mdi-view-dashboard-outline' },
   { to: '/admin/google', key: 'google', icon: 'mdi-google' },
+  { to: '/admin/vapid', key: 'vapid', icon: 'mdi-bell-ring-outline' },
   { to: '/admin/users', key: 'users', icon: 'mdi-account-group-outline' },
 ]
 </script>

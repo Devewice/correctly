@@ -1,26 +1,29 @@
 import webpush from 'web-push'
-import { env, isWebPushConfigured } from '../config/env.js'
 import { prisma } from '../config/database.js'
+import { getVapidConfig } from './settings.js'
 
 let configured = false
 
-export function setupWebPush() {
-  if (!isWebPushConfigured()) {
+export async function refreshWebPush() {
+  const cfg = await getVapidConfig()
+  if (!cfg.configured) {
+    configured = false
     console.warn('[push] VAPID keys missing — Web Push desactivado')
     return false
   }
-  webpush.setVapidDetails(
-    env.vapid.subject,
-    env.vapid.publicKey,
-    env.vapid.privateKey,
-  )
+  webpush.setVapidDetails(cfg.subject, cfg.publicKey, cfg.privateKey)
   configured = true
   console.log('[push] Web Push listo')
   return true
 }
 
+/** @deprecated usar refreshWebPush */
+export async function setupWebPush() {
+  return refreshWebPush()
+}
+
 export function webPushReady() {
-  return configured && isWebPushConfigured()
+  return configured
 }
 
 /**
@@ -47,7 +50,6 @@ export async function sendPushToSubscription(sub, payload) {
     return { ok: true }
   } catch (err) {
     const status = err.statusCode || err.status
-    // Suscripción muerta → borrar
     if (status === 404 || status === 410) {
       await prisma.pushSubscription.deleteMany({ where: { endpoint: sub.endpoint } })
       return { ok: false, reason: 'gone' }

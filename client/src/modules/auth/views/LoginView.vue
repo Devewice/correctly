@@ -10,8 +10,26 @@ const { t, locale } = useI18n()
 const auth = useAuthStore()
 const error = ref('')
 
-onMounted(() => {
-  auth.fetchStatus()
+onMounted(async () => {
+  const params = new URLSearchParams(window.location.search)
+  const oauthError = params.get('error')
+  if (oauthError === 'oauth_not_configured') {
+    error.value = t('login.errors.notConfigured')
+  } else if (oauthError === 'oauth_denied') {
+    error.value = t('login.errors.denied')
+  } else if (oauthError === 'oauth_failed') {
+    error.value = t('login.errors.failed')
+  }
+  if (oauthError) {
+    params.delete('error')
+    const qs = params.toString()
+    window.history.replaceState({}, '', `${window.location.pathname}${qs ? `?${qs}` : ''}`)
+  }
+  try {
+    await auth.fetchStatus()
+  } catch {
+    /* status opcional */
+  }
 })
 
 function googleLogin() {

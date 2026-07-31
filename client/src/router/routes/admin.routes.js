@@ -16,6 +16,11 @@ export const adminRoutes = [
         component: () => import('@/modules/admin/views/AdminGoogleWizard.vue'),
       },
       {
+        path: 'vapid',
+        name: 'admin-vapid',
+        component: () => import('@/modules/admin/views/AdminVapidWizard.vue'),
+      },
+      {
         path: 'users',
         name: 'admin-users',
         component: () => import('@/modules/admin/views/AdminUsers.vue'),

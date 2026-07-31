@@ -21,7 +21,12 @@
     "title": "Welcome to Correctly",
     "subtitle": "Your daily wellness, in one place.",
     "google": "Continue with Google",
-    "googleUnavailable": "Google sign-in is not configured yet. Please try again later."
+    "googleUnavailable": "Google sign-in is not configured yet. Please try again later.",
+    "errors": {
+      "notConfigured": "Google isn't configured yet. Check the Admin wizard.",
+      "denied": "Google sign-in wasn't completed. Try again.",
+      "failed": "Google sign-in failed. Check Client ID, Secret, and Callback URL in the wizard (must match Google Cloud)."
+    }
   },
   "admin": {
     "badge": "Admin",
@@ -30,11 +35,13 @@
     "nav": {
       "overview": "Overview",
       "google": "Google login",
+      "vapid": "Web Push",
       "users": "Users"
     },
     "overview": {
       "users": "Users",
       "google": "Google login",
+      "push": "Web Push",
       "wizard": "Google wizard",
       "configured": "Active",
       "pending": "Pending",
@@ -43,6 +50,9 @@
       "needGoogle": "Set up Google login",
       "needGoogleHint": "A short wizard walks you through Google Cloud Console.",
       "startWizard": "Open wizard",
+      "needVapid": "Set up Web Push (VAPID)",
+      "needVapidHint": "Without these keys, alarms only work while the app is open.",
+      "startVapidWizard": "Open Push wizard",
       "superadmins": "Superadmins"
     },
     "users": {
@@ -77,6 +87,42 @@
           "origins": "Copy these URLs into the Google console (click to copy).",
           "paste": "Paste the Client ID and Client Secret from Google.",
           "test": "Try the Google button. If it works, mark the wizard as done."
+        }
+      },
+      "vapid": {
+        "title": "Wizard · Web Push (VAPID)",
+        "subtitle": "Keys so alarms can reach users in the background.",
+        "generateBtn": "Generate keys now",
+        "haveKeys": "I already have keys",
+        "publicKey": "VAPID Public Key",
+        "privateKey": "VAPID Private Key",
+        "subject": "Subject (mailto:…)",
+        "envTitle": "Optional on Hostinger (.env)",
+        "openReminders": "Open Alarms",
+        "sendTest": "Send test push",
+        "testOk": "Sent to {n} device(s). You should see a notification.",
+        "testFail": "Couldn't send. Enable Web Push in Alarms on this device first.",
+        "steps": {
+          "explain": "What it is",
+          "generate": "Generate",
+          "paste": "Save",
+          "hostinger": "Hostinger",
+          "test": "Test"
+        },
+        "copy": {
+          "explain": "VAPID is Correctly's identity for sending Web Push notifications. Without these keys, browsers won't accept background alerts.",
+          "pointPublic": "Public key: used by the browser when subscribing (safe to expose).",
+          "pointPrivate": "Private key: server-only. Don't share it or commit it to Git.",
+          "pointSubject": "Subject: a mailto: contact (e.g. mailto:admin@jeisson.click).",
+          "generate": "You can generate a key pair here. They're created on the server; save them in the next step.",
+          "generateHint": "If you regenerate later, users must Enable Web Push again.",
+          "paste": "Review or paste the keys and save. They're stored in the database (with .env as fallback).",
+          "hostinger": "Optionally also put them in Hostinger's .env. Not required if you already saved them here.",
+          "hostingerOptional": "Saving in this wizard is enough for production. .env is only a backup or preference.",
+          "test": "Enable Web Push in Alarms on this device and send a test. If the notification arrives, mark the wizard done.",
+          "test1": "Open Soft alarms in Correctly.",
+          "test2": "Tap Enable Web Push and allow the permission.",
+          "test3": "Come back here and tap Send test push."
         }
       }
     }
