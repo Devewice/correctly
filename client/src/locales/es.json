@@ -276,7 +276,9 @@
       "habits": "Mis hábitos del día",
       "journal": "Una nota del día",
       "friends": "Notas y foto del día con amigos",
-      "reminders": "Toques a tiempo (web)"
+      "reminders": "Toques a tiempo (web)",
+      "profile": "Tu cuenta y módulos",
+      "today": "Volver a la guía de hoy"
     }
   },
   "pwa": {
@@ -617,6 +619,7 @@
   "common": {
     "loading": "Cargando…",
     "logout": "Cerrar sesión",
+    "close": "Cerrar",
     "save": "Guardar",
     "cancel": "Cancelar",
     "error": "Algo salió mal"

@@ -7,7 +7,7 @@ import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
 import BrandLogo from '@/shared/components/BrandLogo.vue'
 import InstallAppCard from '@/shared/components/InstallAppCard.vue'
 import SystemHealthBanner from '@/shared/components/SystemHealthBanner.vue'
-import { fadeUp, softHover, withDelay } from '@/shared/motion/presets'
+import { fadeUp, withDelay } from '@/shared/motion/presets'
 import { activeModuleSet } from '@/shared/utils/timeContext'
 
 const { t } = useI18n()
@@ -17,6 +17,7 @@ const auth = useAuthStore()
 const { mdAndUp, lgAndUp } = useDisplay()
 const moreOpen = ref(false)
 const drawer = ref(true)
+const swipeStartY = ref(null)
 
 watch(mdAndUp, (v) => {
   drawer.value = v
@@ -29,24 +30,37 @@ const tab = computed(() => {
   return 'more'
 })
 
+/** Más muestra todo el catálogo; Hoy sigue filtrado por activeModules. */
 const moreItems = computed(() => {
   const mods = activeModuleSet(auth.user)
   const all = [
-    { to: '/water', module: 'water', title: t('water.title'), icon: 'mdi-cup-water', hint: t('day.moreHints.water') },
-    { to: '/meals', module: 'meals', title: t('meals.title'), icon: 'mdi-food-apple', hint: t('day.moreHints.meals') },
-    { to: '/mood', module: 'mood', title: t('mood.title'), icon: 'mdi-emoticon-outline', hint: t('day.moreHints.mood') },
-    { to: '/habits', module: 'habits', title: t('habits.title'), icon: 'mdi-checkbox-marked-circle-outline', hint: t('day.moreHints.habits') },
-    { to: '/sleep', module: 'sleep', title: t('sleep.title'), icon: 'mdi-sleep', hint: t('day.moreHints.sleep') },
-    { to: '/meditation', module: 'meditation', title: t('meditation.title'), icon: 'mdi-meditation', hint: t('day.moreHints.meditation') },
-    { to: '/activity', module: 'activity', title: t('activity.title'), icon: 'mdi-run', hint: t('day.moreHints.activity') },
-    { to: '/journal', module: 'journal', title: t('journal.title'), icon: 'mdi-notebook-outline', hint: t('day.moreHints.journal') },
-    { to: '/weight', module: 'weight', title: t('weight.title'), icon: 'mdi-scale-bathroom', hint: t('day.moreHints.weight') },
+    { to: '/water', module: 'water', title: t('modules.water'), icon: 'mdi-cup-water', hint: t('day.moreHints.water') },
+    { to: '/meals', module: 'meals', title: t('modules.meals'), icon: 'mdi-food-apple', hint: t('day.moreHints.meals') },
+    { to: '/mood', module: 'mood', title: t('modules.mood'), icon: 'mdi-emoticon-outline', hint: t('day.moreHints.mood') },
+    { to: '/habits', module: 'habits', title: t('modules.habits'), icon: 'mdi-checkbox-marked-circle-outline', hint: t('day.moreHints.habits') },
+    { to: '/sleep', module: 'sleep', title: t('modules.sleep'), icon: 'mdi-sleep', hint: t('day.moreHints.sleep') },
+    { to: '/meditation', module: 'meditation', title: t('modules.meditation'), icon: 'mdi-meditation', hint: t('day.moreHints.meditation') },
+    { to: '/activity', module: 'activity', title: t('modules.activity'), icon: 'mdi-run', hint: t('day.moreHints.activity') },
+    { to: '/journal', module: 'journal', title: t('modules.journal'), icon: 'mdi-notebook-outline', hint: t('day.moreHints.journal') },
+    { to: '/weight', module: 'weight', title: t('modules.weight'), icon: 'mdi-scale-bathroom', hint: t('day.moreHints.weight') },
     { to: '/stats', module: null, title: t('stats.title'), icon: 'mdi-chart-bar', hint: t('day.moreHints.stats') },
     { to: '/friends', module: null, title: t('friends.title'), icon: 'mdi-account-group-outline', hint: t('day.moreHints.friends') },
     { to: '/reminders', module: null, title: t('reminders.title'), icon: 'mdi-bell-ring-outline', hint: t('day.moreHints.reminders') },
+    { to: '/profile', module: null, title: t('nav.profile'), icon: 'mdi-account-circle-outline', hint: t('day.moreHints.profile') },
+    { to: '/dashboard', module: null, title: t('nav.dashboard'), icon: 'mdi-white-balance-sunny', hint: t('day.moreHints.today') },
   ]
-  return all.filter((item) => !item.module || mods.has(item.module))
+  // Activos primero; el resto sigue visible para no “perder” módulos
+  return [...all].sort((a, b) => {
+    const aActive = !a.module || mods.has(a.module) ? 0 : 1
+    const bActive = !b.module || mods.has(b.module) ? 0 : 1
+    return aActive - bActive
+  })
 })
+
+/** Lateral: sin Hoy/Perfil (ya están arriba). */
+const drawerMoreItems = computed(() =>
+  moreItems.value.filter((item) => item.to !== '/dashboard' && item.to !== '/profile'),
+)
 
 const contentMax = computed(() => {
   if (lgAndUp.value) return 1100
@@ -59,12 +73,27 @@ function go(path) {
   router.push(path)
 }
 
-function openMore() {
+function toggleMore() {
   if (mdAndUp.value) {
     drawer.value = true
     return
   }
-  moreOpen.value = true
+  moreOpen.value = !moreOpen.value
+}
+
+function closeMore() {
+  moreOpen.value = false
+}
+
+function onSheetTouchStart(e) {
+  swipeStartY.value = e.touches[0]?.clientY ?? null
+}
+
+function onSheetTouchEnd(e) {
+  if (swipeStartY.value == null) return
+  const y = e.changedTouches[0]?.clientY
+  if (y != null && y - swipeStartY.value > 70) closeMore()
+  swipeStartY.value = null
 }
 
 async function logout() {
@@ -117,7 +146,7 @@ async function logout() {
 
     <v-list nav density="comfortable" class="px-2">
       <v-list-item
-        v-for="item in moreItems"
+        v-for="item in drawerMoreItems"
         :key="item.to"
         :to="item.to"
         :prepend-icon="item.icon"
@@ -248,7 +277,7 @@ async function logout() {
     <v-btn value="today" to="/dashboard" prepend-icon="mdi-white-balance-sunny">
       {{ t('nav.dashboard') }}
     </v-btn>
-    <v-btn value="more" prepend-icon="mdi-dots-grid" @click="openMore">
+    <v-btn value="more" prepend-icon="mdi-dots-grid" @click="toggleMore">
       {{ t('nav.more') }}
     </v-btn>
     <v-btn value="profile" to="/profile" prepend-icon="mdi-account-circle-outline">
@@ -257,47 +286,46 @@ async function logout() {
   </v-bottom-navigation>
 
   <v-bottom-sheet v-if="!mdAndUp" v-model="moreOpen">
-    <v-card class="pa-4 more-sheet">
+    <v-card class="more-sheet">
       <div
-        v-motion
-        v-bind="withDelay(fadeUp, 40)"
-        class="text-h6 font-weight-bold mb-1"
+        class="more-sheet__chrome"
+        @touchstart.passive="onSheetTouchStart"
+        @touchend.passive="onSheetTouchEnd"
       >
-        {{ t('day.moreTitle') }}
-      </div>
-      <p
-        v-motion
-        v-bind="withDelay(fadeUp, 90)"
-        class="text-body-2 text-medium-emphasis mb-3"
-      >
-        {{ t('day.moreSubtitle') }}
-      </p>
-      <InstallAppCard compact />
-      <v-row dense>
-        <v-col v-for="(item, i) in moreItems" :key="item.to" cols="6">
-          <div
-            v-motion
-            v-bind="{
-              ...softHover,
-              ...withDelay(fadeUp, 120 + i * 40),
-            }"
-          >
-            <v-card
-              variant="flat"
-              class="pa-3 h-100 more-tile"
-              @click="go(item.to)"
-            >
-              <v-icon :icon="item.icon" color="primary" class="mb-1" />
-              <div class="text-subtitle-2 font-weight-bold more-tile__title">
-                {{ item.title }}
-              </div>
-              <div class="text-caption more-tile__hint text-truncate d-none d-sm-block">
-                {{ item.hint }}
-              </div>
-            </v-card>
+        <div class="more-sheet__handle" aria-hidden="true" />
+        <div class="more-sheet__header">
+          <div>
+            <div v-motion v-bind="withDelay(fadeUp, 40)" class="text-subtitle-1 font-weight-bold">
+              {{ t('day.moreTitle') }}
+            </div>
+            <p class="text-caption text-medium-emphasis mb-0">{{ t('day.moreSubtitle') }}</p>
           </div>
-        </v-col>
-      </v-row>
+          <v-btn
+            icon="mdi-close"
+            variant="text"
+            size="small"
+            :aria-label="t('common.close')"
+            @click="closeMore"
+          />
+        </div>
+      </div>
+
+      <div class="more-sheet__body">
+        <InstallAppCard compact />
+        <div class="more-grid">
+          <button
+            v-for="item in moreItems"
+            :key="item.to"
+            type="button"
+            class="more-row"
+            :class="{ 'more-row--active': route.path === item.to }"
+            @click="go(item.to)"
+          >
+            <v-icon :icon="item.icon" size="22" color="primary" class="more-row__icon" />
+            <span class="more-row__title">{{ item.title }}</span>
+          </button>
+        </div>
+      </div>
     </v-card>
   </v-bottom-sheet>
 </template>
@@ -313,22 +341,69 @@ async function logout() {
   padding-bottom: env(safe-area-inset-bottom);
 }
 .more-sheet {
-  padding-bottom: max(28px, calc(env(safe-area-inset-bottom) + 12px)) !important;
-  max-height: min(88dvh, 760px);
+  border-radius: 16px 16px 0 0 !important;
+  max-height: min(85dvh, 720px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.more-sheet__chrome {
+  flex-shrink: 0;
+  padding: 8px 12px 4px;
+  touch-action: pan-y;
+}
+.more-sheet__handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(61, 61, 61, 0.28);
+  margin: 0 auto 8px;
+}
+.more-sheet__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.more-sheet__body {
+  padding: 8px 12px max(20px, calc(env(safe-area-inset-bottom) + 12px));
   overflow-x: hidden;
   overflow-y: auto;
-  border-radius: 16px 16px 0 0 !important;
+  -webkit-overflow-scrolling: touch;
 }
-.more-tile {
-  background: #efe6da !important;
-  color: #3d3d3d !important;
-  border: 1px solid rgba(94, 122, 91, 0.18) !important;
-  box-shadow: none !important;
+.more-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
-.more-tile__title {
-  color: #3d3d3d !important;
+.more-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid rgba(94, 122, 91, 0.18);
+  border-radius: 12px;
+  background: #efe6da;
+  color: #3d3d3d;
+  text-align: left;
+  cursor: pointer;
 }
-.more-tile__hint {
-  color: rgba(61, 61, 61, 0.72) !important;
+.more-row--active {
+  border-color: #8ba888;
+  background: #e7f0e5;
+}
+.more-row__icon {
+  flex-shrink: 0;
+}
+.more-row__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #3d3d3d;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

@@ -276,7 +276,9 @@
       "habits": "My daily habits",
       "journal": "A note from today",
       "friends": "Daily notes and photos with friends",
-      "reminders": "Gentle web nudges"
+      "reminders": "Gentle web nudges",
+      "profile": "Your account and modules",
+      "today": "Back to today's guide"
     }
   },
   "pwa": {
@@ -617,6 +619,7 @@
   "common": {
     "loading": "Loading…",
     "logout": "Log out",
+    "close": "Close",
     "save": "Save",
     "cancel": "Cancel",
     "error": "Something went wrong"
