@@ -367,16 +367,20 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   position: relative;
   isolation: isolate;
   overflow: visible;
-  padding: 0.15rem 0.1rem 0.5rem;
+  padding: 0 0 0.5rem;
 }
+/* Full-bleed: el glow sale del padding del container y llega a los bordes */
 .today-view::before {
   content: '';
   position: absolute;
   z-index: -1;
-  inset: -8px -4px auto -4px;
-  height: min(280px, 48vw);
-  border-radius: 24px;
-  background: radial-gradient(90% 90% at 15% 0%, var(--today-glow), transparent 70%);
+  top: -0.75rem;
+  left: 50%;
+  width: 100vw;
+  height: min(300px, 52vw);
+  transform: translateX(-50%);
+  border-radius: 0;
+  background: radial-gradient(85% 95% at 18% 0%, var(--today-glow), transparent 72%);
   pointer-events: none;
 }
 .today-view--morning {
