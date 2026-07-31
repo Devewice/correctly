@@ -19,15 +19,15 @@ const tab = computed(() => {
 })
 
 const moreItems = computed(() => [
-  { to: '/stats', title: t('nav.stats'), icon: 'mdi-chart-bar', hint: t('day.moreHints.stats') },
-  { to: '/meditation', title: t('nav.meditation'), icon: 'mdi-meditation', hint: t('day.moreHints.meditation') },
-  { to: '/activity', title: t('nav.activity'), icon: 'mdi-run', hint: t('day.moreHints.activity') },
-  { to: '/weight', title: t('nav.weight'), icon: 'mdi-scale-bathroom', hint: t('day.moreHints.weight') },
-  { to: '/sleep', title: t('nav.sleep'), icon: 'mdi-sleep', hint: t('day.moreHints.sleep') },
-  { to: '/meals', title: t('nav.meals'), icon: 'mdi-food-apple', hint: t('day.moreHints.meals') },
-  { to: '/water', title: t('nav.water'), icon: 'mdi-cup-water', hint: t('day.moreHints.water') },
-  { to: '/mood', title: t('nav.mood'), icon: 'mdi-emoticon-outline', hint: t('day.moreHints.mood') },
-  { to: '/habits', title: t('nav.habits'), icon: 'mdi-checkbox-marked-circle-outline', hint: t('day.moreHints.habits') },
+  { to: '/water', title: t('water.title'), icon: 'mdi-cup-water', hint: t('day.moreHints.water') },
+  { to: '/meals', title: t('meals.title'), icon: 'mdi-food-apple', hint: t('day.moreHints.meals') },
+  { to: '/mood', title: t('mood.title'), icon: 'mdi-emoticon-outline', hint: t('day.moreHints.mood') },
+  { to: '/habits', title: t('habits.title'), icon: 'mdi-checkbox-marked-circle-outline', hint: t('day.moreHints.habits') },
+  { to: '/sleep', title: t('sleep.title'), icon: 'mdi-sleep', hint: t('day.moreHints.sleep') },
+  { to: '/meditation', title: t('meditation.title'), icon: 'mdi-meditation', hint: t('day.moreHints.meditation') },
+  { to: '/activity', title: t('activity.title'), icon: 'mdi-run', hint: t('day.moreHints.activity') },
+  { to: '/weight', title: t('weight.title'), icon: 'mdi-scale-bathroom', hint: t('day.moreHints.weight') },
+  { to: '/stats', title: t('stats.title'), icon: 'mdi-chart-bar', hint: t('day.moreHints.stats') },
 ])
 
 function go(path) {

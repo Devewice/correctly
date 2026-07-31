@@ -13,8 +13,8 @@
     "meditation": "Zen",
     "activity": "Mover",
     "weight": "Peso",
-    "stats": "Stats",
-    "profile": "Perfil",
+    "stats": "Minha semana",
+    "profile": "Eu",
     "more": "Mais"
   },
   "login": {
@@ -127,40 +127,46 @@
     "stepOf": "Uma coisa de cada vez",
     "moodAsk": "Como você se sente agora?",
     "moodHint": "Um toque basta. Sem pensar demais.",
-    "waterAsk": "Vamos beber um pouco de água?",
-    "waterHint": "Pequenos goles somam. Escolha uma quantidade.",
-    "waterNow": "Você está com {ml} ml hoje",
+    "waterAsk": "Vamos beber um copinho de água?",
+    "waterHint": "Sem números estranhos. Só escolha o que bebeu.",
+    "waterNow": "Hoje são uns {glasses} copos",
+    "waterNowEmpty": "Ainda não bebeu água hoje",
+    "waterSip": "Um copinho",
+    "waterGlass": "Um copo",
+    "waterBottle": "Uma garrafa",
     "mealAsk": "O que você comeu?",
-    "mealHint": "Sugestão: {type}. Escreva em uma frase curta.",
-    "habitAsk": "Você fez este hábito?",
-    "habitHint": "Se já fez, marque. Se não, pode pular.",
-    "habitDone": "Sim, pronto",
+    "mealHint": "Como contar para um amigo. Ex: {type}.",
+    "habitAsk": "Você fez?",
+    "habitHint": "Se já fez, um toque. Se não, pode deixar para depois.",
+    "habitDone": "Sim, fiz",
     "doneTitle": "Você está indo muito bem",
-    "doneHint": "Você respondeu o essencial. Abra Mais quando quiser.",
-    "seeStats": "Ver minha semana",
+    "doneHint": "Você cobriu o essencial. Mais é opcional.",
+    "seeStats": "Ver como vai minha semana",
     "continue": "Pronto, próximo",
     "skip": "Agora não",
     "chipMoodPending": "—",
-    "moreTitle": "Mais opções",
-    "moreSubtitle": "Use só se quiser aprofundar. O importante está em Hoje.",
+    "chipGlasses": "{n} copos",
+    "chipMeals": "{n} refeições",
+    "moreTitle": "Você também pode…",
+    "moreSubtitle": "Extras opcionais. O importante está em Hoje.",
     "moreHints": {
-      "stats": "Sua semana em números",
-      "meditation": "Uma pausa curta",
-      "activity": "Mover o corpo",
-      "weight": "Registro de peso",
-      "sleep": "Como dormiu",
-      "meals": "Histórico de refeições",
-      "water": "Detalhe da hidratação",
-      "mood": "Histórico de humor",
-      "habits": "Todos os hábitos"
+      "stats": "Como foi minha semana",
+      "meditation": "Parar um momentinho",
+      "activity": "Dizer que me mexi",
+      "weight": "Anotar como estou",
+      "sleep": "Contar como dormi",
+      "meals": "Rever o que comi",
+      "water": "Somar outro copo",
+      "mood": "Ver como me senti",
+      "habits": "Meus hábitos do dia"
     }
   },
   "meals": {
-    "title": "Refeições",
-    "add": "Registrar refeição",
-    "description": "O que você comeu?",
-    "satisfaction": "Saciedade",
-    "quality": "Qualidade",
+    "title": "O que comi",
+    "add": "Adicionar refeição",
+    "description": "O que foi? Em uma frase",
+    "satisfaction": "Quão saciado?",
+    "quality": "Quão bem comeu?",
     "save": "Salvar",
     "types": {
       "breakfast": "Café da manhã",
@@ -168,37 +174,41 @@
       "lunch": "Almoço",
       "snack": "Lanche",
       "dinner": "Jantar",
-      "night_snack": "Lanche noturno"
+      "night_snack": "Algo à noite"
     }
   },
   "water": {
-    "title": "Hidratação",
-    "goal": "Meta: {goal} ml",
-    "add": "Adicionar {amount} ml"
+    "title": "Beber água",
+    "goal": "Meta suave: uns 8 copos por dia",
+    "addSip": "Um copinho",
+    "addGlass": "Um copo",
+    "addBottle": "Uma garrafa",
+    "todayGlasses": "{n} copos hoje",
+    "progress": "{pct}% do dia"
   },
   "mood": {
     "title": "Como você se sente?",
-    "save": "Registrar humor"
+    "save": "Salvar como me sinto"
   },
   "sleep": {
-    "title": "Sono",
-    "bed": "Fui para a cama",
+    "title": "Como dormi",
+    "bed": "Fui dormir",
     "wake": "Acordei",
-    "quality": "Qualidade",
+    "quality": "Quão bem dormiu?",
     "save": "Salvar sono"
   },
   "habits": {
-    "title": "Hábitos",
-    "empty": "Você ainda não tem hábitos. Adicione no onboarding ou perfil."
+    "title": "Meus hábitos",
+    "empty": "Ainda não tem hábitos. Você pode criar ao começar."
   },
   "meditation": {
-    "title": "Meditação",
-    "subtitle": "Uma pausa suave para voltar ao corpo.",
+    "title": "Um respiro",
+    "subtitle": "Só alguns minutos para voltar ao corpo.",
     "start": "Começar",
     "stop": "Parar",
     "inhale": "Inspire",
     "exhale": "Expire",
-    "today": "Hoje: {min} min",
+    "today": "Hoje: {min} min de calma",
     "types": {
       "breathing": "Respiração",
       "free": "Livre",
@@ -207,10 +217,10 @@
     }
   },
   "activity": {
-    "title": "Atividade física",
-    "duration": "Duração (min)",
-    "notes": "Notas (opcional)",
-    "save": "Salvar atividade",
+    "title": "Me mexi",
+    "duration": "Quantos minutos?",
+    "notes": "Algo para lembrar?",
+    "save": "Salvar",
     "types": {
       "walk": "Caminhar",
       "run": "Correr",
@@ -218,32 +228,32 @@
       "yoga": "Yoga",
       "bike": "Bike",
       "swim": "Nadar",
-      "other": "Outro"
+      "other": "Outra coisa"
     },
     "intensity": {
-      "light": "Leve",
-      "moderate": "Moderada",
-      "intense": "Intensa"
+      "light": "Suave",
+      "moderate": "Normal",
+      "intense": "Forte"
     }
   },
   "weight": {
-    "title": "Peso",
-    "subtitle": "Sem obsessão — um registro suave quando quiser.",
-    "latest": "Último registro",
-    "value": "Peso (kg)",
-    "notes": "Notas",
-    "save": "Salvar peso"
+    "title": "Como estou",
+    "subtitle": "Só se quiser. Sem pressão.",
+    "latest": "Última vez",
+    "value": "Peso",
+    "notes": "Nota opcional",
+    "save": "Salvar"
   },
   "stats": {
-    "title": "Sua semana",
-    "subtitle": "Padrões suaves, sem pressão.",
-    "streak": "Sequência",
-    "avgMood": "Humor médio",
-    "meditation": "Meditação",
-    "waterWeek": "Água (7 dias)",
-    "days": "Resumo diário",
-    "badges": "Conquistas",
-    "noBadges": "Continue registrando para desbloquear conquistas."
+    "title": "Como vai minha semana",
+    "subtitle": "Um olhar suave, sem julgamento.",
+    "streak": "Dias seguidos",
+    "avgMood": "Humor",
+    "meditation": "Respiros",
+    "waterWeek": "Copos de água",
+    "days": "Dia a dia",
+    "badges": "Conquistinhas",
+    "noBadges": "Siga um dia de cada vez — as conquistas aparecem sozinhas."
   },
   "badges": {
     "first_step": "Primeiro passo",

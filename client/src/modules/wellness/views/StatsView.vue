@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
 import PageHeader from '@/shared/components/PageHeader.vue'
+import { glassesFromMl } from '@/shared/utils/water'
 
 const { t } = useI18n()
 const data = ref(null)
@@ -87,7 +88,9 @@ function barHeight(ml) {
               :height="barHeight(day.waterMl)"
             />
           </v-sheet>
-          <span class="text-caption text-medium-emphasis mt-1">{{ day.date.slice(5) }}</span>
+          <span class="text-caption text-medium-emphasis mt-1">
+            {{ glassesFromMl(day.waterMl) }} · {{ day.date.slice(5) }}
+          </span>
         </div>
       </div>
     </v-card>

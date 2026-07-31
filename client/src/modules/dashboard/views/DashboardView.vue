@@ -7,6 +7,7 @@ import { useDayGuide } from '@/modules/dashboard/composables/useDayGuide'
 import { api } from '@/shared/api/client'
 import DayGuideCard from '@/modules/dashboard/components/DayGuideCard.vue'
 import { fadeUp, withDelay } from '@/shared/motion/presets'
+import { glassesFromMl } from '@/shared/utils/water'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -128,11 +129,15 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
             },
             {
               key: 'water',
-              label: `${Math.round((dash.today.summary.waterMl || 0) / 10) / 100}L · ${t('dashboard.water')}`,
+              label: t('day.chipGlasses', {
+                n: glassesFromMl(dash.today.summary.waterMl),
+              }),
             },
             {
               key: 'meals',
-              label: `${dash.today.summary.mealsCount || 0} · ${t('dashboard.meals')}`,
+              label: t('day.chipMeals', {
+                n: dash.today.summary.mealsCount || 0,
+              }),
             },
           ]"
           :key="chip.key"

@@ -13,8 +13,8 @@
     "meditation": "Zen",
     "activity": "Move",
     "weight": "Weight",
-    "stats": "Stats",
-    "profile": "Profile",
+    "stats": "My week",
+    "profile": "Me",
     "more": "More"
   },
   "login": {
@@ -127,40 +127,46 @@
     "stepOf": "One thing at a time",
     "moodAsk": "How are you feeling right now?",
     "moodHint": "One tap is enough. Don't overthink it.",
-    "waterAsk": "Shall we drink some water?",
-    "waterHint": "Small sips add up. Pick an amount.",
-    "waterNow": "You've had {ml} ml today",
+    "waterAsk": "Shall we have a little glass of water?",
+    "waterHint": "No weird numbers. Just pick what you drank.",
+    "waterNow": "About {glasses} glasses today",
+    "waterNowEmpty": "No water logged yet today",
+    "waterSip": "A small glass",
+    "waterGlass": "A glass",
+    "waterBottle": "A bottle",
     "mealAsk": "What did you eat?",
-    "mealHint": "Suggested: {type}. Write a short phrase.",
-    "habitAsk": "Did you do this habit?",
-    "habitHint": "If you did, mark it. If not, you can skip.",
-    "habitDone": "Yes, done",
+    "mealHint": "Like telling a friend. e.g. {type}.",
+    "habitAsk": "Did you do it?",
+    "habitHint": "If yes, tap. If not, leave it for later.",
+    "habitDone": "Yes, I did",
     "doneTitle": "You're doing great today",
-    "doneHint": "You've covered the essentials. Open More anytime.",
-    "seeStats": "See my week",
+    "doneHint": "You've covered the important bits. More is optional.",
+    "seeStats": "See how my week is going",
     "continue": "Done, next",
     "skip": "Not now",
     "chipMoodPending": "—",
-    "moreTitle": "More options",
-    "moreSubtitle": "Use these only if you want to go deeper. The important part is Today.",
+    "chipGlasses": "{n} glasses",
+    "chipMeals": "{n} meals",
+    "moreTitle": "You can also…",
+    "moreSubtitle": "Optional extras. The important part is Today.",
     "moreHints": {
-      "stats": "Your week in numbers",
-      "meditation": "A short pause",
-      "activity": "Move your body",
-      "weight": "Weight log",
-      "sleep": "How you slept",
-      "meals": "Meal history",
-      "water": "Hydration detail",
-      "mood": "Mood history",
-      "habits": "All your habits"
+      "stats": "How my week went",
+      "meditation": "Pause for a moment",
+      "activity": "Say I moved",
+      "weight": "Note how I am",
+      "sleep": "Say how I slept",
+      "meals": "Look back at meals",
+      "water": "Add another glass",
+      "mood": "See how I've felt",
+      "habits": "My daily habits"
     }
   },
   "meals": {
-    "title": "Meals",
-    "add": "Log meal",
-    "description": "What did you eat?",
-    "satisfaction": "Satiety",
-    "quality": "Quality",
+    "title": "What I ate",
+    "add": "Add a meal",
+    "description": "What was it? One short line",
+    "satisfaction": "How full do you feel?",
+    "quality": "How good did it feel?",
     "save": "Save",
     "types": {
       "breakfast": "Breakfast",
@@ -168,37 +174,41 @@
       "lunch": "Lunch",
       "snack": "Snack",
       "dinner": "Dinner",
-      "night_snack": "Night snack"
+      "night_snack": "Late bite"
     }
   },
   "water": {
-    "title": "Hydration",
-    "goal": "Goal: {goal} ml",
-    "add": "Add {amount} ml"
+    "title": "Drink water",
+    "goal": "Gentle goal: about 8 glasses a day",
+    "addSip": "A small glass",
+    "addGlass": "A glass",
+    "addBottle": "A bottle",
+    "todayGlasses": "{n} glasses today",
+    "progress": "{pct}% of the day"
   },
   "mood": {
     "title": "How do you feel?",
-    "save": "Log mood"
+    "save": "Save how I feel"
   },
   "sleep": {
-    "title": "Sleep",
-    "bed": "I went to bed",
+    "title": "How I slept",
+    "bed": "I went to sleep",
     "wake": "I woke up",
-    "quality": "Quality",
+    "quality": "How well did you sleep?",
     "save": "Save sleep"
   },
   "habits": {
-    "title": "Habits",
-    "empty": "No habits yet. Add some in onboarding or profile."
+    "title": "My habits",
+    "empty": "No habits yet. You can create them when you start."
   },
   "meditation": {
-    "title": "Meditation",
-    "subtitle": "A soft pause to come back to your body.",
+    "title": "A breath",
+    "subtitle": "Just a few minutes to come back to your body.",
     "start": "Start",
     "stop": "Stop",
     "inhale": "Inhale",
     "exhale": "Exhale",
-    "today": "Today: {min} min",
+    "today": "Today: {min} min of calm",
     "types": {
       "breathing": "Breathing",
       "free": "Free",
@@ -207,10 +217,10 @@
     }
   },
   "activity": {
-    "title": "Physical activity",
-    "duration": "Duration (min)",
-    "notes": "Notes (optional)",
-    "save": "Save activity",
+    "title": "I moved",
+    "duration": "How many minutes?",
+    "notes": "Anything to remember?",
+    "save": "Save",
     "types": {
       "walk": "Walk",
       "run": "Run",
@@ -218,32 +228,32 @@
       "yoga": "Yoga",
       "bike": "Bike",
       "swim": "Swim",
-      "other": "Other"
+      "other": "Something else"
     },
     "intensity": {
-      "light": "Light",
-      "moderate": "Moderate",
-      "intense": "Intense"
+      "light": "Easy",
+      "moderate": "Normal",
+      "intense": "Hard"
     }
   },
   "weight": {
-    "title": "Weight",
-    "subtitle": "No obsession — a gentle log when you want.",
-    "latest": "Latest entry",
-    "value": "Weight (kg)",
-    "notes": "Notes",
-    "save": "Save weight"
+    "title": "How I am",
+    "subtitle": "Only if you want. No pressure.",
+    "latest": "Last time",
+    "value": "Weight",
+    "notes": "Optional note",
+    "save": "Save"
   },
   "stats": {
-    "title": "Your week",
-    "subtitle": "Soft patterns, no pressure.",
-    "streak": "Streak",
-    "avgMood": "Avg mood",
-    "meditation": "Meditation",
-    "waterWeek": "Water (7 days)",
-    "days": "Daily summary",
-    "badges": "Badges",
-    "noBadges": "Keep logging to unlock badges."
+    "title": "How my week is going",
+    "subtitle": "A soft look, no judgment.",
+    "streak": "Days in a row",
+    "avgMood": "Mood",
+    "meditation": "Breaths",
+    "waterWeek": "Glasses of water",
+    "days": "Day by day",
+    "badges": "Little wins",
+    "noBadges": "Keep going one day at a time — wins show up on their own."
   },
   "badges": {
     "first_step": "First step",

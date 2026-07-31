@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { fadeUp, moodHover, softHover, popIn, withDelay } from '@/shared/motion/presets'
+import { WATER_OPTIONS, glassesFromMl } from '@/shared/utils/water'
 
 const props = defineProps({
   step: { type: Object, required: true },
@@ -117,10 +118,18 @@ function saveMeal() {
         {{ t('day.waterHint') }}
       </p>
       <p v-motion v-bind="withDelay(fadeUp, 160)" class="text-h6 font-weight-bold text-info mb-6">
-        {{ t('day.waterNow', { ml: step.water || 0 }) }}
+        {{
+          (step.water || 0) > 0
+            ? t('day.waterNow', { glasses: glassesFromMl(step.water) })
+            : t('day.waterNowEmpty')
+        }}
       </p>
       <v-row dense class="mb-4">
-        <v-col v-for="(amount, i) in [250, 500]" :key="amount" cols="6">
+        <v-col
+          v-for="(opt, i) in WATER_OPTIONS.slice(0, 2)"
+          :key="opt.ml"
+          cols="6"
+        >
           <div v-motion v-bind="{ ...softHover, ...withDelay(fadeUp, 200 + i * 70) }">
             <v-btn
               block
@@ -128,9 +137,9 @@ function saveMeal() {
               variant="tonal"
               size="large"
               :loading="busy"
-              @click="emit('water', amount)"
+              @click="emit('water', opt.ml)"
             >
-              +{{ amount }} ml
+              {{ opt.key === 'sip' ? t('day.waterSip') : t('day.waterGlass') }}
             </v-btn>
           </div>
         </v-col>
