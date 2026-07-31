@@ -115,6 +115,7 @@ router.beforeEach(async (to) => {
       : { name: 'onboarding' }
   }
 
+  // Usuario logueado sin onboarding → siempre onboarding (hash: #/onboarding)
   if (
     to.name !== 'onboarding' &&
     auth.user &&

@@ -24,6 +24,7 @@ import journalRoutes from './routes/journal.routes.js'
 import meditationRoutes from './routes/meditation.routes.js'
 import weightRoutes from './routes/weight.routes.js'
 import dashboardRoutes from './routes/dashboard.routes.js'
+import { mountSpa } from './spa.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const clientDistCandidates = [
@@ -123,69 +124,11 @@ app.use('/api/meditation', meditationRoutes)
 app.use('/api/weight', weightRoutes)
 app.use('/api/dashboard', dashboardRoutes)
 
-// Front estático + fallback SPA (Hostinger proxyea / y /login a Node)
-if (clientDist) {
-  const indexHtml = path.join(clientDist, 'index.html')
-
-  const sendIndex = (req, res, next) => {
-    if (req.path.startsWith('/api')) return next()
-    res.sendFile(indexHtml, (err) => {
-      if (err) next(err)
-    })
-  }
-
-  app.use(
-    '/assets',
-    express.static(path.join(clientDist, 'assets'), {
-      maxAge: '7d',
-      fallthrough: true,
-    }),
-  )
-  app.use(
-    express.static(clientDist, {
-      index: false,
-      fallthrough: true,
-      maxAge: '1h',
-    }),
-  )
-
-  // Rutas explícitas + fallback (el comodín Express 5 fallaba en Hostinger)
-  app.get('/', sendIndex)
-  app.get(
-    [
-      '/login',
-      '/onboarding',
-      '/dashboard',
-      '/meals',
-      '/water',
-      '/mood',
-      '/sleep',
-      '/habits',
-      '/meditation',
-      '/activity',
-      '/weight',
-      '/stats',
-      '/profile',
-      '/index.html',
-    ],
-    sendIndex,
-  )
-  app.use((req, res, next) => {
-    if (req.method !== 'GET' && req.method !== 'HEAD') return next()
-    if (req.path.startsWith('/api')) return next()
-    return sendIndex(req, res, next)
-  })
-} else if (env.isProd) {
+const spaMounted = mountSpa(app, clientDist)
+if (!spaMounted && env.isProd) {
   console.warn('[correctly] No se encontró UI (server/ui) — solo API')
-  app.get('/', (_req, res) => {
-    res
-      .status(503)
-      .type('html')
-      .send(
-        '<h1>Correctly</h1><p>UI no encontrada.</p><p><a href="/api/health">/api/health</a></p>',
-      )
-  })
 }
+console.log(`[correctly] SPA mounted=${spaMounted} dist=${clientDist || 'none'}`)
 
 app.use(errorHandler)
 
