@@ -199,6 +199,30 @@ body {
   background: var(--cx-error-soft) !important;
 }
 
+/* Oscuro: texto claro sobre wash suave (el azul oscuro #1a5570 casi no se veía) */
+[data-theme='dark'] .v-alert--variant-tonal.v-alert--type-info,
+[data-theme='dark'] .v-alert.text-info {
+  color: #d8f0fa !important;
+  background: rgba(107, 179, 209, 0.28) !important;
+}
+[data-theme='dark'] .v-alert--variant-tonal.v-alert--type-success {
+  color: #d4f5e0 !important;
+  background: rgba(107, 191, 134, 0.28) !important;
+}
+[data-theme='dark'] .v-alert--variant-tonal.v-alert--type-warning {
+  color: #ffe9b8 !important;
+  background: rgba(212, 168, 75, 0.28) !important;
+}
+[data-theme='dark'] .v-alert--variant-tonal.v-alert--type-error {
+  color: #ffd4d0 !important;
+  background: rgba(224, 122, 114, 0.28) !important;
+}
+[data-theme='dark'] .v-alert .v-alert__underlay,
+[data-theme='dark'] .v-alert .v-alert__prepend .v-icon {
+  color: inherit !important;
+  opacity: 1;
+}
+
 /* —— Tonal surfaces —— */
 .v-card--variant-tonal,
 .v-chip--variant-tonal,

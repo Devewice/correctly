@@ -48,7 +48,7 @@ const correctlyDark = {
     'primary-darken-1': '#C5D9C3',
     secondary: '#E8B892',
     accent: '#C9B8D8',
-    info: '#6BB3D1',
+    info: '#8ECCE6',
     success: '#6BBF86',
     warning: '#D4A84B',
     error: '#E07A72',
@@ -60,10 +60,10 @@ const correctlyDark = {
     'on-primary-darken-1': '#1A1D19',
     'on-secondary': '#1A1D19',
     'on-accent': '#1A1D19',
-    'on-info': '#1A1D19',
-    'on-success': '#1A1D19',
-    'on-warning': '#1A1D19',
-    'on-error': '#1A1D19',
+    'on-info': '#D8F0FA',
+    'on-success': '#D4F5E0',
+    'on-warning': '#FFE9B8',
+    'on-error': '#FFD4D0',
   },
 }
 
