@@ -401,19 +401,24 @@ async function logout() {
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  min-width: 0;
 }
 .more-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 8px;
+  width: 100%;
+  max-width: 100%;
 }
 .more-row {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  min-width: 0;
+  max-width: 100%;
   min-height: var(--cx-touch);
-  padding: 12px 14px;
+  padding: 11px 12px;
   border: none;
   border-radius: var(--cx-radius);
   background: var(--cx-surface-soft);
@@ -421,6 +426,7 @@ async function logout() {
   text-align: left;
   cursor: pointer;
   box-shadow: none;
+  overflow: hidden;
   transition: background 0.15s ease, color 0.15s ease;
 }
 .more-row:active {
@@ -434,15 +440,19 @@ async function logout() {
   color: var(--cx-primary-deep);
 }
 .more-row__icon {
-  flex-shrink: 0;
+  flex: 0 0 auto;
 }
 .more-row__title {
-  font-size: 0.875rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.8125rem;
   font-weight: 600;
   line-height: 1.2;
   color: var(--cx-text);
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  word-break: break-word;
 }
 </style>
