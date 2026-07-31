@@ -125,12 +125,18 @@ export async function saveVapidConfig(data, updatedBy) {
 
 export async function getPublicAuthFlags() {
   const google = await getGoogleConfig()
+  const lastError = await getSetting('auth.lastGoogleError', '')
 
   return {
     googleConfigured: google.configured,
     googleWizardDone: google.wizardDone,
     devLogin: false,
     callbackUrl: google.callbackUrl,
+    sources: google.sources,
+    /** Solo metadatos seguros para depurar deploy */
+    clientIdTail: google.clientId ? google.clientId.slice(-20) : '',
+    secretLen: google.clientSecret ? google.clientSecret.length : 0,
+    lastError: lastError || null,
   }
 }
 

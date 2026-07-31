@@ -25,7 +25,10 @@
     "errors": {
       "notConfigured": "Google aún no está configurado. Revisa el wizard en Admin.",
       "denied": "No se completó el acceso con Google. Intenta de nuevo.",
-      "failed": "Falló el login con Google. Revisa Client ID, Secret y la Callback URL en el wizard (deben coincidir con Google Cloud)."
+      "noEmail": "Google no compartió el email. Revisa permisos de la cuenta o la pantalla de consentimiento.",
+      "db": "Google autenticó bien, pero falló al guardar tu usuario. Revisa los logs del servidor / Admin.",
+      "retry": "El código de Google ya se usó o expiró. Pulsa de nuevo Continuar con Google.",
+      "failed": "Falló el login con Google. Revisa Client ID, Secret y la Callback URL (deben coincidir con Google Cloud)."
     }
   },
   "admin": {
@@ -51,6 +54,7 @@
       "needGoogleHint": "Un asistente corto te guía paso a paso en Google Cloud Console.",
       "startWizard": "Abrir wizard",
       "googleSource": "Secret desde",
+      "lastGoogleError": "Último error de login Google",
       "needVapid": "Configura Web Push (VAPID)",
       "needVapidHint": "Sin estas claves, las alarmas solo funcionan con la app abierta.",
       "startVapidWizard": "Abrir wizard Push",

@@ -25,7 +25,10 @@
     "errors": {
       "notConfigured": "Google isn't configured yet. Check the Admin wizard.",
       "denied": "Google sign-in wasn't completed. Try again.",
-      "failed": "Google sign-in failed. Check Client ID, Secret, and Callback URL in the wizard (must match Google Cloud)."
+      "noEmail": "Google didn't share an email. Check account permissions or the consent screen.",
+      "db": "Google signed you in, but saving the user failed. Check server logs / Admin.",
+      "retry": "That Google code was already used or expired. Tap Continue with Google again.",
+      "failed": "Google sign-in failed. Check Client ID, Secret, and Callback URL (must match Google Cloud)."
     }
   },
   "admin": {
@@ -51,6 +54,7 @@
       "needGoogleHint": "A short wizard walks you through Google Cloud Console.",
       "startWizard": "Open wizard",
       "googleSource": "Secret from",
+      "lastGoogleError": "Last Google login error",
       "needVapid": "Set up Web Push (VAPID)",
       "needVapidHint": "Without these keys, alarms only work while the app is open.",
       "startVapidWizard": "Open Push wizard",

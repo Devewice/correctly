@@ -5,11 +5,17 @@ import { api } from '@/shared/api/client'
 
 const { t } = useI18n()
 const data = ref(null)
+const authStatus = ref(null)
 const error = ref('')
 
 onMounted(async () => {
   try {
-    data.value = await api('/admin/overview')
+    const [overview, status] = await Promise.all([
+      api('/admin/overview'),
+      api('/auth/status'),
+    ])
+    data.value = overview
+    authStatus.value = status
   } catch (e) {
     error.value = e.message
   }
@@ -66,6 +72,16 @@ onMounted(async () => {
       <p class="text-body-2 mt-1 mb-4">{{ t('admin.overview.needGoogleHint') }}</p>
       <v-btn color="primary" to="/admin/google">{{ t('admin.overview.startWizard') }}</v-btn>
     </v-card>
+
+    <v-alert
+      v-if="authStatus?.lastError"
+      type="warning"
+      variant="tonal"
+      class="mb-0"
+    >
+      <div class="text-subtitle-2 font-weight-bold mb-1">{{ t('admin.overview.lastGoogleError') }}</div>
+      <div class="text-caption" style="word-break: break-all">{{ authStatus.lastError }}</div>
+    </v-alert>
 
     <v-card
       v-if="!data.settings.vapid?.configured"

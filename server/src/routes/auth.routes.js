@@ -19,6 +19,18 @@ function loginErrorRedirect(code) {
   return `${env.clientUrl}/login?error=${encodeURIComponent(code)}`
 }
 
+async function rememberGoogleError(message) {
+  try {
+    const { setSetting } = await import('../services/settings.js')
+    await setSetting(
+      'auth.lastGoogleError',
+      `${new Date().toISOString()} ${String(message || '').slice(0, 400)}`,
+    )
+  } catch {
+    /* ignore */
+  }
+}
+
 router.get('/google', async (req, res, next) => {
   try {
     const ok = await refreshGoogleStrategy()
@@ -49,25 +61,32 @@ router.get('/google/callback', async (req, res, next) => {
       return res.redirect(loginErrorRedirect('oauth_not_configured'))
     }
 
-    passport.authenticate('google', { session: false }, (err, user, info) => {
+    passport.authenticate('google', { session: false }, async (err, user, info) => {
       if (err) {
-        console.error(
-          '[auth] google callback error:',
-          err.message || err,
-          err.code || '',
-          info || '',
-        )
-        // Token inválido / secret mal → suele ser credentials
-        const code =
-          /invalid_client|unauthorized|invalid_grant|Unexpected end of JSON/i.test(
-            String(err.message || ''),
-          )
-            ? 'oauth_failed'
-            : 'oauth_failed'
-        return res.redirect(loginErrorRedirect(code))
+        const msg = err.message || String(err)
+        console.error('[auth] google callback error:', msg, err.code || '', info || '')
+        await rememberGoogleError(msg)
+        if (err.code === 'oauth_no_email' || /sin email/i.test(msg)) {
+          return res.redirect(loginErrorRedirect('oauth_no_email'))
+        }
+        if (/Unique constraint|P2002/i.test(msg)) {
+          return res.redirect(loginErrorRedirect('oauth_db'))
+        }
+        if (/invalid_client|unauthorized_client/i.test(msg)) {
+          return res.redirect(loginErrorRedirect('oauth_failed'))
+        }
+        if (/invalid_grant|Malformed auth code/i.test(msg)) {
+          return res.redirect(loginErrorRedirect('oauth_retry'))
+        }
+        // Prisma / DB / avatar / etc.
+        if (/prisma|Invalid|VarChar|Argument/i.test(msg)) {
+          return res.redirect(loginErrorRedirect('oauth_db'))
+        }
+        return res.redirect(loginErrorRedirect('oauth_failed'))
       }
       if (!user) {
         console.warn('[auth] google callback sin user', info)
+        await rememberGoogleError(info?.message || 'no user')
         return res.redirect(loginErrorRedirect('oauth_denied'))
       }
 
@@ -78,6 +97,7 @@ router.get('/google/callback', async (req, res, next) => {
         return res.redirect(`${env.clientUrl}/${dest}?token=${token}`)
       } catch (signErr) {
         console.error('[auth] sign token', signErr)
+        await rememberGoogleError(signErr.message)
         return res.redirect(loginErrorRedirect('oauth_failed'))
       }
     })(req, res, next)

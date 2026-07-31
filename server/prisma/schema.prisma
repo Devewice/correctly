@@ -12,7 +12,7 @@ model User {
   googleId             String?  @unique
   email                String   @unique
   name                 String
-  avatar               String?  @db.VarChar(500)
+  avatar               String?  @db.VarChar(1000)
   role                 String   @default("user") // user | admin | superadmin
   timezone             String   @default("America/Bogota")
   language             String   @default("es") // es | en | pt
