@@ -1,116 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { getToken } from '@/utils/api'
-import { useAuthStore } from '@/stores/auth'
+import { getToken } from '@/shared/api/client'
+import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
+import { publicRoutes } from '@/router/routes/public.routes'
+import { appRoutes } from '@/router/routes/app.routes'
+import { adminRoutes } from '@/router/routes/admin.routes'
 
-/** History mode — Apache (.htaccess) debe devolver index.html en /onboarding etc. */
 const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    {
-      path: '/',
-      redirect: '/dashboard',
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/views/LoginView.vue'),
-      meta: { guest: true },
-    },
-    {
-      path: '/onboarding',
-      name: 'onboarding',
-      component: () => import('@/views/OnboardingView.vue'),
-      meta: { auth: true },
-    },
-    {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: () => import('@/views/DashboardView.vue'),
-      meta: { auth: true },
-    },
-    {
-      path: '/meals',
-      name: 'meals',
-      component: () => import('@/views/MealsView.vue'),
-      meta: { auth: true },
-    },
-    {
-      path: '/water',
-      name: 'water',
-      component: () => import('@/views/WaterView.vue'),
-      meta: { auth: true },
-    },
-    {
-      path: '/mood',
-      name: 'mood',
-      component: () => import('@/views/MoodView.vue'),
-      meta: { auth: true },
-    },
-    {
-      path: '/sleep',
-      name: 'sleep',
-      component: () => import('@/views/SleepView.vue'),
-      meta: { auth: true },
-    },
-    {
-      path: '/habits',
-      name: 'habits',
-      component: () => import('@/views/HabitsView.vue'),
-      meta: { auth: true },
-    },
-    {
-      path: '/meditation',
-      name: 'meditation',
-      component: () => import('@/views/MeditationView.vue'),
-      meta: { auth: true },
-    },
-    {
-      path: '/activity',
-      name: 'activity',
-      component: () => import('@/views/ActivityView.vue'),
-      meta: { auth: true },
-    },
-    {
-      path: '/weight',
-      name: 'weight',
-      component: () => import('@/views/WeightView.vue'),
-      meta: { auth: true },
-    },
-    {
-      path: '/stats',
-      name: 'stats',
-      component: () => import('@/views/StatsView.vue'),
-      meta: { auth: true },
-    },
-    {
-      path: '/profile',
-      name: 'profile',
-      component: () => import('@/views/ProfileView.vue'),
-      meta: { auth: true },
-    },
-    {
-      path: '/admin',
-      component: () => import('@/views/admin/AdminLayout.vue'),
-      meta: { auth: true, superadmin: true },
-      children: [
-        {
-          path: '',
-          name: 'admin',
-          component: () => import('@/views/admin/AdminOverview.vue'),
-        },
-        {
-          path: 'google',
-          name: 'admin-google',
-          component: () => import('@/views/admin/AdminGoogleWizard.vue'),
-        },
-        {
-          path: 'users',
-          name: 'admin-users',
-          component: () => import('@/views/admin/AdminUsers.vue'),
-        },
-      ],
-    },
-  ],
+  routes: [...publicRoutes, ...appRoutes, ...adminRoutes],
 })
 
 router.beforeEach(async (to) => {
@@ -123,30 +20,31 @@ router.beforeEach(async (to) => {
     auth.loading = false
   }
 
-  if (to.meta.auth && !auth.user) {
+  const needsAuth = to.matched.some((r) => r.meta.auth)
+  const isGuest = to.matched.some((r) => r.meta.guest)
+  const needsSuper = to.matched.some((r) => r.meta.superadmin)
+
+  if (needsAuth && !auth.user) {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
 
-  if (to.meta.superadmin && auth.user?.role !== 'superadmin') {
+  if (needsSuper && auth.user?.role !== 'superadmin') {
     return { name: 'dashboard' }
   }
 
-  if (to.meta.guest && auth.user) {
+  if (isGuest && auth.user) {
     return auth.user.onboardingCompleted
       ? { name: 'dashboard' }
       : { name: 'onboarding' }
   }
 
-  // Admin puede saltar onboarding de bienestar si entra al panel
-  if (to.path.startsWith('/admin')) {
-    return true
-  }
+  if (to.path.startsWith('/admin')) return true
 
   if (
     to.name !== 'onboarding' &&
     auth.user &&
     !auth.user.onboardingCompleted &&
-    to.meta.auth
+    needsAuth
   ) {
     return { name: 'onboarding' }
   }
