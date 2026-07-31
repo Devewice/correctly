@@ -46,16 +46,16 @@ onMounted(load)
   <v-row dense class="mb-6">
     <v-col v-for="(m, i) in moods" :key="m.value" cols="4" sm>
       <div v-motion v-bind="{ ...moodHover, ...withDelay(fadeUp, 50 + i * 40) }">
-        <v-card
-          class="pa-3 text-center mood-pick"
-          :color="selected === m.value ? 'secondary' : undefined"
-          :variant="selected === m.value ? 'flat' : 'tonal'"
+        <button
+          type="button"
+          class="mood-tile"
+          :class="{ 'mood-tile--selected': selected === m.value }"
           :disabled="busy"
           @click="save(m.value)"
         >
-          <div class="text-h4">{{ m.emoji }}</div>
-          <div class="text-caption mt-1 text-truncate">{{ t(`mood.labels.${m.key}`) }}</div>
-        </v-card>
+          <span class="mood-tile__emoji" aria-hidden="true">{{ m.emoji }}</span>
+          <span class="mood-tile__label">{{ t(`mood.labels.${m.key}`) }}</span>
+        </button>
       </div>
     </v-col>
   </v-row>
@@ -74,7 +74,61 @@ onMounted(load)
 </template>
 
 <style scoped>
-.mood-pick {
-  min-height: 76px;
+.mood-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  min-height: 5.5rem;
+  padding: 0.75rem 0.4rem;
+  border: 2px solid #e4d9cb;
+  border-radius: 1rem;
+  background: #f5ede3;
+  color: #3d3d3d;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.mood-tile:hover:not(:disabled) {
+  border-color: #8ba888;
+  background: #eef3ed;
+}
+
+.mood-tile--selected {
+  border-color: #8ba888;
+  background: #f4cba8;
+  box-shadow: 0 0 0 1px #8ba888;
+}
+
+.mood-tile:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.mood-tile__emoji {
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.mood-tile__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #3d3d3d;
+  text-align: center;
+}
+
+@media (min-width: 600px) {
+  .mood-tile {
+    min-height: 6.25rem;
+  }
+
+  .mood-tile__emoji {
+    font-size: 2.35rem;
+  }
 }
 </style>
