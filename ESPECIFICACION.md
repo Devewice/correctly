@@ -111,8 +111,8 @@ Extraídas de lo que las apps más exitosas comparten:
 | Tecnología | Uso |
 |------------|-----|
 | **Node.js + Express** | API REST |
-| **PostgreSQL** | Base de datos relacional (datos de usuario, logs diarios) |
-| **Prisma ORM** | Migraciones y queries type-safe |
+| **MySQL** (Hostinger) | Base de datos remota: `u301973293_correctly` en `srv1855.hstgr.io` |
+| **Prisma ORM** | Migraciones y queries type-safe (`provider = "mysql"`) |
 | **Passport.js + Google OAuth 2.0** | Autenticación con Google |
 | **JWT + httpOnly cookies** | Sesiones seguras |
 | **node-cron** | Tareas programadas (recordatorios, resúmenes) |
@@ -137,9 +137,10 @@ Extraídas de lo que las apps más exitosas comparten:
 
 | Tecnología | Uso |
 |------------|-----|
-| **Docker** | Contenedores |
-| **Railway / Render / Fly.io** | Deploy backend |
-| **Vercel / Netlify** | Deploy frontend |
+| **Hostinger MySQL** | DB de producción/dev: host `srv1855.hstgr.io` / IP `82.197.82.134` · dominio `jeisson.click` |
+| **phpMyAdmin** | Administración visual de la BD (panel Hostinger) |
+| **Railway / Render / Fly.io / VPS** | Deploy backend (cuando corresponda) |
+| **Vercel / Netlify / Hostinger** | Deploy frontend |
 | **Cloudinary** | Fotos de comidas (fase 2) |
 
 ---
@@ -764,12 +765,13 @@ correctly/
 ├── ESPECIFICACION.md          ← este documento
 ├── README.md
 ├── package.json               ← scripts root (dev, build)
-├── docker-compose.yml         ← PostgreSQL local
+├── .env.example               ← plantilla (sin secretos)
 │
 ├── server/
 │   ├── package.json
+│   ├── .env                   ← MySQL Hostinger (NO subir a git)
 │   ├── prisma/
-│   │   └── schema.prisma
+│   │   └── schema.prisma      ← provider = "mysql"
 │   ├── src/
 │   │   ├── index.js
 │   │   ├── config/
@@ -889,7 +891,7 @@ correctly/
 | Modo claro | ✅ |
 | Animaciones básicas (Motion) | ✅ |
 | API REST completa | ✅ |
-| PostgreSQL + Prisma | ✅ |
+| MySQL (Hostinger) + Prisma | ✅ |
 
 ### 🟡 Fase 2 — Expansión (4–6 semanas)
 
@@ -933,7 +935,7 @@ correctly/
 
 | Aspecto | Medida |
 |---------|--------|
-| Datos de salud | Encriptados at-rest (PostgreSQL) y in-transit (HTTPS) |
+| Datos de salud | Encriptados at-rest (MySQL Hostinger) y in-transit (HTTPS / SSL a MySQL) |
 | Auth | JWT en httpOnly cookies, CSRF protection |
 | Google OAuth | Solo scopes mínimos (email, profile) |
 | Datos del usuario | Nunca vendidos ni compartidos |
@@ -967,8 +969,8 @@ correctly/
 | 3 | **Monetización** | **Totalmente gratis** — sin freemium, sin suscripción, sin paywalls |
 | 4 | **Alcance** | **Producto completo** — no un MVP reducido. Se construye por fases de entrega, pero el objetivo es todo lo especificado (Fases 1 + 2 + 3 como producto gratuito) |
 | 5 | **Repositorio** | https://github.com/Devewice/correctly.git |
-| 6 | **Base de datos (dev)** | Docker PostgreSQL (recomendado) |
-| 7 | **Deploy** | Local primero; luego Railway/Render (API) + Vercel/Netlify (front) |
+| 6 | **Base de datos** | **MySQL Hostinger** — DB `u301973293_correctly`, host `srv1855.hstgr.io` (IP `82.197.82.134`), usuario `u301973293_admin`, panel `jeisson.click` / phpMyAdmin |
+| 7 | **Deploy** | Local primero (API apuntando a MySQL remoto); front/API según Hostinger o Vercel/Render |
 | 8 | **Macros/calorías** | Incluidos (modo simple primero; barcode/macros avanzados después) |
 | 9 | **Medicamentos** | Incluidos en el alcance completo (fase de entrega posterior) |
 | 10 | **Usuarios** | Individual (sin multi-familiar en v1) |
@@ -1013,7 +1015,24 @@ correctly/
 - 🔐 **Login con Google**
 - 🌍 **Multidioma** ES · EN · PT
 
-Stack: **Express + Vue 3 + PostgreSQL**. Repo: [Devewice/correctly](https://github.com/Devewice/correctly.git).
+Stack: **Express + Vue 3 + MySQL (Hostinger)**. Repo: [Devewice/correctly](https://github.com/Devewice/correctly.git).
+
+### Credenciales MySQL (referencia — secretos solo en `.env`)
+
+| Campo | Valor |
+|-------|--------|
+| Host | `srv1855.hstgr.io` (alt. IP `82.197.82.134`) |
+| Base de datos | `u301973293_correctly` |
+| Usuario | `u301973293_admin` |
+| Panel / dominio | `jeisson.click` · phpMyAdmin |
+| Cuota | 1 MB (ampliar si hace falta al crecer datos) |
+| Contraseña | **Solo en `server/.env` — nunca en git ni en este MD** |
+
+Connection string Prisma (ejemplo):
+
+```env
+DATABASE_URL="mysql://u301973293_admin:PASSWORD@srv1855.hstgr.io:3306/u301973293_correctly"
+```
 
 ---
 

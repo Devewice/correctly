@@ -12,10 +12,11 @@ Especificación de producto lista. Desarrollo pendiente.
 
 ## Stack previsto
 
-- **Backend:** Node.js + Express + PostgreSQL + Prisma
+- **Backend:** Node.js + Express + MySQL (Hostinger) + Prisma
 - **Frontend:** Vue 3 + Vite + Tailwind + Motion
 - **Auth:** Google OAuth 2.0
 - **i18n:** ES / EN / PT
+- **DB:** `u301973293_correctly` @ `srv1855.hstgr.io` (credenciales en `server/.env`, no en git)
 
 ## Repo
 

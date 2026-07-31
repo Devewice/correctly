@@ -10,9 +10,12 @@ build/
 .nuxt/
 .vite/
 
-# Env
+# Env (nunca subir secretos)
 .env
-.env.*
+.env.local
+.env.*.local
+**/.env
+!**/.env.example
 !.env.example
 
 # Logs
