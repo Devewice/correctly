@@ -1,10 +1,13 @@
 <script setup>
 import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
 import PageHeader from '@/shared/components/PageHeader.vue'
+import { JOURNAL_PROMPTS } from '@/shared/data/journalPrompts'
 
 const { t } = useI18n()
+const route = useRoute()
 const text = ref('')
 const entries = ref([])
 const busy = ref(false)
@@ -12,6 +15,10 @@ const busy = ref(false)
 async function load() {
   const data = await api('/journal')
   entries.value = data.entries || []
+}
+
+function usePrompt(key) {
+  text.value = t(`journal.prompts.${key}`)
 }
 
 async function save() {
@@ -29,13 +36,33 @@ async function save() {
   }
 }
 
-onMounted(load)
+onMounted(() => {
+  const p = route.query.prompt
+  if (typeof p === 'string' && JOURNAL_PROMPTS.some((x) => x.key === p)) {
+    usePrompt(p)
+  }
+  load()
+})
 </script>
 
 <template>
   <PageHeader :title="t('journal.title')" :subtitle="t('journal.subtitle')" />
 
   <v-card class="pa-4 mb-4">
+    <p class="text-caption text-medium-emphasis mb-2">{{ t('journal.promptsTitle') }}</p>
+    <div class="d-flex flex-wrap ga-2 mb-3">
+      <button
+        v-for="p in JOURNAL_PROMPTS"
+        :key="p.key"
+        type="button"
+        class="select-tile"
+        style="width: auto"
+        @click="usePrompt(p.key)"
+      >
+        <span aria-hidden="true">{{ p.icon }}</span>
+        {{ t(`journal.prompts.${p.key}`).slice(0, 22) }}…
+      </button>
+    </div>
     <v-textarea
       v-model="text"
       rows="4"

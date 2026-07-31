@@ -57,6 +57,11 @@ export const appRoutes = [
         component: () => import('@/modules/wellness/views/JournalView.vue'),
       },
       {
+        path: 'practices',
+        name: 'practices',
+        component: () => import('@/modules/wellness/views/PracticesView.vue'),
+      },
+      {
         path: 'stats',
         name: 'stats',
         component: () => import('@/modules/wellness/views/StatsView.vue'),

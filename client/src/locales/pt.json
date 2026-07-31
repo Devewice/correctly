@@ -193,7 +193,15 @@
     "subtitle": "Uma linha basta. Sem pressão.",
     "line": "O que você gostaria de lembrar de hoje?",
     "save": "Salvar",
-    "empty": "Ainda não há notas hoje."
+    "empty": "Ainda não há notas hoje.",
+    "promptsTitle": "Quer um empurrãozinho?",
+    "prompts": {
+      "peace": "Hoje me trouxe paz…",
+      "proud": "Hoje me sinto orgulhoso de…",
+      "release": "Hoje posso soltar…",
+      "thanks": "Hoje agradeço…",
+      "tomorrow": "Amanhã quero cuidar…"
+    }
   },
   "dashboard": {
     "greetingMorning": "Bom dia, {name}",
@@ -278,8 +286,40 @@
       "friends": "Notas e foto do dia com amigos",
       "reminders": "Toques no horário (web)",
       "profile": "Sua conta e módulos",
-      "today": "Voltar ao guia de hoje"
-    }
+      "today": "Voltar ao guia de hoje",
+      "practices": "Micropráticas de 1–3 min"
+    },
+    "moodAsk_1": "Qual cara combina com hoje?",
+    "moodAsk_2": "Check-in rápido: como vai?",
+    "waterAsk_1": "Um gole de água no que você faz?",
+    "waterAsk_2": "Seu corpo pede água. Somamos?",
+    "mealAsk_1": "Algo gostoso para anotar?",
+    "mealAsk_2": "Uma linha sobre a refeição basta.",
+    "habitAsk_1": "Já fez esse hábito?",
+    "habitAsk_2": "Pequeno passo: marcamos?",
+    "sleepAsk_1": "O sono cuidou de você?",
+    "sleepAsk_2": "Acordou mais ou menos descansado?",
+    "meditationAsk_1": "Três minutos só para você?",
+    "meditationAsk_2": "Baixamos o ritmo com a respiração?",
+    "activityAsk_1": "Corpo em movimento hoje?",
+    "activityAsk_2": "Uma caminhada ou alongamento conta?",
+    "journalAsk_1": "O que você quer lembrar?",
+    "journalAsk_2": "Uma linha curta do dia.",
+    "shareWithFriends": "Compartilhar com amigos",
+    "closeTitle": "Fechamento do dia",
+    "closeCared": "Hoje você cuidou de:",
+    "closePhraseHigh": "Você se cuidou com calma. Isso já é muito.",
+    "closePhraseMid": "Vai bem. O importante é seguir sem pressão.",
+    "closePhraseSoft": "Cada registro conta. Obrigado por estar aqui.",
+    "closePhraseEmpty": "Ainda dá tempo. Um passo basta.",
+    "lowEnergy": "Energia baixa",
+    "freezeLeft": "{n} dia de graça",
+    "burstMood": "Humor anotado",
+    "burstWater": "Água somada",
+    "burstMeal": "Refeição registrada",
+    "burstHabit": "Hábito pronto",
+    "burstSleep": "Sono contado",
+    "burstDone": "Pronto"
   },
   "pwa": {
     "title": "Usar como app",
@@ -450,8 +490,8 @@
     "listTitle": "Seus amigos",
     "listEmpty": "Você ainda não tem amigos. Compartilhe seu link.",
     "remove": "Remover",
-    "likesStat": "Likes recebidos",
-    "dislikesStat": "Dislikes recebidos",
+    "likesStat": "Ânimos recebidos",
+    "dislikesStat": "Força recebida",
     "alreadyToday": "Você já publicou hoje. Volte amanhã.",
     "badImage": "Escolha uma imagem",
     "imageTooBig": "Máximo 2.5 MB",
@@ -459,7 +499,11 @@
     "joinSubtitle": "Emparelhando…",
     "joinOk": "Agora você é amigo de {name}",
     "joinAlready": "Você já era amigo de {name}",
-    "badCode": "Link inválido"
+    "badCode": "Link inválido",
+    "reactCheer": "Ânimo",
+    "reactStrength": "Força",
+    "checkInTitle": "Check-in com amigos",
+    "checkInHint": "Uma nota curta ou foto. Só hoje. Sem pressão de rede social."
   },
   "meals": {
     "title": "O que comi",
@@ -604,8 +648,12 @@
     "days": "Dia a dia",
     "badges": "Conquistinhas",
     "noBadges": "Siga um dia de cada vez — as conquistas aparecem sozinhas.",
-    "likes": "Likes de amigos",
-    "dislikes": "Dislikes de amigos"
+    "likes": "Ânimos de amigos",
+    "dislikes": "Força de amigos",
+    "freeze": "Dias de graça",
+    "freezeHint": "Se falhar um dia, a sequência pode se salvar uma vez por semana.",
+    "correlations": "Padrões suaves",
+    "correlationsEmpty": "Com mais dias registrados, padrões amáveis aparecem aqui."
   },
   "badges": {
     "first_step": "Primeiro passo",
@@ -627,6 +675,55 @@
   "insights": {
     "welcome": "Registrar o dia é um ato de cuidado. Comece com o café ou um copo d'água.",
     "streak": "Você está há {days} dias seguidos. Bom ritmo!",
-    "logMeal": "Dica: registre o café da manhã em menos de 10 segundos com uma nota curta."
+    "logMeal": "Dica: registre o café da manhã em menos de 10 segundos com uma nota curta.",
+    "corrSleepMood": "Quando você dorme melhor, o humor costuma subir. Vale cuidar.",
+    "corrWaterMood": "Dias com mais água coincidem com melhor humor no seu histórico.",
+    "corrMoveMood": "Se mover um pouco parece acompanhar um humor mais alto."
+  },
+  "rituals": {
+    "morning": {
+      "short": "Manhã",
+      "title": "Ritual da manhã"
+    },
+    "evening": {
+      "short": "Noite",
+      "title": "Ritual da noite"
+    },
+    "reset": {
+      "short": "Reset",
+      "title": "Ritual de reset"
+    }
+  },
+  "practices": {
+    "title": "Micropráticas",
+    "subtitle": "1 a 3 minutos. Sem cursos longos.",
+    "open": "Ver micropráticas",
+    "minutes": "{n} min",
+    "items": {
+      "breathe_box": {
+        "title": "Respiração curta",
+        "hint": "Acalma o sistema"
+      },
+      "shoulders": {
+        "title": "Ombros e pescoço",
+        "hint": "Solta a tensão"
+      },
+      "gratitude_one": {
+        "title": "Uma gratidão",
+        "hint": "Abre o diário"
+      },
+      "walk_desk": {
+        "title": "Caminhada de mesa",
+        "hint": "3 minutos de movimento"
+      },
+      "body_scan_mini": {
+        "title": "Escaneamento breve",
+        "hint": "Notar o corpo"
+      },
+      "water_pause": {
+        "title": "Pausa com água",
+        "hint": "Um copo consciente"
+      }
+    }
   }
 }

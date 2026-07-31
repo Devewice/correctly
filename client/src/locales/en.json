@@ -193,7 +193,15 @@
     "subtitle": "One line is enough. No pressure.",
     "line": "What would you like to remember from today?",
     "save": "Save",
-    "empty": "No notes yet today."
+    "empty": "No notes yet today.",
+    "promptsTitle": "Want a gentle prompt?",
+    "prompts": {
+      "peace": "Today brought me peace…",
+      "proud": "Today I feel proud of…",
+      "release": "Today I can let go of…",
+      "thanks": "Today I am grateful for…",
+      "tomorrow": "Tomorrow I want to care for…"
+    }
   },
   "dashboard": {
     "greetingMorning": "Good morning, {name}",
@@ -278,8 +286,40 @@
       "friends": "Daily notes and photos with friends",
       "reminders": "Gentle web nudges",
       "profile": "Your account and modules",
-      "today": "Back to today's guide"
-    }
+      "today": "Back to today's guide",
+      "practices": "1–3 min micro-practices"
+    },
+    "moodAsk_1": "Which face fits today?",
+    "moodAsk_2": "Quick check-in: how are you?",
+    "waterAsk_1": "A sip of water with what you are doing?",
+    "waterAsk_2": "Your body wants a drink. Add one?",
+    "mealAsk_1": "Anything tasty to note?",
+    "mealAsk_2": "One line about your meal is enough.",
+    "habitAsk_1": "Did you cross this habit?",
+    "habitAsk_2": "Small step: shall we mark it?",
+    "sleepAsk_1": "Did sleep take care of you?",
+    "sleepAsk_2": "Did you wake more or less rested?",
+    "meditationAsk_1": "Three minutes just for you?",
+    "meditationAsk_2": "Lower the pace with a breath?",
+    "activityAsk_1": "Body in motion today?",
+    "activityAsk_2": "A short walk or stretch counts?",
+    "journalAsk_1": "What would you like to remember?",
+    "journalAsk_2": "One short line from today.",
+    "shareWithFriends": "Share with friends",
+    "closeTitle": "Day close",
+    "closeCared": "Today you cared for:",
+    "closePhraseHigh": "You cared for yourself gently. That is already a lot.",
+    "closePhraseMid": "You are doing fine. Keep going without pressure.",
+    "closePhraseSoft": "Every log counts. Thanks for being here.",
+    "closePhraseEmpty": "There is still time. One step is enough.",
+    "lowEnergy": "Low energy",
+    "freezeLeft": "{n} grace day",
+    "burstMood": "Mood saved",
+    "burstWater": "Water added",
+    "burstMeal": "Meal logged",
+    "burstHabit": "Habit done",
+    "burstSleep": "Sleep logged",
+    "burstDone": "Done"
   },
   "pwa": {
     "title": "Use as an app",
@@ -450,8 +490,8 @@
     "listTitle": "Your friends",
     "listEmpty": "No friends yet. Share your link.",
     "remove": "Remove",
-    "likesStat": "Likes received",
-    "dislikesStat": "Dislikes received",
+    "likesStat": "Cheers received",
+    "dislikesStat": "Strength received",
     "alreadyToday": "You already posted today. Come back tomorrow.",
     "badImage": "Pick an image",
     "imageTooBig": "Max 2.5 MB",
@@ -459,7 +499,11 @@
     "joinSubtitle": "Pairing you up…",
     "joinOk": "You're now friends with {name}",
     "joinAlready": "You were already friends with {name}",
-    "badCode": "Invalid link"
+    "badCode": "Invalid link",
+    "reactCheer": "Cheer",
+    "reactStrength": "Strength",
+    "checkInTitle": "Friends check-in",
+    "checkInHint": "A short note or photo. Just today. No social feed pressure."
   },
   "meals": {
     "title": "What I ate",
@@ -604,8 +648,12 @@
     "days": "Day by day",
     "badges": "Little wins",
     "noBadges": "Keep going one day at a time — wins show up on their own.",
-    "likes": "Friend likes",
-    "dislikes": "Friend dislikes"
+    "likes": "Friend cheers",
+    "dislikes": "Friend strength",
+    "freeze": "Grace days",
+    "freezeHint": "If you miss a day, your streak can be saved once a week.",
+    "correlations": "Gentle patterns",
+    "correlationsEmpty": "With more logged days, kind patterns will show here."
   },
   "badges": {
     "first_step": "First step",
@@ -627,6 +675,55 @@
   "insights": {
     "welcome": "Logging your day is self-care. Start with breakfast or a glass of water.",
     "streak": "You're on a {days}-day streak. Nice pace!",
-    "logMeal": "Tip: log breakfast in under 10 seconds with a short note."
+    "logMeal": "Tip: log breakfast in under 10 seconds with a short note.",
+    "corrSleepMood": "When you sleep better, your mood often rises. Worth caring for.",
+    "corrWaterMood": "Days with more water line up with a better mood in your history.",
+    "corrMoveMood": "Moving a little seems to go with a higher mood."
+  },
+  "rituals": {
+    "morning": {
+      "short": "Wake",
+      "title": "Morning ritual"
+    },
+    "evening": {
+      "short": "Close",
+      "title": "Evening ritual"
+    },
+    "reset": {
+      "short": "Reset",
+      "title": "Reset ritual"
+    }
+  },
+  "practices": {
+    "title": "Micro-practices",
+    "subtitle": "1 to 3 minutes. No long courses.",
+    "open": "See micro-practices",
+    "minutes": "{n} min",
+    "items": {
+      "breathe_box": {
+        "title": "Short breath",
+        "hint": "Calm the system"
+      },
+      "shoulders": {
+        "title": "Shoulders & neck",
+        "hint": "Release tension"
+      },
+      "gratitude_one": {
+        "title": "One gratitude",
+        "hint": "Opens the journal"
+      },
+      "walk_desk": {
+        "title": "Desk walk",
+        "hint": "3 minutes of movement"
+      },
+      "body_scan_mini": {
+        "title": "Mini body scan",
+        "hint": "Notice the body"
+      },
+      "water_pause": {
+        "title": "Water pause",
+        "hint": "A mindful glass"
+      }
+    }
   }
 }

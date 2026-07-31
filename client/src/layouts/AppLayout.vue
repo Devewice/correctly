@@ -42,6 +42,7 @@ const moreItems = computed(() => {
     { to: '/meditation', module: 'meditation', title: t('modules.meditation'), icon: 'mdi-meditation', hint: t('day.moreHints.meditation') },
     { to: '/activity', module: 'activity', title: t('modules.activity'), icon: 'mdi-run', hint: t('day.moreHints.activity') },
     { to: '/journal', module: 'journal', title: t('modules.journal'), icon: 'mdi-notebook-outline', hint: t('day.moreHints.journal') },
+    { to: '/practices', module: null, title: t('practices.title'), icon: 'mdi-spa-outline', hint: t('day.moreHints.practices') },
     { to: '/weight', module: 'weight', title: t('modules.weight'), icon: 'mdi-scale-bathroom', hint: t('day.moreHints.weight') },
     { to: '/stats', module: null, title: t('stats.title'), icon: 'mdi-chart-bar', hint: t('day.moreHints.stats') },
     { to: '/friends', module: null, title: t('friends.title'), icon: 'mdi-account-group-outline', hint: t('day.moreHints.friends') },

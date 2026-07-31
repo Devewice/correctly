@@ -6,6 +6,8 @@ import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
 import { setLocale } from '@/plugins/i18n'
 import PageHeader from '@/shared/components/PageHeader.vue'
 import InstallAppCard from '@/shared/components/InstallAppCard.vue'
+import { loadCarePrefs, saveCarePrefs } from '@/shared/utils/carePrefs'
+import { RITUALS } from '@/shared/data/rituals'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -38,6 +40,17 @@ const form = reactive({
   sleepTime: auth.user?.sleepTime || '23:00',
   activeModules: initialModules(),
 })
+
+const prefs = ref(loadCarePrefs(auth.user?.id))
+
+function toggleLowEnergy() {
+  prefs.value = saveCarePrefs(auth.user?.id, { lowEnergy: !prefs.value.lowEnergy })
+}
+
+function setRitual(id) {
+  const next = prefs.value.ritualId === id ? null : id
+  prefs.value = saveCarePrefs(auth.user?.id, { ritualId: next })
+}
 
 const languages = [
   { title: 'Español', value: 'es' },
@@ -115,6 +128,30 @@ async function save() {
           </button>
         </v-col>
       </v-row>
+
+      <p class="text-body-2 text-medium-emphasis mb-2">{{ t('day.lowEnergy') }} / {{ t('rituals.morning.title') }}</p>
+      <div class="d-flex flex-wrap ga-2 mb-4">
+        <button
+          type="button"
+          class="select-tile"
+          :class="{ 'select-tile--on': prefs.lowEnergy }"
+          style="width: auto"
+          @click="toggleLowEnergy"
+        >
+          {{ t('day.lowEnergy') }}
+        </button>
+        <button
+          v-for="r in RITUALS"
+          :key="r.id"
+          type="button"
+          class="select-tile"
+          :class="{ 'select-tile--on': prefs.ritualId === r.id }"
+          style="width: auto"
+          @click="setRitual(r.id)"
+        >
+          {{ r.icon }} {{ t(`rituals.${r.id}.short`) }}
+        </button>
+      </div>
 
       <v-btn type="submit" block color="primary" size="large" :loading="busy">
         {{ t('common.save') }}

@@ -182,6 +182,11 @@ onMounted(load)
       </div>
     </v-card>
 
+    <v-card v-if="canPost" class="pa-4 mb-3" variant="flat" color="surface-light">
+      <div class="text-subtitle-2 font-weight-bold">{{ t('friends.checkInTitle') }}</div>
+      <p class="text-body-2 text-medium-emphasis mb-0 mt-1">{{ t('friends.checkInHint') }}</p>
+    </v-card>
+
     <v-card v-if="canPost" class="pa-5 mb-5">
       <div class="text-subtitle-1 font-weight-bold mb-1">{{ t('friends.todayTitle') }}</div>
       <p class="text-body-2 text-medium-emphasis mb-4">{{ t('friends.todayHint') }}</p>
@@ -250,15 +255,15 @@ onMounted(load)
             :variant="share.myReaction === 'like' ? 'flat' : 'tonal'"
             @click="react(share, 'like')"
           >
-            👍 {{ share.likes }}
+            💛 {{ t('friends.reactCheer') }} {{ share.likes }}
           </v-btn>
           <v-btn
             size="small"
-            :color="share.myReaction === 'dislike' ? 'error' : undefined"
+            :color="share.myReaction === 'dislike' ? 'secondary' : undefined"
             :variant="share.myReaction === 'dislike' ? 'flat' : 'tonal'"
             @click="react(share, 'dislike')"
           >
-            👎 {{ share.dislikes }}
+            💪 {{ t('friends.reactStrength') }} {{ share.dislikes }}
           </v-btn>
         </div>
       </v-card>

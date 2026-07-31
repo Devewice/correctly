@@ -4,10 +4,13 @@ import { useI18n } from 'vue-i18n'
 import { fadeUp, moodHover, softHover, withDelay } from '@/shared/motion/presets'
 import { WATER_OPTIONS, glassesFromMl } from '@/shared/utils/water'
 import GuideStepIcon from '@/modules/dashboard/components/GuideStepIcon.vue'
+import { tAsk, pickVariantIndex } from '@/shared/utils/askVariants'
+import { JOURNAL_PROMPTS } from '@/shared/data/journalPrompts'
 
 const props = defineProps({
   step: { type: Object, required: true },
   mealType: { type: String, default: 'breakfast' },
+  dateKey: { type: String, default: '' },
   busy: { type: Boolean, default: false },
 })
 
@@ -56,7 +59,14 @@ const askTitle = computed(() => {
     rest: 'day.restTitle',
     done: 'day.doneTitle',
   }
-  return t(map[key] || 'day.doneTitle')
+  const base = map[key] || 'day.doneTitle'
+  if (key === 'rest' || key === 'done') return t(base)
+  return tAsk(t, base, props.dateKey, 3)
+})
+
+const journalPrompt = computed(() => {
+  const i = pickVariantIndex(props.dateKey, 'journal-prompt', JOURNAL_PROMPTS.length)
+  return JOURNAL_PROMPTS[i]
 })
 
 const contextLine = computed(() => {
@@ -282,6 +292,15 @@ function pickMood(value) {
     </template>
 
     <template v-else-if="step.key === 'journal'">
+      <button
+        type="button"
+        class="select-tile mb-3"
+        style="justify-content: flex-start"
+        @click="journalText = t(`journal.prompts.${journalPrompt.key}`)"
+      >
+        <span class="me-2" aria-hidden="true">{{ journalPrompt.icon }}</span>
+        {{ t(`journal.prompts.${journalPrompt.key}`) }}
+      </button>
       <v-textarea
         v-model="journalText"
         rows="2"

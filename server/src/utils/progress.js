@@ -66,40 +66,71 @@ function yesterdayKey(dateKey) {
   return toDateKey(d)
 }
 
+/** Semana ISO YYYY-Www — un día de gracia por semana */
+function isoWeekKey(dateKey) {
+  const d = new Date(`${dateKey}T12:00:00`)
+  const day = d.getDay() || 7
+  d.setDate(d.getDate() + 4 - day)
+  const yearStart = new Date(d.getFullYear(), 0, 1)
+  const week = Math.ceil(((d - yearStart) / 86400000 + 1) / 7)
+  return `${d.getFullYear()}-W${String(week).padStart(2, '0')}`
+}
+
+async function ensureWeeklyFreeze(prisma, userId, dateKey, stats) {
+  const weekKey = `freeze_week_${isoWeekKey(dateKey)}`
+  const already = await prisma.achievement.findUnique({
+    where: { userId_badgeId: { userId, badgeId: weekKey } },
+  })
+  if (already) return stats
+  await prisma.achievement.create({ data: { userId, badgeId: weekKey } })
+  return prisma.userStats.update({
+    where: { userId },
+    data: {
+      streakFreezesRemaining: Math.max(1, stats.streakFreezesRemaining || 0),
+    },
+  })
+}
+
 export async function touchStreak(prisma, userId, dateKey = toDateKey()) {
-  const stats = await prisma.userStats.upsert({
+  let stats = await prisma.userStats.upsert({
     where: { userId },
     create: {
       userId,
       currentStreak: 1,
       bestStreak: 1,
+      streakFreezesRemaining: 1,
       lastLogDate: dateKey,
     },
     update: {},
   })
+
+  stats = await ensureWeeklyFreeze(prisma, userId, dateKey, stats)
 
   if (stats.lastLogDate === dateKey) {
     return stats
   }
 
   let currentStreak = 1
+  let freezes = stats.streakFreezesRemaining || 0
   if (stats.lastLogDate === yesterdayKey(dateKey)) {
     currentStreak = (stats.currentStreak || 0) + 1
-  } else if (stats.streakFreezesRemaining > 0 && stats.lastLogDate) {
+  } else if (freezes > 0 && stats.lastLogDate) {
     const gapYesterday = yesterdayKey(yesterdayKey(dateKey))
     if (stats.lastLogDate === gapYesterday) {
       currentStreak = (stats.currentStreak || 0) + 1
-      await prisma.userStats.update({
-        where: { userId },
-        data: { streakFreezesRemaining: { decrement: 1 } },
-      })
+      freezes -= 1
     }
   }
 
   const bestStreak = Math.max(stats.bestStreak || 0, currentStreak)
   return prisma.userStats.update({
     where: { userId },
-    data: { currentStreak, bestStreak, lastLogDate: dateKey },
+    data: {
+      currentStreak,
+      bestStreak,
+      lastLogDate: dateKey,
+      streakFreezesRemaining: freezes,
+    },
   })
 }
 

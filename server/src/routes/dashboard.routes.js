@@ -240,6 +240,15 @@ router.get('/insights', async (req, res) => {
     })
   }
 
+  if ((stats?.streakFreezesRemaining || 0) > 0) {
+    insights.push({
+      id: 'freeze',
+      type: 'tip',
+      messageKey: 'stats.freezeHint',
+      params: {},
+    })
+  }
+
   res.json({ insights })
 })
 
@@ -311,6 +320,55 @@ router.get('/weekly', async (req, res) => {
   const avg = (arr) =>
     arr.length ? Math.round((arr.reduce((s, n) => s + n, 0) / arr.length) * 10) / 10 : null
 
+  const correlations = []
+  const pairedSleepMood = days.filter(
+    (d) => d.sleepQuality != null && d.avgMood != null,
+  )
+  if (pairedSleepMood.length >= 3) {
+    const poor = pairedSleepMood.filter((d) => d.sleepQuality <= 2)
+    const good = pairedSleepMood.filter((d) => d.sleepQuality >= 4)
+    const avgOf = (arr) =>
+      arr.length ? arr.reduce((s, d) => s + d.avgMood, 0) / arr.length : null
+    const poorMood = avgOf(poor)
+    const goodMood = avgOf(good)
+    if (poorMood != null && goodMood != null && goodMood - poorMood >= 0.4) {
+      correlations.push({
+        id: 'sleep_mood',
+        messageKey: 'insights.corrSleepMood',
+        params: {},
+      })
+    }
+  }
+  const hydrated = days.filter((d) => d.waterMl >= 1500 && d.avgMood != null)
+  const dry = days.filter((d) => d.waterMl > 0 && d.waterMl < 800 && d.avgMood != null)
+  if (hydrated.length >= 2 && dry.length >= 2) {
+    const h =
+      hydrated.reduce((s, d) => s + d.avgMood, 0) / hydrated.length
+    const dr = dry.reduce((s, d) => s + d.avgMood, 0) / dry.length
+    if (h - dr >= 0.35) {
+      correlations.push({
+        id: 'water_mood',
+        messageKey: 'insights.corrWaterMood',
+        params: {},
+      })
+    }
+  }
+  const moved = days.filter((d) => d.activityMin >= 15 && d.avgMood != null)
+  if (moved.length >= 2) {
+    const mAvg = moved.reduce((s, d) => s + d.avgMood, 0) / moved.length
+    const other = days.filter((d) => d.activityMin < 10 && d.avgMood != null)
+    if (other.length >= 2) {
+      const oAvg = other.reduce((s, d) => s + d.avgMood, 0) / other.length
+      if (mAvg - oAvg >= 0.35) {
+        correlations.push({
+          id: 'move_mood',
+          messageKey: 'insights.corrMoveMood',
+          params: {},
+        })
+      }
+    }
+  }
+
   res.json({
     from: toDateKey(start),
     to: toDateKey(end),
@@ -323,6 +381,7 @@ router.get('/weekly', async (req, res) => {
       meditationMin: meditations.reduce((s, m) => s + m.duration, 0),
       activityMin: activities.reduce((s, a) => s + a.duration, 0),
     },
+    correlations,
     stats: req.user.stats,
   })
 })

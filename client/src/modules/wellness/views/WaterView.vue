@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
 import PageHeader from '@/shared/components/PageHeader.vue'
@@ -7,6 +8,8 @@ import { WATER_OPTIONS, glassesFromMl } from '@/shared/utils/water'
 import { softHover, withDelay, fadeUp } from '@/shared/motion/presets'
 
 const { t } = useI18n()
+const route = useRoute()
+const router = useRouter()
 const totalMl = ref(0)
 const goalGlasses = 8
 const busy = ref(false)
@@ -35,7 +38,14 @@ async function add(amount) {
   }
 }
 
-onMounted(load)
+onMounted(async () => {
+  await load()
+  const ml = Number(route.query.ml || route.query.quick)
+  if (ml > 0) {
+    await add(ml)
+    router.replace({ path: '/water', query: {} })
+  }
+})
 </script>
 
 <template>

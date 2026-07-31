@@ -51,6 +51,15 @@ function barHeight(ml) {
       </v-col>
       <v-col cols="6" md="3">
         <v-card class="pa-4">
+          <div class="text-caption text-medium-emphasis">{{ t('stats.freeze') }}</div>
+          <div class="text-h5 font-weight-bold">
+            {{ data.stats?.streakFreezesRemaining ?? 0 }}
+          </div>
+          <div class="text-caption text-medium-emphasis mt-1">{{ t('stats.freezeHint') }}</div>
+        </v-card>
+      </v-col>
+      <v-col cols="6" md="3">
+        <v-card class="pa-4">
           <div class="text-caption text-medium-emphasis">XP</div>
           <div class="text-h5 font-weight-bold">{{ data.stats?.totalXP || 0 }}</div>
         </v-card>
@@ -80,6 +89,22 @@ function barHeight(ml) {
         </v-card>
       </v-col>
     </v-row>
+
+    <v-card class="pa-4 pa-sm-5 mb-4">
+      <div class="text-h6 font-weight-bold mb-2">{{ t('stats.correlations') }}</div>
+      <template v-if="data.correlations?.length">
+        <p
+          v-for="c in data.correlations"
+          :key="c.id"
+          class="text-body-2 mb-2"
+        >
+          {{ t(c.messageKey, c.params || {}) }}
+        </p>
+      </template>
+      <p v-else class="text-body-2 text-medium-emphasis mb-0">
+        {{ t('stats.correlationsEmpty') }}
+      </p>
+    </v-card>
 
     <v-card class="pa-4 pa-sm-5 mb-4">
       <div class="text-h6 font-weight-bold mb-4">{{ t('stats.waterWeek') }}</div>

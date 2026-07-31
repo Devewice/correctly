@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useDisplay } from 'vuetify'
 import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
@@ -7,31 +8,42 @@ import { useDashboardStore } from '@/modules/dashboard/stores/useDashboardStore'
 import { useDayGuide } from '@/modules/dashboard/composables/useDayGuide'
 import { api } from '@/shared/api/client'
 import DayGuideCard from '@/modules/dashboard/components/DayGuideCard.vue'
+import DayCloseSummary from '@/modules/dashboard/components/DayCloseSummary.vue'
+import StepCompleteBurst from '@/modules/dashboard/components/StepCompleteBurst.vue'
 import { fadeUp, withDelay } from '@/shared/motion/presets'
 import { glassesFromMl } from '@/shared/utils/water'
 import { addDaySkip, loadDaySkips } from '@/shared/utils/daySkips'
 import { activeModuleSet, dateKeyLocal } from '@/shared/utils/timeContext'
+import { loadCarePrefs, saveCarePrefs } from '@/shared/utils/carePrefs'
+import { RITUALS } from '@/shared/data/rituals'
 
 const { t } = useI18n()
 const { lgAndUp } = useDisplay()
+const route = useRoute()
+const router = useRouter()
 const auth = useAuthStore()
 const dash = useDashboardStore()
 
 const skipped = ref(new Set())
 const busy = ref(false)
+const prefs = ref(loadCarePrefs(auth.user?.id))
+const burst = ref(false)
+const burstLabel = ref('')
 
 const userRef = computed(() => auth.user)
-const { steps, suggestedMealType, band } = useDayGuide(
+const { steps, suggestedMealType, band, caredFor } = useDayGuide(
   computed(() => dash.today),
   userRef,
   skipped,
+  prefs,
 )
 
 const current = computed(() => steps.value[0] || null)
-
 const progressPct = computed(() => dash.today?.progress ?? 0)
-
 const mods = computed(() => activeModuleSet(auth.user))
+const showSummary = computed(
+  () => current.value?.key === 'done' || current.value?.key === 'rest',
+)
 
 const greeting = computed(() => {
   const name = auth.user?.name?.split(' ')[0] || ''
@@ -78,31 +90,79 @@ const insightText = computed(() => {
   return t(insight.messageKey, insight.params || {})
 })
 
+const freezes = computed(() => dash.today?.stats?.streakFreezesRemaining ?? 0)
+
 function syncSkips() {
   const date = dash.today?.date || dateKeyLocal()
   skipped.value = loadDaySkips(auth.user?.id, date)
 }
 
+function syncPrefs() {
+  prefs.value = loadCarePrefs(auth.user?.id)
+}
+
+function toggleLowEnergy() {
+  prefs.value = saveCarePrefs(auth.user?.id, { lowEnergy: !prefs.value.lowEnergy })
+}
+
+function setRitual(id) {
+  const next = prefs.value.ritualId === id ? null : id
+  prefs.value = saveCarePrefs(auth.user?.id, { ritualId: next })
+}
+
+function flashComplete(label) {
+  burstLabel.value = label
+  burst.value = true
+  window.setTimeout(() => {
+    burst.value = false
+  }, 700)
+}
+
 watch(
   () => [dash.today?.date, auth.user?.id],
-  () => syncSkips(),
+  () => {
+    syncSkips()
+    syncPrefs()
+  },
   { immediate: true },
 )
 
 onMounted(async () => {
   await dash.loadAll()
   syncSkips()
+  syncPrefs()
+  await handleQuickAction()
 })
+
+async function handleQuickAction() {
+  const action = route.query.action || route.query.quick
+  if (!action) return
+  try {
+    if (action === 'water' || action === '1') {
+      const ml = Number(route.query.ml) || 250
+      await api('/water', { method: 'POST', body: { amount: ml } })
+      flashComplete(t('day.burstWater'))
+    } else if (action === 'mood') {
+      const mood = Number(route.query.mood) || 4
+      await api('/mood', { method: 'POST', body: { mood } })
+      flashComplete(t('day.burstMood'))
+    }
+    await dash.loadAll()
+  } finally {
+    router.replace({ path: '/dashboard', query: {} })
+  }
+}
 
 function skip() {
   if (!current.value || !dash.today) return
   skipped.value = addDaySkip(auth.user?.id, dash.today.date, current.value.id)
 }
 
-async function withBusy(fn) {
+async function withBusy(fn, burstKey) {
   busy.value = true
   try {
     await fn()
+    if (burstKey) flashComplete(t(burstKey))
     await dash.loadAll()
     syncSkips()
   } finally {
@@ -111,65 +171,75 @@ async function withBusy(fn) {
 }
 
 async function onMood(mood) {
-  await withBusy(() => api('/mood', { method: 'POST', body: { mood } }))
+  await withBusy(() => api('/mood', { method: 'POST', body: { mood } }), 'day.burstMood')
 }
 
 async function onWater(amount) {
-  await withBusy(() => api('/water', { method: 'POST', body: { amount } }))
+  await withBusy(() => api('/water', { method: 'POST', body: { amount } }), 'day.burstWater')
 }
 
 async function onMeal({ type, description }) {
-  await withBusy(() =>
-    api('/meals', {
-      method: 'POST',
-      body: { type, description, satisfaction: 3, quality: 4 },
-    }),
+  await withBusy(
+    () =>
+      api('/meals', {
+        method: 'POST',
+        body: { type, description, satisfaction: 3, quality: 4 },
+      }),
+    'day.burstMeal',
   )
 }
 
 async function onHabit(habit) {
-  await withBusy(() =>
-    api(`/habits/${habit.id}/complete`, {
-      method: 'POST',
-      body: { date: dash.today.date },
-    }),
+  await withBusy(
+    () =>
+      api(`/habits/${habit.id}/complete`, {
+        method: 'POST',
+        body: { date: dash.today.date },
+      }),
+    'day.burstHabit',
   )
 }
 
 async function onSleep(opt) {
   const wake = new Date()
   const bed = new Date(wake.getTime() - opt.hours * 60 * 60 * 1000)
-  await withBusy(() =>
-    api('/sleep', {
-      method: 'POST',
-      body: {
-        bedTime: bed.toISOString(),
-        wakeTime: wake.toISOString(),
-        quality: opt.quality,
-      },
-    }),
+  await withBusy(
+    () =>
+      api('/sleep', {
+        method: 'POST',
+        body: {
+          bedTime: bed.toISOString(),
+          wakeTime: wake.toISOString(),
+          quality: opt.quality,
+        },
+      }),
+    'day.burstSleep',
   )
 }
 
 async function onMeditation(minutes) {
-  await withBusy(() =>
-    api('/meditation', {
-      method: 'POST',
-      body: { duration: minutes, type: 'breathing', feeling: 'calmer' },
-    }),
+  await withBusy(
+    () =>
+      api('/meditation', {
+        method: 'POST',
+        body: { duration: minutes, type: 'breathing', feeling: 'calmer' },
+      }),
+    'day.burstDone',
   )
 }
 
 async function onActivity(payload) {
-  await withBusy(() => api('/activities', { method: 'POST', body: payload }))
+  await withBusy(() => api('/activities', { method: 'POST', body: payload }), 'day.burstDone')
 }
 
 async function onJournal(content) {
-  await withBusy(() =>
-    api('/journal', {
-      method: 'POST',
-      body: { content, type: 'evening' },
-    }),
+  await withBusy(
+    () =>
+      api('/journal', {
+        method: 'POST',
+        body: { content, type: 'evening' },
+      }),
+    'day.burstDone',
   )
 }
 
@@ -177,51 +247,94 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
 </script>
 
 <template>
+  <StepCompleteBurst :show="burst" :label="burstLabel" />
+
   <div v-if="dash.loading && !dash.today" class="py-16 text-center text-medium-emphasis">
     {{ t('common.loading') }}
   </div>
 
-  <div v-else-if="dash.today" class="today-view pb-8 pb-md-4">
-    <!-- 1. Cabecera corta -->
+  <div
+    v-else-if="dash.today"
+    class="today-view pb-8 pb-md-4"
+    :class="`today-view--${band}`"
+  >
     <header v-motion v-bind="withDelay(fadeUp, 0)" class="today-view__header">
       <h1 class="today-view__greeting">{{ greeting }}</h1>
       <p class="today-view__meta">
         <span>{{ t(`day.band.${band}`) }}</span>
         <span class="today-view__dot" aria-hidden="true">·</span>
         <span>{{ t('dashboard.streak', { days: dash.today.stats?.currentStreak || 0 }) }}</span>
+        <template v-if="freezes > 0">
+          <span class="today-view__dot" aria-hidden="true">·</span>
+          <span>{{ t('day.freezeLeft', { n: freezes }) }}</span>
+        </template>
       </p>
+      <div class="today-view__toggles">
+        <button
+          type="button"
+          class="select-tile"
+          :class="{ 'select-tile--on': prefs.lowEnergy }"
+          style="width: auto"
+          @click="toggleLowEnergy"
+        >
+          {{ t('day.lowEnergy') }}
+        </button>
+        <button
+          v-for="r in RITUALS"
+          :key="r.id"
+          type="button"
+          class="select-tile"
+          :class="{ 'select-tile--on': prefs.ritualId === r.id }"
+          style="width: auto"
+          @click="setRitual(r.id)"
+        >
+          {{ r.icon }} {{ t(`rituals.${r.id}.short`) }}
+        </button>
+      </div>
     </header>
 
     <v-row :dense="!lgAndUp" class="today-view__row">
-      <!-- 2. Acción principal primero (en móvil va arriba) -->
       <v-col cols="12" lg="7" order="1" order-lg="2" class="today-view__focus">
         <p class="today-view__focus-label">{{ t('day.guideTitle') }}</p>
 
-        <DayGuideCard
-          v-if="current"
-          :key="current.id"
-          :step="current"
-          :meal-type="suggestedMealType"
-          :busy="busy"
-          @mood="onMood"
-          @water="onWater"
-          @meal="onMeal"
-          @habit="onHabit"
-          @sleep="onSleep"
-          @meditation="onMeditation"
-          @activity="onActivity"
-          @journal="onJournal"
-          @skip="skip"
+        <Transition name="guide-swap" mode="out-in">
+          <DayCloseSummary
+            v-if="showSummary"
+            :key="'summary'"
+            :cared-for="caredFor"
+            :progress="progressPct"
+            :streak="dash.today.stats?.currentStreak || 0"
+          />
+          <DayGuideCard
+            v-else-if="current"
+            :key="current.id"
+            :step="current"
+            :meal-type="suggestedMealType"
+            :date-key="dash.today.date"
+            :busy="busy"
+            @mood="onMood"
+            @water="onWater"
+            @meal="onMeal"
+            @habit="onHabit"
+            @sleep="onSleep"
+            @meditation="onMeditation"
+            @activity="onActivity"
+            @journal="onJournal"
+            @skip="skip"
+          />
+        </Transition>
+
+        <DayCloseSummary
+          v-if="!showSummary && progressPct >= 70 && caredFor.length"
+          class="mt-4"
+          :cared-for="caredFor"
+          :progress="progressPct"
+          :streak="dash.today.stats?.currentStreak || 0"
         />
       </v-col>
 
-      <!-- 3. Progreso e insight secundarios -->
       <v-col cols="12" lg="5" order="2" order-lg="1" class="today-view__aside">
-        <div
-          v-motion
-          v-bind="withDelay(fadeUp, 80)"
-          class="today-progress"
-        >
+        <div v-motion v-bind="withDelay(fadeUp, 80)" class="today-progress">
           <div class="today-progress__top">
             <span class="today-progress__label">{{ t('day.dayProgress') }}</span>
             <span class="today-progress__pct">{{ progressPct }}%</span>
@@ -242,16 +355,48 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
         >
           {{ insightText }}
         </p>
+
+        <v-btn
+          class="mt-3"
+          variant="text"
+          size="small"
+          to="/practices"
+          prepend-icon="mdi-spa-outline"
+        >
+          {{ t('practices.open') }}
+        </v-btn>
       </v-col>
     </v-row>
   </div>
 </template>
 
 <style scoped>
+.today-view {
+  --today-glow: rgba(139, 168, 136, 0.12);
+  border-radius: 18px;
+  padding: 0.15rem;
+  background:
+    radial-gradient(120% 80% at 10% 0%, var(--today-glow), transparent 55%),
+    transparent;
+  transition: background 0.4s ease;
+}
+.today-view--morning {
+  --today-glow: rgba(244, 203, 168, 0.35);
+}
+.today-view--midday {
+  --today-glow: rgba(139, 168, 136, 0.22);
+}
+.today-view--afternoon {
+  --today-glow: rgba(212, 197, 226, 0.28);
+}
+.today-view--evening,
+.today-view--rest {
+  --today-glow: rgba(95, 122, 140, 0.18);
+}
+
 .today-view__header {
   margin-bottom: 1rem;
 }
-
 .today-view__greeting {
   font-size: 1.35rem;
   font-weight: 700;
@@ -259,7 +404,6 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   color: #3d3d3d;
   margin: 0;
 }
-
 .today-view__meta {
   margin: 0.35rem 0 0;
   font-size: 0.8125rem;
@@ -269,11 +413,15 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   align-items: center;
   gap: 0.25rem 0.35rem;
 }
-
 .today-view__dot {
   opacity: 0.5;
 }
-
+.today-view__toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
 .today-view__focus-label {
   margin: 0 0 0.5rem;
   font-size: 0.7rem;
@@ -282,18 +430,12 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   text-transform: uppercase;
   color: #5e7a5b;
 }
-
-.today-view__aside {
-  margin-top: 0.25rem;
-}
-
 .today-progress {
   padding: 0.85rem 1rem;
   border-radius: 14px;
   background: rgba(139, 168, 136, 0.14);
   border: 1px solid rgba(94, 122, 91, 0.16);
 }
-
 .today-progress__top {
   display: flex;
   align-items: baseline;
@@ -301,26 +443,22 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   gap: 0.75rem;
   margin-bottom: 0.45rem;
 }
-
 .today-progress__label {
   font-size: 0.8125rem;
   font-weight: 600;
   color: #3d3d3d;
 }
-
 .today-progress__pct {
   font-size: 1rem;
   font-weight: 700;
   color: #5e7a5b;
 }
-
 .today-progress__chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
   margin-top: 0.65rem;
 }
-
 .today-progress__chip {
   display: inline-flex;
   align-items: center;
@@ -332,7 +470,6 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   color: #3d3d3d;
   border: 1px solid rgba(94, 122, 91, 0.12);
 }
-
 .today-insight {
   margin: 0.85rem 0 0;
   font-size: 0.8125rem;
@@ -340,17 +477,34 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   color: rgba(61, 61, 61, 0.75);
 }
 
+.guide-swap-enter-active,
+.guide-swap-leave-active {
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease;
+}
+.guide-swap-enter-from {
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+}
+.guide-swap-leave-to {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.98);
+}
+
 @media (min-width: 1280px) {
   .today-view__greeting {
     font-size: 1.75rem;
   }
-
-  .today-view__header {
-    margin-bottom: 1.25rem;
-  }
-
   .today-view__aside {
     margin-top: 1.65rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guide-swap-enter-active,
+  .guide-swap-leave-active {
+    transition: none;
   }
 }
 </style>

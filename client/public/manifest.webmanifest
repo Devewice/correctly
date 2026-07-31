@@ -38,5 +38,28 @@
       "type": "image/png",
       "purpose": "maskable"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "+1 vaso de agua",
+      "short_name": "Agua",
+      "description": "Registrar un vaso de agua",
+      "url": "/dashboard?action=water&ml=250",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Cómo me siento",
+      "short_name": "Ánimo",
+      "description": "Abrir check-in de ánimo",
+      "url": "/mood",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Hoy",
+      "short_name": "Hoy",
+      "description": "Abrir la guía de hoy",
+      "url": "/dashboard",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
   ]
 }
