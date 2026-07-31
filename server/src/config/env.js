@@ -33,7 +33,29 @@ function resolveDatabaseUrl() {
   return raw
 }
 
-const databaseUrl = resolveDatabaseUrl()
+/**
+ * En Hostinger, desde la misma cuenta MySQL suele ser localhost.
+ * Si DATABASE_HOST_REMOTE=true se respeta el host remoto del panel.
+ */
+function preferLocalMysqlHost(url) {
+  if (!url || process.env.DATABASE_HOST_REMOTE === 'true') return url
+  if (process.env.DATABASE_USE_LOCALHOST === 'false') return url
+  // Solo reescribir hosts típicos de Hostinger cuando corremos en producción
+  if (process.env.NODE_ENV !== 'production') return url
+  try {
+    const u = new URL(url)
+    if (u.hostname.includes('hstgr.io') || u.hostname.startsWith('srv')) {
+      u.hostname = 'localhost'
+      console.log('[db] Usando localhost para MySQL (mismo hosting Hostinger)')
+      return u.toString()
+    }
+  } catch {
+    /* ignore */
+  }
+  return url
+}
+
+const databaseUrl = preferLocalMysqlHost(resolveDatabaseUrl())
 if (databaseUrl) {
   process.env.DATABASE_URL = databaseUrl
 }

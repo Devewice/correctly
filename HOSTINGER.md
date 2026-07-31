@@ -1,58 +1,56 @@
 # Despliegue en Hostinger — jeisson.click
 
-## Ajustes correctos en el panel
+## Configuración recomendada
 
 | Campo | Valor |
 |-------|--------|
 | Preajuste | `Other` o `Express` |
 | Rama | `main` |
-| Node | `20.x` / `22.x` / `24.x` |
+| Node | `24.x` |
 | Directorio raíz | `./` |
-| Comando de build | `npm run build` |
-| Directorio de salida | `client/dist` |
+| Build | `npm run build` |
+| **Directorio de salida** | **déjalo VACÍO** (borra `client/dist`) |
 | Archivo de entrada | `server/src/index.js` |
+
+> Si pones `client/dist` como output, Hostinger mueve el front a `public_html` y Express ya no lo encuentra → **404 en /**.  
+> El build ahora copia el front a `server/public` y Express lo sirve.
 
 ---
 
-## Variables de entorno (copia esto)
-
-**Importante:**
-1. **NO pongas `PORT`** — Hostinger lo asigna solo. Si fijas `PORT=3000`, la web da **404**.
-2. `DATABASE_URL` debe llevar la contraseña **codificada**, no la palabra `PASSWORD`.
-3. `GOOGLE_CALLBACK_URL` **sin** `:3000`.
+## Variables de entorno
 
 ```env
 NODE_ENV=production
 CLIENT_URL=https://jeisson.click
 
-DATABASE_HOST=srv1855.hstgr.io
+DATABASE_HOST=localhost
 DATABASE_PORT=3306
 DATABASE_NAME=u301973293_correctly
 DATABASE_USER=u301973293_admin
 DATABASE_PASSWORD=y:Zz3L?>p6
+DATABASE_URL=mysql://u301973293_admin:y%3AZz3L%3F%3Ep6@localhost:3306/u301973293_correctly
 
-DATABASE_URL=mysql://u301973293_admin:y%3AZz3L%3F%3Ep6@srv1855.hstgr.io:3306/u301973293_correctly
-
-JWT_SECRET=pon-aqui-una-clave-larga-aleatoria
-
+JWT_SECRET=cambia-esta-clave
 GOOGLE_CALLBACK_URL=https://jeisson.click/api/auth/google/callback
 ```
 
-> Contraseña URL-encoded: `y:Zz3L?>p6` → `y%3AZz3L%3F%3Ep6`  
-> (`:` = `%3A`, `?` = `%3F`, `>` = `%3E`)
+### Cambios clave
+| Antes | Ahora |
+|-------|--------|
+| `DATABASE_HOST=srv1855.hstgr.io` | **`localhost`** (Node corre en el mismo Hostinger) |
+| `PORT=3000` | **no poner PORT** |
+| Output `client/dist` | **vacío** |
 
-### Quitar del panel
-- ~~`PORT=3000`~~ ← bórrala
-- ~~`DATABASE_URL=...PASSWORD@...`~~ ← cámbiala por la de arriba
-- ~~`GOOGLE_CALLBACK_URL=https://jeisson.click:3000/...`~~ ← quita el `:3000`
+Si MySQL solo acepta el host remoto, pon:
+```env
+DATABASE_HOST_REMOTE=true
+DATABASE_HOST=srv1855.hstgr.io
+DATABASE_URL=mysql://u301973293_admin:y%3AZz3L%3F%3Ep6@srv1855.hstgr.io:3306/u301973293_correctly
+```
 
 ---
 
-## Después de guardar
-1. Guarda variables
-2. **Redesplegar**
-3. Prueba:
-   - https://jeisson.click/api/health → `{"ok":true,...}`
-   - https://jeisson.click/ → login Correctly
+## Comprobar
 
-Si `/api/health` falla, el Node no arrancó (mira logs del despliegue / runtime).
+1. https://jeisson.click/api/health → `{"ok":true,"db":"up"}`
+2. https://jeisson.click/ → pantalla de login Correctly

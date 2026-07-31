@@ -27,11 +27,17 @@ import dashboardRoutes from './routes/dashboard.routes.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const clientDistCandidates = [
+  // Preferido en Hostinger: copia hecha en npm run build
+  path.resolve(__dirname, '../public'),
+  path.resolve(process.cwd(), 'server/public'),
+  path.resolve(process.cwd(), 'public'),
   path.resolve(__dirname, '../../client/dist'),
   path.resolve(process.cwd(), 'client/dist'),
   path.resolve(process.cwd(), 'dist'),
 ]
-const clientDist = clientDistCandidates.find((p) => existsSync(path.join(p, 'index.html')))
+const clientDist = clientDistCandidates.find((p) =>
+  existsSync(path.join(p, 'index.html')),
+)
 
 configurePassport()
 
@@ -78,9 +84,21 @@ app.use(
 app.get('/api/health', async (_req, res) => {
   try {
     await checkDatabase()
-    res.json({ ok: true, db: 'up', name: 'correctly' })
+    res.json({
+      ok: true,
+      db: 'up',
+      name: 'correctly',
+      ui: Boolean(clientDist),
+      uiPath: clientDist || null,
+    })
   } catch (err) {
-    res.status(503).json({ ok: false, db: 'down', error: err.message })
+    res.status(503).json({
+      ok: false,
+      db: 'down',
+      error: err.message,
+      ui: Boolean(clientDist),
+      uiPath: clientDist || null,
+    })
   }
 })
 
