@@ -25,6 +25,8 @@ import journalRoutes from './routes/journal.routes.js'
 import meditationRoutes from './routes/meditation.routes.js'
 import weightRoutes from './routes/weight.routes.js'
 import dashboardRoutes from './routes/dashboard.routes.js'
+import adminRoutes from './routes/admin.routes.js'
+import { ensureSuperAdmins } from './services/bootstrap.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -46,8 +48,6 @@ const clientDistCandidates = [
 const clientDist = clientDistCandidates.find((p) =>
   existsSync(path.join(p, 'index.html')),
 )
-
-configurePassport()
 
 const app = express()
 app.set('trust proxy', 1)
@@ -123,6 +123,7 @@ app.use('/api/journal', journalRoutes)
 app.use('/api/meditation', meditationRoutes)
 app.use('/api/weight', weightRoutes)
 app.use('/api/dashboard', dashboardRoutes)
+app.use('/api/admin', adminRoutes)
 
 if (serveSpa) {
   // También copiar a server/ui en build (prepare) para que Node encuentre el HTML
@@ -144,10 +145,16 @@ if (serveSpa) {
 
 app.use(errorHandler)
 
-const server = app.listen(env.port, '0.0.0.0', () => {
+const server = app.listen(env.port, '0.0.0.0', async () => {
   console.log(
     `Correctly → :${env.port} spa=${serveSpa} ui=${clientDist || 'none'}`,
   )
+  try {
+    await configurePassport()
+    await ensureSuperAdmins()
+  } catch (err) {
+    console.warn('[bootstrap]', err.message)
+  }
 })
 
 async function shutdown() {

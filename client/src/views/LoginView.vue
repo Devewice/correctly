@@ -28,6 +28,19 @@ async function demoLogin() {
   }
 }
 
+async function adminLogin() {
+  busy.value = true
+  error.value = ''
+  try {
+    await auth.devLoginAdmin({ language: locale.value })
+    router.push('/admin')
+  } catch (e) {
+    error.value = e.message || t('common.error')
+  } finally {
+    busy.value = false
+  }
+}
+
 function googleLogin() {
   window.location.href = '/api/auth/google'
 }
@@ -90,6 +103,16 @@ function changeLang(lang) {
           @click="demoLogin"
         >
           {{ busy ? t('common.loading') : t('login.dev') }}
+        </button>
+
+        <button
+          v-if="auth.authStatus.devLogin"
+          type="button"
+          class="w-full rounded-2xl bg-lavender/80 px-4 py-3 text-sm font-medium text-ink ring-1 ring-lavender disabled:opacity-50"
+          :disabled="busy"
+          @click="adminLogin"
+        >
+          {{ t('login.devAdmin') }}
         </button>
       </div>
 

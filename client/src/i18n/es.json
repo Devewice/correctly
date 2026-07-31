@@ -21,7 +21,66 @@
     "subtitle": "Tu bienestar diario, en un solo lugar.",
     "google": "Continuar con Google",
     "dev": "Entrar en modo demo",
-    "googleUnavailable": "Google OAuth aún no está configurado. Usa el modo demo."
+    "devAdmin": "Entrar como Jeisson (superadmin)",
+    "googleUnavailable": "Google OAuth aún no está configurado. Usa el modo demo o el panel admin."
+  },
+  "admin": {
+    "badge": "Admin",
+    "title": "Configuración",
+    "backApp": "Volver a la app",
+    "nav": {
+      "overview": "Resumen",
+      "google": "Google login",
+      "users": "Usuarios"
+    },
+    "overview": {
+      "users": "Usuarios",
+      "google": "Login Google",
+      "wizard": "Wizard Google",
+      "configured": "Activo",
+      "pending": "Pendiente",
+      "done": "Completado",
+      "notDone": "Por hacer",
+      "needGoogle": "Configura el login con Google",
+      "needGoogleHint": "Un asistente corto te guía paso a paso en Google Cloud Console.",
+      "startWizard": "Abrir wizard",
+      "superadmins": "Superadministradores"
+    },
+    "users": {
+      "title": "Usuarios y roles"
+    },
+    "wizard": {
+      "next": "Siguiente",
+      "back": "Atrás",
+      "copy": "copiar",
+      "saveContinue": "Guardar y continuar",
+      "finish": "Marcar como listo",
+      "saved": "Guardado",
+      "google": {
+        "title": "Wizard · Login con Google",
+        "subtitle": "Solo cuando haga falta. Te guiamos en lo esencial.",
+        "openConsole": "Abrir Google Cloud Console",
+        "jsOrigins": "Orígenes autorizados de JavaScript",
+        "redirectUris": "URI de redirección autorizados",
+        "tryLogin": "Probar Continuar con Google",
+        "steps": {
+          "console": "Consola",
+          "oauthClient": "Cliente OAuth",
+          "origins": "URLs",
+          "paste": "Pegar claves",
+          "test": "Probar"
+        },
+        "copy": {
+          "console": "Abre Google Cloud Console y crea (o elige) un proyecto para Correctly.",
+          "oauthClient": "Crea credenciales → ID de cliente de OAuth → Aplicación web.",
+          "typeWeb": "Tipo: Aplicación web",
+          "nameApp": "Nombre: Correctly",
+          "origins": "Copia estas URLs en la consola de Google (haz clic para copiar).",
+          "paste": "Pega aquí el Client ID y el Client Secret que te dio Google.",
+          "test": "Prueba el botón de Google. Si funciona, marca el wizard como listo."
+        }
+      }
+    }
   },
   "onboarding": {
     "welcome": "Empecemos tu camino",

@@ -43,7 +43,7 @@ export function mountSpa(app, clientDist) {
     if (req.path.startsWith('/api')) return next()
     if (req.path.startsWith('/assets')) return next()
 
-    res.setHeader('X-Correctly-Spa', 'spa-v4')
+    res.setHeader('X-Correctly-Spa', 'spa-v5-roles')
     res.setHeader('Cache-Control', 'no-store')
     res.status(200).type('html').send(indexHtml)
   })

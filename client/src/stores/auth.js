@@ -42,6 +42,17 @@ export const useAuthStore = defineStore('auth', () => {
     return data.user
   }
 
+  async function devLoginAdmin(payload = {}) {
+    const data = await api('/auth/dev-login-admin', {
+      method: 'POST',
+      body: payload,
+    })
+    setToken(data.token)
+    user.value = data.user
+    if (data.user?.language) setLocale(data.user.language)
+    return data.user
+  }
+
   async function logout() {
     try {
       await api('/auth/logout', { method: 'POST' })
@@ -70,6 +81,7 @@ export const useAuthStore = defineStore('auth', () => {
     fetchStatus,
     fetchMe,
     devLogin,
+    devLoginAdmin,
     logout,
     bootstrapFromUrl,
   }

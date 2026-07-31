@@ -88,6 +88,28 @@ const router = createRouter({
       component: () => import('@/views/ProfileView.vue'),
       meta: { auth: true },
     },
+    {
+      path: '/admin',
+      component: () => import('@/views/admin/AdminLayout.vue'),
+      meta: { auth: true, superadmin: true },
+      children: [
+        {
+          path: '',
+          name: 'admin',
+          component: () => import('@/views/admin/AdminOverview.vue'),
+        },
+        {
+          path: 'google',
+          name: 'admin-google',
+          component: () => import('@/views/admin/AdminGoogleWizard.vue'),
+        },
+        {
+          path: 'users',
+          name: 'admin-users',
+          component: () => import('@/views/admin/AdminUsers.vue'),
+        },
+      ],
+    },
   ],
 })
 
@@ -105,10 +127,19 @@ router.beforeEach(async (to) => {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
 
+  if (to.meta.superadmin && auth.user?.role !== 'superadmin') {
+    return { name: 'dashboard' }
+  }
+
   if (to.meta.guest && auth.user) {
     return auth.user.onboardingCompleted
       ? { name: 'dashboard' }
       : { name: 'onboarding' }
+  }
+
+  // Admin puede saltar onboarding de bienestar si entra al panel
+  if (to.path.startsWith('/admin')) {
+    return true
   }
 
   if (

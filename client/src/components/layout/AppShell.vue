@@ -31,6 +31,13 @@ async function logout() {
       </RouterLink>
       <div class="flex items-center gap-3">
         <RouterLink
+          v-if="auth.user?.role === 'superadmin'"
+          to="/admin"
+          class="rounded-full bg-ink px-3 py-1.5 text-xs font-medium text-white"
+        >
+          {{ t('admin.badge') }}
+        </RouterLink>
+        <RouterLink
           to="/profile"
           class="flex items-center gap-2 rounded-full bg-white/70 px-3 py-1.5 text-sm shadow-sm ring-1 ring-black/5"
         >

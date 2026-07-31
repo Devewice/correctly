@@ -85,5 +85,6 @@ export const env = {
   isProd: (process.env.NODE_ENV || 'development') === 'production',
 }
 
+/** @deprecated usar services/settings getGoogleConfig / passport.isGoogleAuthConfigured */
 export const isGoogleAuthConfigured = () =>
   Boolean(env.google.clientId && env.google.clientSecret)

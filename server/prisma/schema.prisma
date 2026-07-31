@@ -13,6 +13,7 @@ model User {
   email                String   @unique
   name                 String
   avatar               String?  @db.VarChar(500)
+  role                 String   @default("user") // user | admin | superadmin
   timezone             String   @default("America/Bogota")
   language             String   @default("es") // es | en | pt
   units                String   @default("metric")
@@ -249,4 +250,12 @@ model Achievement {
 
   @@unique([userId, badgeId])
   @@index([userId])
+}
+
+/** Configuración global (Google OAuth, flags de wizard, etc.) */
+model AppSetting {
+  key       String   @id @db.VarChar(120)
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+  updatedBy String?
 }

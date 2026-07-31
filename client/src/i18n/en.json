@@ -21,7 +21,66 @@
     "subtitle": "Your daily wellness, in one place.",
     "google": "Continue with Google",
     "dev": "Enter demo mode",
-    "googleUnavailable": "Google OAuth is not configured yet. Use demo mode."
+    "devAdmin": "Enter as Jeisson (superadmin)",
+    "googleUnavailable": "Google OAuth is not configured yet. Use demo mode or the admin panel."
+  },
+  "admin": {
+    "badge": "Admin",
+    "title": "Settings",
+    "backApp": "Back to app",
+    "nav": {
+      "overview": "Overview",
+      "google": "Google login",
+      "users": "Users"
+    },
+    "overview": {
+      "users": "Users",
+      "google": "Google login",
+      "wizard": "Google wizard",
+      "configured": "Active",
+      "pending": "Pending",
+      "done": "Done",
+      "notDone": "To do",
+      "needGoogle": "Set up Google login",
+      "needGoogleHint": "A short wizard walks you through Google Cloud Console.",
+      "startWizard": "Open wizard",
+      "superadmins": "Superadmins"
+    },
+    "users": {
+      "title": "Users and roles"
+    },
+    "wizard": {
+      "next": "Next",
+      "back": "Back",
+      "copy": "copy",
+      "saveContinue": "Save and continue",
+      "finish": "Mark as done",
+      "saved": "Saved",
+      "google": {
+        "title": "Wizard · Google login",
+        "subtitle": "Only when needed. We guide you through the essentials.",
+        "openConsole": "Open Google Cloud Console",
+        "jsOrigins": "Authorized JavaScript origins",
+        "redirectUris": "Authorized redirect URIs",
+        "tryLogin": "Try Continue with Google",
+        "steps": {
+          "console": "Console",
+          "oauthClient": "OAuth client",
+          "origins": "URLs",
+          "paste": "Paste keys",
+          "test": "Test"
+        },
+        "copy": {
+          "console": "Open Google Cloud Console and create (or pick) a project for Correctly.",
+          "oauthClient": "Create credentials → OAuth client ID → Web application.",
+          "typeWeb": "Type: Web application",
+          "nameApp": "Name: Correctly",
+          "origins": "Copy these URLs into the Google console (click to copy).",
+          "paste": "Paste the Client ID and Client Secret from Google.",
+          "test": "Try the Google button. If it works, mark the wizard as done."
+        }
+      }
+    }
   },
   "onboarding": {
     "welcome": "Let's start your journey",

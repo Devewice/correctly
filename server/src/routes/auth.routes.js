@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import passport from 'passport'
-import { env, isGoogleAuthConfigured } from '../config/env.js'
+import { env } from '../config/env.js'
 import { prisma } from '../config/database.js'
 import {
   clearAuthCookie,
@@ -8,14 +8,21 @@ import {
   setAuthCookie,
   signToken,
 } from '../middleware/auth.js'
+import {
+  isGoogleAuthConfigured,
+  refreshGoogleStrategy,
+} from '../config/passport.js'
+import { getPublicAuthFlags } from '../services/settings.js'
+import { ROLES, matchesSuperAdminIdentity } from '../services/roles.js'
 
 const router = Router()
 
-router.get('/google', (req, res, next) => {
-  if (!isGoogleAuthConfigured()) {
+router.get('/google', async (req, res, next) => {
+  const ok = await refreshGoogleStrategy()
+  if (!ok && !(await isGoogleAuthConfigured())) {
     return res.status(503).json({
       error: 'Google OAuth no configurado',
-      hint: 'Configura GOOGLE_CLIENT_ID y GOOGLE_CLIENT_SECRET, o usa POST /api/auth/dev-login',
+      hint: 'El superadmin debe completarlo en /admin (wizard Google)',
     })
   }
   return passport.authenticate('google', {
@@ -26,8 +33,9 @@ router.get('/google', (req, res, next) => {
 
 router.get(
   '/google/callback',
-  (req, res, next) => {
-    if (!isGoogleAuthConfigured()) {
+  async (req, res, next) => {
+    const ok = await refreshGoogleStrategy()
+    if (!ok) {
       return res.redirect(`${env.clientUrl}/login?error=oauth_not_configured`)
     }
     return passport.authenticate('google', {
@@ -43,16 +51,17 @@ router.get(
   },
 )
 
-/** Demo login — local siempre; en producción solo si ALLOW_DEMO_LOGIN=true */
 router.post('/dev-login', async (req, res) => {
-  const allowDemo =
-    env.nodeEnv !== 'production' || process.env.ALLOW_DEMO_LOGIN === 'true'
-  if (!allowDemo) {
+  const flags = await getPublicAuthFlags()
+  if (!flags.devLogin) {
     return res.status(404).json({ error: 'Not found' })
   }
 
   const email = (req.body?.email || 'demo@correctly.app').toLowerCase()
   const name = req.body?.name || 'Demo Correctly'
+  const role = matchesSuperAdminIdentity({ email, name })
+    ? ROLES.SUPERADMIN
+    : ROLES.USER
 
   let user = await prisma.user.findUnique({ where: { email } })
   if (!user) {
@@ -61,6 +70,7 @@ router.post('/dev-login', async (req, res) => {
         email,
         name,
         language: req.body?.language || 'es',
+        role,
         stats: { create: {} },
       },
     })
@@ -69,6 +79,46 @@ router.post('/dev-login', async (req, res) => {
       where: { userId: user.id },
       create: { userId: user.id },
       update: {},
+    })
+    if (matchesSuperAdminIdentity(user) && user.role !== ROLES.SUPERADMIN) {
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { role: ROLES.SUPERADMIN },
+      })
+    }
+  }
+
+  const token = signToken(user)
+  setAuthCookie(res, token)
+  res.json({ token, user })
+})
+
+/** Login demo como Jeisson (superadmin) — solo si ALLOW_DEMO_LOGIN */
+router.post('/dev-login-admin', async (req, res) => {
+  const flags = await getPublicAuthFlags()
+  if (!flags.devLogin) {
+    return res.status(404).json({ error: 'Not found' })
+  }
+
+  const email = 'jeisson@correctly.app'
+  const name = 'Jeisson'
+
+  let user = await prisma.user.findUnique({ where: { email } })
+  if (!user) {
+    user = await prisma.user.create({
+      data: {
+        email,
+        name,
+        role: ROLES.SUPERADMIN,
+        onboardingCompleted: true,
+        language: req.body?.language || 'es',
+        stats: { create: {} },
+      },
+    })
+  } else if (user.role !== ROLES.SUPERADMIN) {
+    user = await prisma.user.update({
+      where: { id: user.id },
+      data: { role: ROLES.SUPERADMIN },
     })
   }
 
@@ -86,12 +136,9 @@ router.get('/me', requireAuth, (req, res) => {
   res.json({ user: req.user })
 })
 
-router.get('/status', (_req, res) => {
-  res.json({
-    googleConfigured: isGoogleAuthConfigured(),
-    devLogin:
-      env.nodeEnv !== 'production' || process.env.ALLOW_DEMO_LOGIN === 'true',
-  })
+router.get('/status', async (_req, res) => {
+  const flags = await getPublicAuthFlags()
+  res.json(flags)
 })
 
 export default router

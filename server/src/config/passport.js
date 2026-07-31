@@ -1,60 +1,78 @@
 import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
-import { env, isGoogleAuthConfigured } from './env.js'
 import { prisma } from './database.js'
+import { getGoogleConfig } from '../services/settings.js'
+import { ROLES, matchesSuperAdminIdentity } from '../services/roles.js'
 
-export function configurePassport() {
-  if (!isGoogleAuthConfigured()) {
-    console.warn('[auth] Google OAuth no configurado — usa /api/auth/dev-login en desarrollo')
-    return
+async function upsertGoogleUser(profile) {
+  const email = profile.emails?.[0]?.value
+  if (!email) throw new Error('Google account sin email')
+
+  let user = await prisma.user.findFirst({
+    where: { OR: [{ googleId: profile.id }, { email }] },
+  })
+
+  const roleBoost = matchesSuperAdminIdentity({ email, name: profile.displayName })
+    ? ROLES.SUPERADMIN
+    : undefined
+
+  if (!user) {
+    user = await prisma.user.create({
+      data: {
+        googleId: profile.id,
+        email,
+        name: profile.displayName || email.split('@')[0],
+        avatar: profile.photos?.[0]?.value,
+        role: roleBoost || ROLES.USER,
+        stats: { create: {} },
+      },
+    })
+  } else {
+    user = await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        googleId: user.googleId || profile.id,
+        avatar: user.avatar || profile.photos?.[0]?.value,
+        name: user.name || profile.displayName,
+        ...(roleBoost ? { role: ROLES.SUPERADMIN } : {}),
+      },
+    })
+  }
+
+  await prisma.userStats.upsert({
+    where: { userId: user.id },
+    create: { userId: user.id },
+    update: {},
+  })
+
+  return user
+}
+
+/** Recarga la estrategia Google desde DB (+ fallback env) */
+export async function refreshGoogleStrategy() {
+  const cfg = await getGoogleConfig()
+  try {
+    passport.unuse('google')
+  } catch {
+    /* no estaba registrada */
+  }
+
+  if (!cfg.configured) {
+    console.warn('[auth] Google OAuth no configurado (env ni panel admin)')
+    return false
   }
 
   passport.use(
+    'google',
     new GoogleStrategy(
       {
-        clientID: env.google.clientId,
-        clientSecret: env.google.clientSecret,
-        callbackURL: env.google.callbackUrl,
+        clientID: cfg.clientId,
+        clientSecret: cfg.clientSecret,
+        callbackURL: cfg.callbackUrl,
       },
       async (_accessToken, _refreshToken, profile, done) => {
         try {
-          const email = profile.emails?.[0]?.value
-          if (!email) return done(new Error('Google account sin email'))
-
-          let user = await prisma.user.findFirst({
-            where: {
-              OR: [{ googleId: profile.id }, { email }],
-            },
-          })
-
-          if (!user) {
-            user = await prisma.user.create({
-              data: {
-                googleId: profile.id,
-                email,
-                name: profile.displayName || email.split('@')[0],
-                avatar: profile.photos?.[0]?.value,
-                stats: { create: {} },
-              },
-            })
-          } else if (!user.googleId) {
-            user = await prisma.user.update({
-              where: { id: user.id },
-              data: {
-                googleId: profile.id,
-                avatar: user.avatar || profile.photos?.[0]?.value,
-                name: user.name || profile.displayName,
-              },
-            })
-          }
-
-          // Ensure stats row
-          await prisma.userStats.upsert({
-            where: { userId: user.id },
-            create: { userId: user.id },
-            update: {},
-          })
-
+          const user = await upsertGoogleUser(profile)
           return done(null, user)
         } catch (err) {
           return done(err)
@@ -62,4 +80,16 @@ export function configurePassport() {
       },
     ),
   )
+
+  console.log('[auth] Google OAuth listo →', cfg.callbackUrl)
+  return true
+}
+
+export async function configurePassport() {
+  await refreshGoogleStrategy()
+}
+
+export async function isGoogleAuthConfigured() {
+  const cfg = await getGoogleConfig()
+  return cfg.configured
 }
