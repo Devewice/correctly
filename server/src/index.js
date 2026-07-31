@@ -27,7 +27,9 @@ import dashboardRoutes from './routes/dashboard.routes.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const clientDistCandidates = [
-  // Preferido en Hostinger: copia hecha en npm run build
+  // Hostinger mueve server/public → public_html; server/ui se queda con Node
+  path.resolve(__dirname, '../ui'),
+  path.resolve(process.cwd(), 'server/ui'),
   path.resolve(__dirname, '../public'),
   path.resolve(process.cwd(), 'server/public'),
   path.resolve(process.cwd(), 'public'),
@@ -115,15 +117,27 @@ app.use('/api/meditation', meditationRoutes)
 app.use('/api/weight', weightRoutes)
 app.use('/api/dashboard', dashboardRoutes)
 
-// Hostinger / production: serve Vue build from the same Node process
+// Hostinger: / a veces llega a Node (no a Apache). Servir SPA desde server/ui.
 if (clientDist) {
-  app.use(express.static(clientDist, { index: false, maxAge: '1h' }))
-  app.get(/^(?!\/api).*/, (_req, res) => {
-    res.sendFile(path.join(clientDist, 'index.html'))
+  app.use(express.static(clientDist, { index: 'index.html', maxAge: '1h' }))
+  app.use((req, res, next) => {
+    if (req.method !== 'GET' && req.method !== 'HEAD') return next()
+    if (req.path.startsWith('/api')) return next()
+    return res.sendFile(path.join(clientDist, 'index.html'), (err) => {
+      if (err) next(err)
+    })
   })
 } else if (env.isProd) {
-  console.warn('[correctly] No se encontró client/dist/index.html — solo API')
+  console.warn('[correctly] No se encontró UI (server/ui) — solo API')
   console.warn('[correctly] Candidatos:', clientDistCandidates.join(' | '))
+  app.get('/', (_req, res) => {
+    res
+      .status(503)
+      .type('html')
+      .send(
+        '<h1>Correctly</h1><p>UI no encontrada en el servidor Node. Redesplega tras el fix server/ui.</p><p><a href="/index.html">Probar /index.html</a> · <a href="/api/health">/api/health</a></p>',
+      )
+  })
 }
 
 app.use(errorHandler)

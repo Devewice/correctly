@@ -14,7 +14,7 @@
 |-------|--------|
 | Preajuste | `Other` |
 | Build | `npm run build` |
-| **Directorio de salida** | **`server/public`** ← clave para el 404 |
+| **Directorio de salida** | **`server/public`** (Apache / public_html) |
 | Archivo de entrada | `server/src/index.js` |
 
 Hostinger copia el “output” a `public_html`. Ahí debe estar el Vue.  
