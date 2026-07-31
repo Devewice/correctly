@@ -2,6 +2,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
+import PageHeader from '@/shared/components/PageHeader.vue'
 
 const { t } = useI18n()
 const logs = ref([])
@@ -43,51 +44,53 @@ onMounted(load)
 </script>
 
 <template>
-  <h1 class="text-h4 font-weight-bold mb-4">{{ t('activity.title') }}</h1>
+  <PageHeader :title="t('activity.title')" />
 
-  <v-card class="pa-5 mb-6" tag="form" @submit.prevent="save">
-    <div class="d-flex flex-wrap ga-2 mb-4">
-      <v-chip
-        v-for="type in types"
-        :key="type"
-        :color="form.type === type ? 'primary' : undefined"
-        :variant="form.type === type ? 'flat' : 'tonal'"
-        size="small"
-        label
-        @click="form.type = type"
-      >
-        {{ t(`activity.types.${type}`) }}
-      </v-chip>
-    </div>
+  <v-card class="pa-5 mb-6">
+    <v-form @submit.prevent="save">
+      <div class="d-flex flex-wrap ga-2 mb-4">
+        <v-chip
+          v-for="type in types"
+          :key="type"
+          :color="form.type === type ? 'primary' : undefined"
+          :variant="form.type === type ? 'flat' : 'tonal'"
+          size="small"
+          label
+          @click="form.type = type"
+        >
+          {{ t(`activity.types.${type}`) }}
+        </v-chip>
+      </div>
 
-    <v-text-field
-      v-model.number="form.duration"
-      type="number"
-      :min="1"
-      :max="600"
-      :label="t('activity.duration')"
-      class="mb-3"
-    />
+      <v-text-field
+        v-model.number="form.duration"
+        type="number"
+        :min="1"
+        :max="600"
+        :label="t('activity.duration')"
+        class="mb-3"
+      />
 
-    <div class="d-flex flex-wrap ga-2 mb-4">
-      <v-chip
-        v-for="level in ['light', 'moderate', 'intense']"
-        :key="level"
-        :color="form.intensity === level ? 'secondary' : undefined"
-        :variant="form.intensity === level ? 'flat' : 'tonal'"
-        size="small"
-        label
-        @click="form.intensity = level"
-      >
-        {{ t(`activity.intensity.${level}`) }}
-      </v-chip>
-    </div>
+      <div class="d-flex flex-wrap ga-2 mb-4">
+        <v-chip
+          v-for="level in ['light', 'moderate', 'intense']"
+          :key="level"
+          :color="form.intensity === level ? 'secondary' : undefined"
+          :variant="form.intensity === level ? 'flat' : 'tonal'"
+          size="small"
+          label
+          @click="form.intensity = level"
+        >
+          {{ t(`activity.intensity.${level}`) }}
+        </v-chip>
+      </div>
 
-    <v-text-field v-model="form.notes" :label="t('activity.notes')" class="mb-3" />
+      <v-text-field v-model="form.notes" :label="t('activity.notes')" class="mb-3" />
 
-    <v-btn type="submit" block color="primary" size="large" :loading="busy">
-      {{ t('activity.save') }}
-    </v-btn>
+      <v-btn type="submit" block color="primary" size="large" :loading="busy">
+        {{ t('activity.save') }}
+      </v-btn>
+    </v-form>
   </v-card>
 
   <v-card v-for="log in logs" :key="log.id" class="pa-4 mb-2">

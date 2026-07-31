@@ -2,6 +2,7 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
+import PageHeader from '@/shared/components/PageHeader.vue'
 
 const { t } = useI18n()
 const logs = ref([])
@@ -39,8 +40,7 @@ onMounted(load)
 </script>
 
 <template>
-  <h1 class="text-h4 font-weight-bold mb-1">{{ t('weight.title') }}</h1>
-  <p class="text-body-2 text-medium-emphasis mb-6">{{ t('weight.subtitle') }}</p>
+  <PageHeader :title="t('weight.title')" :subtitle="t('weight.subtitle')" />
 
   <v-card v-if="latest" class="pa-5 mb-6" color="secondary" variant="tonal">
     <div class="text-caption text-medium-emphasis">{{ t('weight.latest') }}</div>
@@ -56,21 +56,23 @@ onMounted(load)
     </div>
   </v-card>
 
-  <v-card class="pa-5 mb-6" tag="form" @submit.prevent="save">
-    <v-text-field
-      v-model.number="form.weight"
-      type="number"
-      step="0.1"
-      :min="20"
-      :max="400"
-      :label="t('weight.value')"
-      required
-      class="mb-2"
-    />
-    <v-text-field v-model="form.notes" :label="t('weight.notes')" class="mb-3" />
-    <v-btn type="submit" block color="primary" size="large" :loading="busy">
-      {{ t('weight.save') }}
-    </v-btn>
+  <v-card class="pa-5 mb-6">
+    <v-form @submit.prevent="save">
+      <v-text-field
+        v-model.number="form.weight"
+        type="number"
+        step="0.1"
+        :min="20"
+        :max="400"
+        :label="t('weight.value')"
+        required
+        class="mb-2"
+      />
+      <v-text-field v-model="form.notes" :label="t('weight.notes')" class="mb-3" />
+      <v-btn type="submit" block color="primary" size="large" :loading="busy">
+        {{ t('weight.save') }}
+      </v-btn>
+    </v-form>
   </v-card>
 
   <v-card v-for="log in logs" :key="log.id" class="pa-4 mb-2">

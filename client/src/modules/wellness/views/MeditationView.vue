@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
+import PageHeader from '@/shared/components/PageHeader.vue'
 
 const { t } = useI18n()
 const presets = [5, 10, 15, 20]
@@ -77,8 +78,7 @@ onUnmounted(stop)
 </script>
 
 <template>
-  <h1 class="text-h4 font-weight-bold mb-1">{{ t('meditation.title') }}</h1>
-  <p class="text-body-2 text-medium-emphasis mb-6">{{ t('meditation.subtitle') }}</p>
+  <PageHeader :title="t('meditation.title')" :subtitle="t('meditation.subtitle')" />
 
   <div class="d-flex flex-wrap ga-2 mb-4">
     <v-chip
@@ -110,11 +110,9 @@ onUnmounted(stop)
   </div>
 
   <div class="d-flex justify-center mb-4">
-    <v-sheet
-      class="d-flex align-center justify-center rounded-circle"
+    <v-avatar
       color="accent"
-      width="180"
-      height="180"
+      size="180"
       :style="{
         transform: running && phase === 'inhale' ? 'scale(1.08)' : 'scale(0.92)',
         transition: 'transform 1s ease',
@@ -126,19 +124,12 @@ onUnmounted(stop)
           {{ t(`meditation.${phase}`) }}
         </div>
       </div>
-    </v-sheet>
+    </v-avatar>
   </div>
 
-  <v-progress-linear :model-value="progress" color="accent" class="mb-6" rounded />
+  <v-progress-linear :model-value="progress" color="accent" class="mb-6" />
 
-  <v-btn
-    v-if="!running"
-    block
-    color="primary"
-    size="large"
-    class="mb-6"
-    @click="start"
-  >
+  <v-btn v-if="!running" block color="primary" size="large" class="mb-6" @click="start">
     {{ t('meditation.start') }}
   </v-btn>
   <v-btn v-else block color="error" size="large" class="mb-6" @click="stop">

@@ -189,8 +189,10 @@ function itemLabel(item) {
           v-for="habit in dash.today.habits"
           :key="habit.id"
           :title="`${habit.icon} ${habit.name}`"
-          class="mb-1 rounded-lg"
-          style="background: rgba(0, 0, 0, 0.03)"
+          class="mb-1"
+          rounded="lg"
+          color="surface-light"
+          variant="tonal"
         >
           <template #append>
             <v-btn

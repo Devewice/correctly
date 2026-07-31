@@ -2,6 +2,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
+import PageHeader from '@/shared/components/PageHeader.vue'
 
 const { t } = useI18n()
 const logs = ref([])
@@ -46,27 +47,29 @@ onMounted(load)
 </script>
 
 <template>
-  <h1 class="text-h4 font-weight-bold mb-4">{{ t('sleep.title') }}</h1>
+  <PageHeader :title="t('sleep.title')" />
 
-  <v-card class="pa-5 mb-6" color="accent" variant="tonal" tag="form" @submit.prevent="save">
-    <v-text-field
-      v-model="form.bedTime"
-      type="datetime-local"
-      :label="t('sleep.bed')"
-      required
-      class="mb-2"
-    />
-    <v-text-field
-      v-model="form.wakeTime"
-      type="datetime-local"
-      :label="t('sleep.wake')"
-      class="mb-2"
-    />
-    <div class="text-body-2 mb-1">{{ t('sleep.quality') }}: {{ form.quality }}</div>
-    <v-slider v-model="form.quality" :min="1" :max="5" :step="1" color="primary" thumb-label class="mb-2" />
-    <v-btn type="submit" block color="primary" size="large" :loading="busy">
-      {{ t('sleep.save') }}
-    </v-btn>
+  <v-card class="pa-5 mb-6" color="accent" variant="tonal">
+    <v-form @submit.prevent="save">
+      <v-text-field
+        v-model="form.bedTime"
+        type="datetime-local"
+        :label="t('sleep.bed')"
+        required
+        class="mb-2"
+      />
+      <v-text-field
+        v-model="form.wakeTime"
+        type="datetime-local"
+        :label="t('sleep.wake')"
+        class="mb-2"
+      />
+      <div class="text-body-2 mb-1">{{ t('sleep.quality') }}: {{ form.quality }}</div>
+      <v-slider v-model="form.quality" :min="1" :max="5" :step="1" class="mb-2" />
+      <v-btn type="submit" block color="primary" size="large" :loading="busy">
+        {{ t('sleep.save') }}
+      </v-btn>
+    </v-form>
   </v-card>
 
   <v-card v-for="log in logs" :key="log.id" class="pa-4 mb-2">

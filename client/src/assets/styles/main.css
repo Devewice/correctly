@@ -1,26 +1,4 @@
-@import 'tailwindcss';
-
-@theme {
-  --font-display: 'Nunito', ui-rounded, system-ui, sans-serif;
-  --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
-
-  --color-sage: #8ba888;
-  --color-sage-light: #b5cfb5;
-  --color-sage-dark: #5e7a5b;
-  --color-sand: #f5ede3;
-  --color-peach: #f4cba8;
-  --color-lavender: #d4c5e2;
-  --color-sky: #a8d4e6;
-  --color-blush: #e8b4b8;
-  --color-success: #7cb88f;
-  --color-warning: #e8c468;
-  --color-danger: #d98880;
-  --color-ink: #3d3d3d;
-  --color-muted: #7a7a7a;
-  --color-surface: #ffffff;
-  --color-bg: #faf8f5;
-}
-
+/* Solo tipografía y reset mínimo — UI 100% Vuetify */
 html,
 body,
 #app {
@@ -29,15 +7,18 @@ body,
 
 body {
   margin: 0;
-  font-family: var(--font-sans);
-  color: var(--color-ink);
-  background:
-    radial-gradient(1200px 600px at 10% -10%, #f4cba855, transparent 55%),
-    radial-gradient(900px 500px at 90% 0%, #d4c5e244, transparent 50%),
-    radial-gradient(800px 400px at 50% 100%, #a8d4e633, transparent 45%),
-    var(--color-bg);
 }
 
-.font-display {
-  font-family: var(--font-display);
+.v-application {
+  font-family: 'DM Sans', system-ui, sans-serif !important;
+}
+
+.v-application .text-h1,
+.v-application .text-h2,
+.v-application .text-h3,
+.v-application .text-h4,
+.v-application .text-h5,
+.v-application .text-h6,
+.v-application .v-app-bar-title {
+  font-family: 'Nunito', 'DM Sans', system-ui, sans-serif !important;
 }

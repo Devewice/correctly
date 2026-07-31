@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
+import PageHeader from '@/shared/components/PageHeader.vue'
 
 const { t } = useI18n()
 const data = ref(null)
@@ -28,11 +29,14 @@ function moodLabel(v) {
 function badgeLabel(id) {
   return t(`badges.${id}`, id)
 }
+
+function barHeight(ml) {
+  return `${Math.max(8, (ml / maxWater.value) * 100)}%`
+}
 </script>
 
 <template>
-  <h1 class="text-h4 font-weight-bold mb-1">{{ t('stats.title') }}</h1>
-  <p class="text-body-2 text-medium-emphasis mb-6">{{ t('stats.subtitle') }}</p>
+  <PageHeader :title="t('stats.title')" :subtitle="t('stats.subtitle')" />
 
   <div v-if="!data" class="text-medium-emphasis">{{ t('common.loading') }}</div>
 
@@ -70,32 +74,34 @@ function badgeLabel(id) {
         <div
           v-for="day in data.days"
           :key="day.date"
-          class="d-flex flex-column align-center flex-grow-1"
-          style="height: 100%"
+          class="d-flex flex-column align-center flex-grow-1 h-100"
         >
-          <div
-            class="w-100 d-flex align-end flex-grow-1 rounded-t"
-            style="background: rgba(0, 0, 0, 0.04)"
+          <v-sheet
+            color="surface-light"
+            class="w-100 d-flex align-end flex-grow-1 rounded-t-lg"
+            height="100%"
           >
-            <div
-              class="w-100 rounded-t"
-              style="background: #a8d4e6; transition: height 0.4s"
-              :style="{ height: `${Math.max(4, (day.waterMl / maxWater) * 100)}%` }"
+            <v-sheet
+              color="info"
+              class="w-100 rounded-t-lg"
+              :height="barHeight(day.waterMl)"
             />
-          </div>
-          <span class="text-caption text-medium-emphasis">{{ day.date.slice(5) }}</span>
+          </v-sheet>
+          <span class="text-caption text-medium-emphasis mt-1">{{ day.date.slice(5) }}</span>
         </div>
       </div>
     </v-card>
 
     <v-card class="pa-5 mb-4">
       <div class="text-h6 font-weight-bold mb-3">{{ t('stats.days') }}</div>
-      <v-list density="compact" class="bg-transparent pa-0">
+      <v-list density="compact">
         <v-list-item
           v-for="day in data.days"
           :key="day.date"
-          class="mb-1 rounded-lg"
-          style="background: rgba(0, 0, 0, 0.03)"
+          class="mb-1"
+          rounded="lg"
+          color="surface-light"
+          variant="tonal"
         >
           <template #title>
             <div class="d-flex justify-space-between text-body-2">

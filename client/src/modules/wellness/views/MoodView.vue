@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
+import PageHeader from '@/shared/components/PageHeader.vue'
 
 const { t } = useI18n()
 const selected = ref(null)
@@ -36,7 +37,7 @@ onMounted(load)
 </script>
 
 <template>
-  <h1 class="text-h4 font-weight-bold mb-6">{{ t('mood.title') }}</h1>
+  <PageHeader :title="t('mood.title')" />
 
   <div class="d-flex justify-space-between ga-2 mb-6">
     <v-btn
@@ -44,7 +45,6 @@ onMounted(load)
       :key="m.value"
       :color="selected === m.value ? 'secondary' : undefined"
       :variant="selected === m.value ? 'flat' : 'tonal'"
-      icon
       size="x-large"
       class="text-h4"
       @click="selected = m.value"

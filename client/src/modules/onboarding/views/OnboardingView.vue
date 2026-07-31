@@ -58,19 +58,20 @@ async function finish() {
 
 <template>
   <v-main>
-    <v-container class="fill-height" style="max-width: 520px">
-      <v-card
-        v-motion
-        :initial="{ opacity: 0, y: 16 }"
-        :enter="{ opacity: 1, y: 0 }"
-        class="pa-6 pa-sm-8 w-100"
-      >
-        <div class="text-caption text-primary text-uppercase font-weight-bold">
-          {{ t('app.name') }}
-        </div>
-        <h1 class="text-h4 font-weight-bold mt-2">{{ t('onboarding.welcome') }}</h1>
+  <v-container class="fill-height py-10" style="max-width: 520px">
+    <v-card
+      v-motion
+      :initial="{ opacity: 0, y: 16 }"
+      :enter="{ opacity: 1, y: 0 }"
+      class="pa-6 pa-sm-8 w-100"
+    >
+      <div class="text-caption text-primary text-uppercase font-weight-bold">
+        {{ t('app.name') }}
+      </div>
+      <h1 class="text-h4 font-weight-bold mt-2">{{ t('onboarding.welcome') }}</h1>
 
-        <div v-if="step === 0" class="mt-6">
+      <v-window v-model="step" class="mt-6">
+        <v-window-item :value="0">
           <p class="text-body-2 text-medium-emphasis mb-3">{{ t('onboarding.language') }}</p>
           <div class="d-flex ga-2 mb-6">
             <v-chip
@@ -87,9 +88,9 @@ async function finish() {
           <v-btn block color="primary" size="large" @click="step = 1">
             {{ t('onboarding.continue') }}
           </v-btn>
-        </div>
+        </v-window-item>
 
-        <div v-else-if="step === 1" class="mt-6">
+        <v-window-item :value="1">
           <p class="text-body-2 text-medium-emphasis mb-3">{{ t('onboarding.modules') }}</p>
           <v-row dense class="mb-6">
             <v-col v-for="key in moduleKeys" :key="key" cols="6">
@@ -106,9 +107,9 @@ async function finish() {
           <v-btn block color="primary" size="large" @click="step = 2">
             {{ t('onboarding.continue') }}
           </v-btn>
-        </div>
+        </v-window-item>
 
-        <div v-else class="mt-6">
+        <v-window-item :value="2">
           <p class="text-body-2 text-medium-emphasis mb-3">{{ t('onboarding.routines') }}</p>
           <v-text-field
             v-model="form.wakeTime"
@@ -137,8 +138,9 @@ async function finish() {
           >
             {{ t('onboarding.finish') }}
           </v-btn>
-        </div>
-      </v-card>
-    </v-container>
+        </v-window-item>
+      </v-window>
+    </v-card>
+  </v-container>
   </v-main>
 </template>

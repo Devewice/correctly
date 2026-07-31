@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/shared/api/client'
+import PageHeader from '@/shared/components/PageHeader.vue'
 
 const { t } = useI18n()
 const habits = ref([])
@@ -29,9 +30,9 @@ onMounted(load)
 </script>
 
 <template>
-  <h1 class="text-h4 font-weight-bold mb-4">{{ t('habits.title') }}</h1>
+  <PageHeader :title="t('habits.title')" />
 
-  <v-card v-if="habits.length" class="pa-2">
+  <v-card v-if="habits.length">
     <v-list>
       <v-list-item
         v-for="habit in habits"
@@ -49,5 +50,5 @@ onMounted(load)
       </v-list-item>
     </v-list>
   </v-card>
-  <p v-else class="text-medium-emphasis">{{ t('habits.empty') }}</p>
+  <v-alert v-else type="info" variant="tonal">{{ t('habits.empty') }}</v-alert>
 </template>
