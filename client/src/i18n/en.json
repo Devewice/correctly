@@ -10,6 +10,10 @@
     "mood": "Mood",
     "sleep": "Sleep",
     "habits": "Habits",
+    "meditation": "Zen",
+    "activity": "Move",
+    "weight": "Weight",
+    "stats": "Stats",
     "profile": "Profile"
   },
   "login": {
@@ -53,6 +57,7 @@
     "mood": "Mood",
     "sleep": "Sleep",
     "meals": "Meals",
+    "more": "More modules",
     "emptyTimeline": "No entries yet today. Start with one tap.",
     "insight": "Today's insight"
   },
@@ -91,6 +96,69 @@
   "habits": {
     "title": "Habits",
     "empty": "No habits yet. Add some in onboarding or profile."
+  },
+  "meditation": {
+    "title": "Meditation",
+    "subtitle": "A soft pause to come back to your body.",
+    "start": "Start",
+    "stop": "Stop",
+    "inhale": "Inhale",
+    "exhale": "Exhale",
+    "today": "Today: {min} min",
+    "types": {
+      "breathing": "Breathing",
+      "free": "Free",
+      "body_scan": "Body scan",
+      "gratitude": "Gratitude"
+    }
+  },
+  "activity": {
+    "title": "Physical activity",
+    "duration": "Duration (min)",
+    "notes": "Notes (optional)",
+    "save": "Save activity",
+    "types": {
+      "walk": "Walk",
+      "run": "Run",
+      "gym": "Gym",
+      "yoga": "Yoga",
+      "bike": "Bike",
+      "swim": "Swim",
+      "other": "Other"
+    },
+    "intensity": {
+      "light": "Light",
+      "moderate": "Moderate",
+      "intense": "Intense"
+    }
+  },
+  "weight": {
+    "title": "Weight",
+    "subtitle": "No obsession — a gentle log when you want.",
+    "latest": "Latest entry",
+    "value": "Weight (kg)",
+    "notes": "Notes",
+    "save": "Save weight"
+  },
+  "stats": {
+    "title": "Your week",
+    "subtitle": "Soft patterns, no pressure.",
+    "streak": "Streak",
+    "avgMood": "Avg mood",
+    "meditation": "Meditation",
+    "waterWeek": "Water (7 days)",
+    "days": "Daily summary",
+    "badges": "Badges",
+    "noBadges": "Keep logging to unlock badges."
+  },
+  "badges": {
+    "first_step": "First step",
+    "water_week": "Hydrated",
+    "streak_7": "Fire streak",
+    "streak_30": "Consistency",
+    "zen_10": "Zen Master",
+    "home_chef": "Home chef",
+    "early_bird": "Early bird"
   },
   "common": {
     "loading": "Loading…",

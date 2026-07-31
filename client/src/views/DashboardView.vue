@@ -91,7 +91,7 @@ function itemLabel(item) {
           class="rounded-3xl bg-peach/40 p-4 ring-1 ring-peach/50 transition hover:-translate-y-0.5"
         >
           <p class="text-xs text-muted">{{ t('dashboard.meals') }}</p>
-          <p class="mt-1 font-display text-2xl font-700">
+          <p class="mt-1 font-display text-2xl font-extrabold">
             {{ dash.today.summary.mealsCount }}
           </p>
         </RouterLink>
@@ -100,7 +100,7 @@ function itemLabel(item) {
           class="rounded-3xl bg-sky/40 p-4 ring-1 ring-sky/50 transition hover:-translate-y-0.5"
         >
           <p class="text-xs text-muted">{{ t('dashboard.water') }}</p>
-          <p class="mt-1 font-display text-2xl font-700">
+          <p class="mt-1 font-display text-2xl font-extrabold">
             {{ Math.round(dash.today.summary.waterMl / 10) / 100 }}L
           </p>
         </RouterLink>
@@ -109,7 +109,7 @@ function itemLabel(item) {
           class="rounded-3xl bg-blush/35 p-4 ring-1 ring-blush/40 transition hover:-translate-y-0.5"
         >
           <p class="text-xs text-muted">{{ t('dashboard.mood') }}</p>
-          <p class="mt-1 font-display text-2xl font-700">
+          <p class="mt-1 font-display text-2xl font-extrabold">
             {{
               dash.today.summary.latestMood
                 ? moodEmoji[dash.today.summary.latestMood.mood]
@@ -122,7 +122,7 @@ function itemLabel(item) {
           class="rounded-3xl bg-lavender/40 p-4 ring-1 ring-lavender/50 transition hover:-translate-y-0.5"
         >
           <p class="text-xs text-muted">{{ t('dashboard.sleep') }}</p>
-          <p class="mt-1 font-display text-2xl font-700">
+          <p class="mt-1 font-display text-2xl font-extrabold">
             {{
               dash.today.summary.sleep?.durationMin
                 ? `${Math.round(dash.today.summary.sleep.durationMin / 60 * 10) / 10}h`
@@ -130,6 +130,15 @@ function itemLabel(item) {
             }}
           </p>
         </RouterLink>
+      </section>
+
+      <section class="flex flex-wrap gap-2">
+        <p class="w-full text-xs uppercase tracking-wide text-muted">{{ t('dashboard.more') }}</p>
+        <RouterLink to="/meditation" class="rounded-full bg-lavender/50 px-3 py-1.5 text-xs">{{ t('nav.meditation') }}</RouterLink>
+        <RouterLink to="/activity" class="rounded-full bg-sage/20 px-3 py-1.5 text-xs">{{ t('nav.activity') }}</RouterLink>
+        <RouterLink to="/weight" class="rounded-full bg-peach/50 px-3 py-1.5 text-xs">{{ t('nav.weight') }}</RouterLink>
+        <RouterLink to="/water" class="rounded-full bg-sky/40 px-3 py-1.5 text-xs">{{ t('nav.water') }}</RouterLink>
+        <RouterLink to="/stats" class="rounded-full bg-white px-3 py-1.5 text-xs ring-1 ring-black/5">{{ t('nav.stats') }}</RouterLink>
       </section>
 
       <section

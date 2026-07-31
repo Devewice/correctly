@@ -11,10 +11,10 @@ const auth = useAuthStore()
 const links = [
   { to: '/dashboard', key: 'dashboard' },
   { to: '/meals', key: 'meals' },
-  { to: '/water', key: 'water' },
   { to: '/mood', key: 'mood' },
-  { to: '/sleep', key: 'sleep' },
   { to: '/habits', key: 'habits' },
+  { to: '/meditation', key: 'meditation' },
+  { to: '/stats', key: 'stats' },
 ]
 
 async function logout() {

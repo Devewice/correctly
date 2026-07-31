@@ -10,6 +10,10 @@
     "mood": "Humor",
     "sleep": "Sono",
     "habits": "Hábitos",
+    "meditation": "Zen",
+    "activity": "Mover",
+    "weight": "Peso",
+    "stats": "Stats",
     "profile": "Perfil"
   },
   "login": {
@@ -53,6 +57,7 @@
     "mood": "Humor",
     "sleep": "Sono",
     "meals": "Refeições",
+    "more": "Mais módulos",
     "emptyTimeline": "Ainda não há registros hoje. Comece com um toque.",
     "insight": "Insight do dia"
   },
@@ -91,6 +96,69 @@
   "habits": {
     "title": "Hábitos",
     "empty": "Você ainda não tem hábitos. Adicione no onboarding ou perfil."
+  },
+  "meditation": {
+    "title": "Meditação",
+    "subtitle": "Uma pausa suave para voltar ao corpo.",
+    "start": "Começar",
+    "stop": "Parar",
+    "inhale": "Inspire",
+    "exhale": "Expire",
+    "today": "Hoje: {min} min",
+    "types": {
+      "breathing": "Respiração",
+      "free": "Livre",
+      "body_scan": "Body scan",
+      "gratitude": "Gratidão"
+    }
+  },
+  "activity": {
+    "title": "Atividade física",
+    "duration": "Duração (min)",
+    "notes": "Notas (opcional)",
+    "save": "Salvar atividade",
+    "types": {
+      "walk": "Caminhar",
+      "run": "Correr",
+      "gym": "Academia",
+      "yoga": "Yoga",
+      "bike": "Bike",
+      "swim": "Nadar",
+      "other": "Outro"
+    },
+    "intensity": {
+      "light": "Leve",
+      "moderate": "Moderada",
+      "intense": "Intensa"
+    }
+  },
+  "weight": {
+    "title": "Peso",
+    "subtitle": "Sem obsessão — um registro suave quando quiser.",
+    "latest": "Último registro",
+    "value": "Peso (kg)",
+    "notes": "Notas",
+    "save": "Salvar peso"
+  },
+  "stats": {
+    "title": "Sua semana",
+    "subtitle": "Padrões suaves, sem pressão.",
+    "streak": "Sequência",
+    "avgMood": "Humor médio",
+    "meditation": "Meditação",
+    "waterWeek": "Água (7 dias)",
+    "days": "Resumo diário",
+    "badges": "Conquistas",
+    "noBadges": "Continue registrando para desbloquear conquistas."
+  },
+  "badges": {
+    "first_step": "Primeiro passo",
+    "water_week": "Hidratado",
+    "streak_7": "Sequência de fogo",
+    "streak_30": "Constância",
+    "zen_10": "Zen Master",
+    "home_chef": "Chef caseiro",
+    "early_bird": "Madrugador"
   },
   "common": {
     "loading": "Carregando…",

@@ -18,6 +18,8 @@ import sleepRoutes from './routes/sleep.routes.js'
 import habitsRoutes from './routes/habits.routes.js'
 import activitiesRoutes from './routes/activities.routes.js'
 import journalRoutes from './routes/journal.routes.js'
+import meditationRoutes from './routes/meditation.routes.js'
+import weightRoutes from './routes/weight.routes.js'
 import dashboardRoutes from './routes/dashboard.routes.js'
 
 configurePassport()
@@ -61,6 +63,8 @@ app.use('/api/sleep', sleepRoutes)
 app.use('/api/habits', habitsRoutes)
 app.use('/api/activities', activitiesRoutes)
 app.use('/api/journal', journalRoutes)
+app.use('/api/meditation', meditationRoutes)
+app.use('/api/weight', weightRoutes)
 app.use('/api/dashboard', dashboardRoutes)
 
 app.use(errorHandler)

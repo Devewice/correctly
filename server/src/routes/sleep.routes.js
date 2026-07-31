@@ -3,7 +3,8 @@ import { z } from 'zod'
 import { prisma } from '../config/database.js'
 import { requireAuth } from '../middleware/auth.js'
 import { dayBounds, toDateKey } from '../utils/dates.js'
-import { addXp, XP } from '../utils/xp.js'
+import { XP } from '../utils/xp.js'
+import { afterLog } from '../utils/progress.js'
 
 const router = Router()
 router.use(requireAuth)
@@ -55,7 +56,7 @@ router.post('/', async (req, res) => {
       notes: data.notes,
     },
   })
-  await addXp(prisma, req.user.id, XP.sleep)
+  await afterLog(prisma, req.user.id, XP.sleep)
   res.status(201).json({ log })
 })
 

@@ -172,7 +172,6 @@ router.get('/timeline', async (req, res) => {
 })
 
 router.get('/insights', async (req, res) => {
-  // Lightweight starter insights — expand later with correlations
   const stats = req.user.stats
   const insights = []
 
@@ -202,6 +201,90 @@ router.get('/insights', async (req, res) => {
   }
 
   res.json({ insights })
+})
+
+router.get('/weekly', async (req, res) => {
+  const userId = req.user.id
+  const end = new Date()
+  end.setHours(23, 59, 59, 999)
+  const start = new Date(end)
+  start.setDate(start.getDate() - 6)
+  start.setHours(0, 0, 0, 0)
+
+  const [meals, waterLogs, moodLogs, sleepLogs, meditations, activities] =
+    await Promise.all([
+      prisma.mealLog.findMany({
+        where: { userId, loggedAt: { gte: start, lte: end } },
+        select: { loggedAt: true, type: true },
+      }),
+      prisma.waterLog.findMany({
+        where: { userId, loggedAt: { gte: start, lte: end } },
+        select: { loggedAt: true, amount: true },
+      }),
+      prisma.moodLog.findMany({
+        where: { userId, loggedAt: { gte: start, lte: end } },
+        select: { loggedAt: true, mood: true },
+      }),
+      prisma.sleepLog.findMany({
+        where: { userId, bedTime: { gte: start, lte: end } },
+        select: { bedTime: true, durationMin: true, quality: true },
+      }),
+      prisma.meditationLog.findMany({
+        where: { userId, loggedAt: { gte: start, lte: end } },
+        select: { loggedAt: true, duration: true },
+      }),
+      prisma.activityLog.findMany({
+        where: { userId, loggedAt: { gte: start, lte: end } },
+        select: { loggedAt: true, duration: true },
+      }),
+    ])
+
+  const days = []
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(start)
+    d.setDate(start.getDate() + i)
+    const key = toDateKey(d)
+    const dayWater = waterLogs
+      .filter((l) => toDateKey(l.loggedAt) === key)
+      .reduce((s, l) => s + l.amount, 0)
+    const dayMoods = moodLogs.filter((l) => toDateKey(l.loggedAt) === key)
+    const avgMood = dayMoods.length
+      ? dayMoods.reduce((s, m) => s + m.mood, 0) / dayMoods.length
+      : null
+    const daySleep = sleepLogs.find((l) => toDateKey(l.bedTime) === key)
+    days.push({
+      date: key,
+      meals: meals.filter((m) => toDateKey(m.loggedAt) === key).length,
+      waterMl: dayWater,
+      avgMood,
+      sleepMin: daySleep?.durationMin || null,
+      sleepQuality: daySleep?.quality || null,
+      meditationMin: meditations
+        .filter((m) => toDateKey(m.loggedAt) === key)
+        .reduce((s, m) => s + m.duration, 0),
+      activityMin: activities
+        .filter((a) => toDateKey(a.loggedAt) === key)
+        .reduce((s, a) => s + a.duration, 0),
+    })
+  }
+
+  const avg = (arr) =>
+    arr.length ? Math.round((arr.reduce((s, n) => s + n, 0) / arr.length) * 10) / 10 : null
+
+  res.json({
+    from: toDateKey(start),
+    to: toDateKey(end),
+    days,
+    totals: {
+      meals: meals.length,
+      waterMl: waterLogs.reduce((s, l) => s + l.amount, 0),
+      avgMood: avg(moodLogs.map((m) => m.mood)),
+      avgSleepMin: avg(sleepLogs.map((s) => s.durationMin).filter(Boolean)),
+      meditationMin: meditations.reduce((s, m) => s + m.duration, 0),
+      activityMin: activities.reduce((s, a) => s + a.duration, 0),
+    },
+    stats: req.user.stats,
+  })
 })
 
 export default router

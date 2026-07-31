@@ -58,6 +58,30 @@ const router = createRouter({
       meta: { auth: true },
     },
     {
+      path: '/meditation',
+      name: 'meditation',
+      component: () => import('@/views/MeditationView.vue'),
+      meta: { auth: true },
+    },
+    {
+      path: '/activity',
+      name: 'activity',
+      component: () => import('@/views/ActivityView.vue'),
+      meta: { auth: true },
+    },
+    {
+      path: '/weight',
+      name: 'weight',
+      component: () => import('@/views/WeightView.vue'),
+      meta: { auth: true },
+    },
+    {
+      path: '/stats',
+      name: 'stats',
+      component: () => import('@/views/StatsView.vue'),
+      meta: { auth: true },
+    },
+    {
       path: '/profile',
       name: 'profile',
       component: () => import('@/views/ProfileView.vue'),
