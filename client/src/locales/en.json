@@ -14,7 +14,8 @@
     "activity": "Move",
     "weight": "Weight",
     "stats": "Stats",
-    "profile": "Profile"
+    "profile": "Profile",
+    "more": "More"
   },
   "login": {
     "title": "Welcome to Correctly",
@@ -119,6 +120,42 @@
     "more": "More modules",
     "emptyTimeline": "No entries yet today. Start with one tap.",
     "insight": "Today's insight"
+  },
+  "day": {
+    "todayLabel": "Your day",
+    "dayProgress": "Today's progress",
+    "guideTitle": "Next step",
+    "stepLabel": "Step {n}",
+    "stepOf": "One thing at a time",
+    "moodAsk": "How are you feeling right now?",
+    "moodHint": "One tap is enough. Don't overthink it.",
+    "waterAsk": "Shall we drink some water?",
+    "waterHint": "Small sips add up. Pick an amount.",
+    "waterNow": "You've had {ml} ml today",
+    "mealAsk": "What did you eat?",
+    "mealHint": "Suggested: {type}. Write a short phrase.",
+    "habitAsk": "Did you do this habit?",
+    "habitHint": "If you did, mark it. If not, you can skip.",
+    "habitDone": "Yes, done",
+    "doneTitle": "You're doing great today",
+    "doneHint": "You've covered the essentials. Open More anytime.",
+    "seeStats": "See my week",
+    "continue": "Done, next",
+    "skip": "Not now",
+    "chipMoodPending": "—",
+    "moreTitle": "More options",
+    "moreSubtitle": "Use these only if you want to go deeper. The important part is Today.",
+    "moreHints": {
+      "stats": "Your week in numbers",
+      "meditation": "A short pause",
+      "activity": "Move your body",
+      "weight": "Weight log",
+      "sleep": "How you slept",
+      "meals": "Meal history",
+      "water": "Hydration detail",
+      "mood": "Mood history",
+      "habits": "All your habits"
+    }
   },
   "meals": {
     "title": "Meals",

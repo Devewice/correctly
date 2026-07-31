@@ -1,33 +1,38 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useDisplay } from 'vuetify'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
+import BrandLogo from '@/shared/components/BrandLogo.vue'
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
-const { mdAndUp } = useDisplay()
-const drawer = ref(true)
+const moreOpen = ref(false)
 
-const primaryNav = computed(() => [
-  { to: '/dashboard', title: t('nav.dashboard'), icon: 'mdi-home-heart' },
-  { to: '/meals', title: t('nav.meals'), icon: 'mdi-food-apple' },
-  { to: '/mood', title: t('nav.mood'), icon: 'mdi-emoticon-outline' },
-  { to: '/habits', title: t('nav.habits'), icon: 'mdi-checkbox-marked-circle-outline' },
-  { to: '/stats', title: t('nav.stats'), icon: 'mdi-chart-bar' },
+const tab = computed(() => {
+  if (route.path.startsWith('/profile')) return 'profile'
+  if (route.path === '/dashboard' || route.path === '/') return 'today'
+  return 'more'
+})
+
+const moreItems = computed(() => [
+  { to: '/stats', title: t('nav.stats'), icon: 'mdi-chart-bar', hint: t('day.moreHints.stats') },
+  { to: '/meditation', title: t('nav.meditation'), icon: 'mdi-meditation', hint: t('day.moreHints.meditation') },
+  { to: '/activity', title: t('nav.activity'), icon: 'mdi-run', hint: t('day.moreHints.activity') },
+  { to: '/weight', title: t('nav.weight'), icon: 'mdi-scale-bathroom', hint: t('day.moreHints.weight') },
+  { to: '/sleep', title: t('nav.sleep'), icon: 'mdi-sleep', hint: t('day.moreHints.sleep') },
+  { to: '/meals', title: t('nav.meals'), icon: 'mdi-food-apple', hint: t('day.moreHints.meals') },
+  { to: '/water', title: t('nav.water'), icon: 'mdi-cup-water', hint: t('day.moreHints.water') },
+  { to: '/mood', title: t('nav.mood'), icon: 'mdi-emoticon-outline', hint: t('day.moreHints.mood') },
+  { to: '/habits', title: t('nav.habits'), icon: 'mdi-checkbox-marked-circle-outline', hint: t('day.moreHints.habits') },
 ])
 
-const secondaryNav = computed(() => [
-  { to: '/water', title: t('nav.water'), icon: 'mdi-cup-water' },
-  { to: '/sleep', title: t('nav.sleep'), icon: 'mdi-sleep' },
-  { to: '/meditation', title: t('nav.meditation'), icon: 'mdi-meditation' },
-  { to: '/activity', title: t('nav.activity'), icon: 'mdi-run' },
-  { to: '/weight', title: t('nav.weight'), icon: 'mdi-scale-bathroom' },
-  { to: '/profile', title: t('nav.profile'), icon: 'mdi-account-circle-outline' },
-])
+function go(path) {
+  moreOpen.value = false
+  router.push(path)
+}
 
 async function logout() {
   await auth.logout()
@@ -36,115 +41,58 @@ async function logout() {
 </script>
 
 <template>
-  <v-navigation-drawer
-    v-model="drawer"
-    :permanent="mdAndUp"
-    :temporary="!mdAndUp"
-    width="260"
-  >
-    <v-list-item
-      class="py-4 px-2"
-      :title="t('app.name')"
-      :subtitle="t('app.tagline')"
-    >
-      <template #prepend>
-        <v-avatar color="primary" variant="tonal" size="40">
-          <v-icon icon="mdi-heart-pulse" />
-        </v-avatar>
-      </template>
-    </v-list-item>
-
-    <v-divider />
-
-    <v-list nav density="comfortable" class="px-2">
-      <v-list-subheader>{{ t('nav.dashboard') }}</v-list-subheader>
-      <v-list-item
-        v-for="item in primaryNav"
-        :key="item.to"
-        :to="item.to"
-        :prepend-icon="item.icon"
-        :title="item.title"
-        :active="route.path === item.to"
-        color="primary"
-        rounded="lg"
-      />
-
-      <v-list-subheader class="mt-2">{{ t('dashboard.more') }}</v-list-subheader>
-      <v-list-item
-        v-for="item in secondaryNav"
-        :key="item.to"
-        :to="item.to"
-        :prepend-icon="item.icon"
-        :title="item.title"
-        :active="route.path === item.to"
-        color="primary"
-        rounded="lg"
-      />
-    </v-list>
-
-    <template #append>
-      <div class="pa-3">
-        <v-btn
-          v-if="auth.user?.role === 'superadmin'"
-          block
-          variant="tonal"
-          color="primary"
-          class="mb-2"
-          to="/admin"
-          prepend-icon="mdi-shield-crown-outline"
-        >
-          {{ t('admin.badge') }}
-        </v-btn>
-        <v-btn
-          block
-          variant="text"
-          prepend-icon="mdi-logout"
-          @click="logout"
-        >
-          {{ t('common.logout') }}
-        </v-btn>
-      </div>
-    </template>
-  </v-navigation-drawer>
-
-  <v-app-bar>
-    <v-app-bar-nav-icon
-      v-if="!mdAndUp"
-      @click="drawer = !drawer"
-    />
-    <v-app-bar-title class="font-weight-bold text-primary-darken-1">
-      {{ t('app.name') }}
+  <v-app-bar elevation="0" height="64">
+    <v-app-bar-title class="ms-2">
+      <BrandLogo :size="36" />
     </v-app-bar-title>
     <template #append>
-      <v-btn variant="text" class="text-none" to="/profile">
-        <v-avatar v-if="auth.user?.avatar" size="28" class="me-2">
-          <v-img :src="auth.user.avatar" alt="" />
-        </v-avatar>
-        <span class="d-none d-sm-inline">{{ auth.user?.name }}</span>
-      </v-btn>
+      <v-btn
+        v-if="auth.user?.role === 'superadmin'"
+        icon="mdi-shield-crown-outline"
+        variant="text"
+        to="/admin"
+        :aria-label="t('admin.badge')"
+      />
+      <v-btn icon="mdi-logout-variant" variant="text" :aria-label="t('common.logout')" @click="logout" />
     </template>
   </v-app-bar>
 
   <v-main>
-    <v-container class="py-6" style="max-width: 960px">
+    <v-container class="py-4 py-sm-6" style="max-width: 560px">
       <router-view />
     </v-container>
   </v-main>
 
-  <v-bottom-navigation
-    v-if="!mdAndUp"
-    :model-value="route.path"
-    grow
-    app
-  >
-    <v-btn
-      v-for="item in primaryNav"
-      :key="item.to"
-      :value="item.to"
-      :to="item.to"
-      :prepend-icon="item.icon"
-    >
-      {{ item.title }}
+  <v-bottom-navigation :model-value="tab" grow app color="primary" elevation="8">
+    <v-btn value="today" to="/dashboard" prepend-icon="mdi-white-balance-sunny">
+      {{ t('nav.dashboard') }}
+    </v-btn>
+    <v-btn value="more" prepend-icon="mdi-dots-grid" @click="moreOpen = true">
+      {{ t('nav.more') }}
+    </v-btn>
+    <v-btn value="profile" to="/profile" prepend-icon="mdi-account-circle-outline">
+      {{ t('nav.profile') }}
     </v-btn>
   </v-bottom-navigation>
+
+  <v-bottom-sheet v-model="moreOpen" inset>
+    <v-card class="pa-4 pb-8">
+      <div class="text-h6 font-weight-bold mb-1">{{ t('day.moreTitle') }}</div>
+      <p class="text-body-2 text-medium-emphasis mb-4">{{ t('day.moreSubtitle') }}</p>
+      <v-row dense>
+        <v-col v-for="item in moreItems" :key="item.to" cols="6">
+          <v-card
+            variant="tonal"
+            color="surface-light"
+            class="pa-3 h-100"
+            @click="go(item.to)"
+          >
+            <v-icon :icon="item.icon" color="primary" class="mb-2" />
+            <div class="text-subtitle-2 font-weight-bold">{{ item.title }}</div>
+            <div class="text-caption text-medium-emphasis">{{ item.hint }}</div>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-card>
+  </v-bottom-sheet>
 </template>

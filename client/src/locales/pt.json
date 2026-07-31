@@ -14,7 +14,8 @@
     "activity": "Mover",
     "weight": "Peso",
     "stats": "Stats",
-    "profile": "Perfil"
+    "profile": "Perfil",
+    "more": "Mais"
   },
   "login": {
     "title": "Bem-vindo ao Correctly",
@@ -119,6 +120,42 @@
     "more": "Mais módulos",
     "emptyTimeline": "Ainda não há registros hoje. Comece com um toque.",
     "insight": "Insight do dia"
+  },
+  "day": {
+    "todayLabel": "Seu dia",
+    "dayProgress": "Progresso de hoje",
+    "guideTitle": "Próximo passo",
+    "stepLabel": "Passo {n}",
+    "stepOf": "Uma coisa de cada vez",
+    "moodAsk": "Como você se sente agora?",
+    "moodHint": "Um toque basta. Sem pensar demais.",
+    "waterAsk": "Vamos beber um pouco de água?",
+    "waterHint": "Pequenos goles somam. Escolha uma quantidade.",
+    "waterNow": "Você está com {ml} ml hoje",
+    "mealAsk": "O que você comeu?",
+    "mealHint": "Sugestão: {type}. Escreva em uma frase curta.",
+    "habitAsk": "Você fez este hábito?",
+    "habitHint": "Se já fez, marque. Se não, pode pular.",
+    "habitDone": "Sim, pronto",
+    "doneTitle": "Você está indo muito bem",
+    "doneHint": "Você respondeu o essencial. Abra Mais quando quiser.",
+    "seeStats": "Ver minha semana",
+    "continue": "Pronto, próximo",
+    "skip": "Agora não",
+    "chipMoodPending": "—",
+    "moreTitle": "Mais opções",
+    "moreSubtitle": "Use só se quiser aprofundar. O importante está em Hoje.",
+    "moreHints": {
+      "stats": "Sua semana em números",
+      "meditation": "Uma pausa curta",
+      "activity": "Mover o corpo",
+      "weight": "Registro de peso",
+      "sleep": "Como dormiu",
+      "meals": "Histórico de refeições",
+      "water": "Detalhe da hidratação",
+      "mood": "Histórico de humor",
+      "habits": "Todos os hábitos"
+    }
   },
   "meals": {
     "title": "Refeições",

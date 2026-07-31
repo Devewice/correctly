@@ -14,7 +14,8 @@
     "activity": "Mover",
     "weight": "Peso",
     "stats": "Stats",
-    "profile": "Perfil"
+    "profile": "Perfil",
+    "more": "Más"
   },
   "login": {
     "title": "Bienvenido a Correctly",
@@ -91,7 +92,7 @@
     "sleep": "Hora de dormir",
     "goal": "Meta principal (opcional)",
     "continue": "Continuar",
-    "finish": "Ir al dashboard"
+    "finish": "Empezar mi día"
   },
   "modules": {
     "meals": "Comidas",
@@ -119,6 +120,42 @@
     "more": "Más módulos",
     "emptyTimeline": "Aún no hay registros hoy. Empieza con un toque.",
     "insight": "Insight del día"
+  },
+  "day": {
+    "todayLabel": "Tu día",
+    "dayProgress": "Progreso de hoy",
+    "guideTitle": "Siguiente paso",
+    "stepLabel": "Paso {n}",
+    "stepOf": "Vamos por partes",
+    "moodAsk": "¿Cómo te sientes ahora?",
+    "moodHint": "Un toque basta. Sin pensarlo demasiado.",
+    "waterAsk": "¿Tomamos un poco de agua?",
+    "waterHint": "Pequeños sorbos suman. Elige una cantidad.",
+    "waterNow": "Llevas {ml} ml hoy",
+    "mealAsk": "¿Qué comiste?",
+    "mealHint": "Sugerimos: {type}. Escribe en una frase corta.",
+    "habitAsk": "¿Cumpliste este hábito?",
+    "habitHint": "Si ya lo hiciste, márcalo. Si no, puedes saltarlo.",
+    "habitDone": "Sí, listo",
+    "doneTitle": "Vas muy bien hoy",
+    "doneHint": "Ya respondiste lo esencial. Puedes seguir en Más cuando quieras.",
+    "seeStats": "Ver mi semana",
+    "continue": "Listo, siguiente",
+    "skip": "Ahora no",
+    "chipMoodPending": "—",
+    "moreTitle": "Más opciones",
+    "moreSubtitle": "Lo usas solo si quieres profundizar. Lo importante está en Hoy.",
+    "moreHints": {
+      "stats": "Tu semana en números",
+      "meditation": "Una pausa corta",
+      "activity": "Mover el cuerpo",
+      "weight": "Registro de peso",
+      "sleep": "Cómo dormiste",
+      "meals": "Historial de comidas",
+      "water": "Detalle de hidratación",
+      "mood": "Historial de ánimo",
+      "habits": "Todos tus hábitos"
+    }
   },
   "meals": {
     "title": "Comidas",

@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
 import { setLocale } from '@/plugins/i18n'
+import BrandLogo from '@/shared/components/BrandLogo.vue'
 
 const { t, locale } = useI18n()
 const auth = useAuthStore()
@@ -47,14 +48,18 @@ function googleLogin() {
 </script>
 
 <template>
-  <v-card class="pa-6 pa-sm-8" border>
+  <v-card class="pa-6 pa-sm-8">
+    <div class="d-flex justify-center mb-6">
+      <BrandLogo :size="56">
+        <template #tagline>
+          <div class="brand-logo__tagline">{{ t('app.tagline') }}</div>
+        </template>
+      </BrandLogo>
+    </div>
+
     <div class="text-center mb-6">
-      <div class="text-h4 font-weight-bold text-primary-darken-1">
-        {{ t('app.name') }}
-      </div>
-      <div class="text-body-2 text-medium-emphasis mt-1">{{ t('app.tagline') }}</div>
-      <div class="text-h6 mt-5">{{ t('login.title') }}</div>
-      <div class="text-body-2 text-medium-emphasis">{{ t('login.subtitle') }}</div>
+      <div class="text-h6 font-weight-bold">{{ t('login.title') }}</div>
+      <div class="text-body-2 text-medium-emphasis mt-1">{{ t('login.subtitle') }}</div>
     </div>
 
     <div class="d-flex justify-center ga-2 mb-6">
@@ -114,8 +119,17 @@ function googleLogin() {
       {{ t('login.devAdmin') }}
     </v-btn>
 
-    <v-alert v-if="error" type="error" variant="tonal" class="mt-4" density="compact">
+    <v-alert v-if="error" type="error" class="mt-4" density="compact">
       {{ error }}
     </v-alert>
   </v-card>
 </template>
+
+<style scoped>
+.brand-logo__tagline {
+  font-size: 0.8rem;
+  color: rgba(61, 61, 61, 0.65);
+  margin-top: 4px;
+  max-width: 220px;
+}
+</style>
