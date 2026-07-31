@@ -13,8 +13,8 @@ export function signToken(user) {
 export function setAuthCookie(res, token) {
   res.cookie('correctly_token', token, {
     httpOnly: true,
-    sameSite: env.nodeEnv === 'production' ? 'none' : 'lax',
-    secure: env.nodeEnv === 'production',
+    sameSite: 'lax',
+    secure: env.isProd,
     maxAge: 30 * 24 * 60 * 60 * 1000,
   })
 }
@@ -22,8 +22,8 @@ export function setAuthCookie(res, token) {
 export function clearAuthCookie(res) {
   res.clearCookie('correctly_token', {
     httpOnly: true,
-    sameSite: env.nodeEnv === 'production' ? 'none' : 'lax',
-    secure: env.nodeEnv === 'production',
+    sameSite: 'lax',
+    secure: env.isProd,
   })
 }
 

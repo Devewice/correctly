@@ -4,6 +4,9 @@ import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import passport from 'passport'
 import rateLimit from 'express-rate-limit'
+import path from 'path'
+import { existsSync } from 'fs'
+import { fileURLToPath } from 'url'
 import { env } from './config/env.js'
 import { checkDatabase, prisma } from './config/database.js'
 import { configurePassport } from './config/passport.js'
@@ -22,14 +25,36 @@ import meditationRoutes from './routes/meditation.routes.js'
 import weightRoutes from './routes/weight.routes.js'
 import dashboardRoutes from './routes/dashboard.routes.js'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const clientDist = path.resolve(__dirname, '../../client/dist')
+
 configurePassport()
 
 const app = express()
 
-app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }))
+app.set('trust proxy', 1)
+
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+    contentSecurityPolicy: false,
+  }),
+)
+
+const allowedOrigins = new Set(
+  [env.clientUrl, 'http://localhost:5173', 'http://localhost:3000']
+    .filter(Boolean)
+    .map((o) => o.replace(/\/$/, '')),
+)
+
 app.use(
   cors({
-    origin: env.clientUrl,
+    origin(origin, cb) {
+      if (!origin || allowedOrigins.has(origin.replace(/\/$/, '')) || env.isProd) {
+        return cb(null, true)
+      }
+      return cb(null, false)
+    },
     credentials: true,
   }),
 )
@@ -67,10 +92,23 @@ app.use('/api/meditation', meditationRoutes)
 app.use('/api/weight', weightRoutes)
 app.use('/api/dashboard', dashboardRoutes)
 
+// Hostinger / production: serve Vue build from the same Node process
+if (existsSync(clientDist)) {
+  app.use(express.static(clientDist, { index: false, maxAge: '1h' }))
+  app.get(/^(?!\/api).*/, (_req, res) => {
+    res.sendFile(path.join(clientDist, 'index.html'))
+  })
+} else if (env.isProd) {
+  console.warn(`[correctly] No se encontró ${clientDist} — solo API activa`)
+}
+
 app.use(errorHandler)
 
-const server = app.listen(env.port, () => {
-  console.log(`Correctly API → http://localhost:${env.port}`)
+const server = app.listen(env.port, '0.0.0.0', () => {
+  console.log(`Correctly → http://0.0.0.0:${env.port} (${env.nodeEnv})`)
+  if (existsSync(clientDist)) {
+    console.log(`Static UI → ${clientDist}`)
+  }
 })
 
 async function shutdown() {

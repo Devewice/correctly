@@ -3,7 +3,11 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-dotenv.config({ path: path.resolve(__dirname, '../../.env') })
+const serverEnv = path.resolve(__dirname, '../../.env')
+const rootEnv = path.resolve(__dirname, '../../../.env')
+
+dotenv.config({ path: serverEnv })
+dotenv.config({ path: rootEnv, override: false })
 
 export const env = {
   port: Number(process.env.PORT || 3000),
@@ -18,6 +22,7 @@ export const env = {
       'http://localhost:3000/api/auth/google/callback',
   },
   databaseUrl: process.env.DATABASE_URL || '',
+  isProd: (process.env.NODE_ENV || 'development') === 'production',
 }
 
 export const isGoogleAuthConfigured = () =>
