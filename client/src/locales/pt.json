@@ -239,6 +239,7 @@
     "subtitleShort": "Adicione à tela inicial e abra sem o navegador.",
     "install": "Instalar Correctly",
     "installed": "O Correctly já está instalado como app neste dispositivo.",
+    "installedShort": "O Correctly já está instalado neste dispositivo.",
     "manual": "No Chrome/Edge: menu ⋮ → “Instalar Correctly” ou “Aplicativo”. No Android também pode aparecer “Adicionar à tela inicial”.",
     "manualShort": "Menu ⋮ do navegador → Instalar app ou Adicionar à tela inicial.",
     "ios1": "Toque em Compartilhar (quadrado com seta) no Safari.",

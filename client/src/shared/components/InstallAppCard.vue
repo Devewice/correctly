@@ -58,9 +58,28 @@ const { canPrompt, isApp, showIosHelp, promptInstall } = usePwaInstall()
     </div>
   </v-card>
 
-  <v-alert v-else type="success" variant="tonal" density="compact" class="mb-4">
-    {{ t('pwa.installed') }}
-  </v-alert>
+  <v-card
+    v-else
+    class="install-card install-card--done mb-4"
+    :class="compact ? 'pa-3' : 'pa-4'"
+    variant="flat"
+  >
+    <div class="d-flex align-center ga-3">
+      <v-avatar
+        color="success"
+        variant="flat"
+        :size="compact ? 36 : 40"
+        class="flex-shrink-0"
+      >
+        <v-icon icon="mdi-check" color="white" :size="compact ? 20 : 22" />
+      </v-avatar>
+      <div class="install-card__body">
+        <div class="text-subtitle-2 font-weight-bold install-card__title">
+          {{ compact ? t('pwa.installedShort') : t('pwa.installed') }}
+        </div>
+      </div>
+    </div>
+  </v-card>
 </template>
 
 <style scoped>
@@ -70,6 +89,11 @@ const { canPrompt, isApp, showIosHelp, promptInstall } = usePwaInstall()
   border: 1px solid rgba(94, 122, 91, 0.16) !important;
   overflow: visible !important;
   width: 100%;
+  max-width: 100%;
+}
+.install-card--done {
+  background: #e4efe3 !important;
+  border-color: rgba(63, 143, 91, 0.28) !important;
 }
 .install-card__body {
   flex: 1 1 auto;
@@ -78,14 +102,17 @@ const { canPrompt, isApp, showIosHelp, promptInstall } = usePwaInstall()
 }
 .install-card__title {
   color: #3d3d3d !important;
-  line-height: 1.25;
+  line-height: 1.3;
+  white-space: normal;
   word-break: break-word;
+  overflow-wrap: anywhere;
 }
 .install-card__sub {
   color: rgba(61, 61, 61, 0.8) !important;
   line-height: 1.35;
   white-space: normal;
   word-break: break-word;
+  overflow-wrap: anywhere;
 }
 .install-card__list {
   color: rgba(61, 61, 61, 0.85);
