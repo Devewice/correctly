@@ -136,7 +136,7 @@ function typeTitle(type) {
 </script>
 
 <template>
-  <PageHeader :title="t('reminders.title')" :subtitle="t('reminders.subtitle')" />
+  <PageHeader :title="t('reminders.title')" :subtitle="t('reminders.subtitle')" icon="mdi-bell-outline" />
 
   <InstallAppCard />
 

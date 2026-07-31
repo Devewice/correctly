@@ -84,7 +84,7 @@ onUnmounted(stop)
 </script>
 
 <template>
-  <PageHeader :title="t('meditation.title')" :subtitle="t('meditation.subtitle')" />
+  <PageHeader :title="t('meditation.title')" :subtitle="t('meditation.subtitle')" icon="mdi-meditation" />
 
   <p class="text-body-2 text-medium-emphasis mb-3">{{ t('meditation.ask') }}</p>
 

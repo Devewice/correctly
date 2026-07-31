@@ -37,6 +37,7 @@
   "admin": {
     "badge": "Admin",
     "title": "Settings",
+    "subtitle": "Login, notifications, and roles — same calm language as the rest of Correctly.",
     "backApp": "Back to app",
     "nav": {
       "overview": "Overview",
@@ -51,6 +52,8 @@
       "users": "Users"
     },
     "overview": {
+      "statusTitle": "System status",
+      "todoTitle": "To configure",
       "users": "Users",
       "google": "Google login",
       "push": "Web Push",
@@ -70,7 +73,8 @@
       "superadmins": "Superadmins"
     },
     "users": {
-      "title": "Users and roles"
+      "title": "Users and roles",
+      "subtitle": "Change each account role carefully."
     },
     "wizard": {
       "next": "Next",

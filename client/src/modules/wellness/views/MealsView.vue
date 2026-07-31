@@ -63,7 +63,7 @@ onMounted(load)
 </script>
 
 <template>
-  <PageHeader :title="t('meals.title')" :subtitle="t('meals.subtitle')" />
+  <PageHeader :title="t('meals.title')" :subtitle="t('meals.subtitle')" icon="mdi-food-apple-outline" />
 
   <v-card class="pa-4 pa-sm-5 mb-5 cx-panel--lift">
     <p class="text-body-2 text-medium-emphasis mb-3">{{ t('meals.whenAsk') }}</p>

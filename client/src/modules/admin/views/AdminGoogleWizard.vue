@@ -102,26 +102,33 @@ function copy(text) {
   <div v-if="!wizard" class="text-medium-emphasis">{{ t('common.loading') }}</div>
 
   <div v-else class="d-flex flex-column ga-4">
-    <div>
-      <h2 class="text-h5 font-weight-bold">{{ t('admin.wizard.google.title') }}</h2>
-      <p class="text-body-2 text-medium-emphasis mt-1">{{ t('admin.wizard.google.subtitle') }}</p>
-    </div>
+    <header class="d-flex align-start ga-3">
+      <div class="wizard-icon" aria-hidden="true">
+        <v-icon icon="mdi-google" color="primary" />
+      </div>
+      <div>
+        <h2 class="text-h6 font-weight-bold mb-0">{{ t('admin.wizard.google.title') }}</h2>
+        <p class="text-body-2 text-medium-emphasis mt-1 mb-0">
+          {{ t('admin.wizard.google.subtitle') }}
+        </p>
+      </div>
+    </header>
 
     <div class="d-flex flex-wrap ga-2">
       <v-chip
         v-for="(s, i) in steps"
         :key="s.id"
         size="small"
-        label
         :color="i === step ? 'primary' : i < step ? 'success' : undefined"
         :variant="i === step || i < step ? 'flat' : 'tonal'"
+        :prepend-icon="i < step ? 'mdi-check' : undefined"
         @click="step = i"
       >
         {{ i + 1 }}. {{ t(s.titleKey) }}
       </v-chip>
     </div>
 
-    <v-card class="pa-6">
+    <v-card class="pa-4 pa-sm-6 cx-panel--lift">
       <div v-if="current?.id === 'console'" class="d-flex flex-column ga-4">
         <p class="text-body-2">{{ t('admin.wizard.google.copy.console') }}</p>
         <div class="d-flex flex-wrap ga-2">
@@ -239,3 +246,15 @@ function copy(text) {
     </v-card>
   </div>
 </template>
+
+<style scoped>
+.wizard-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--cx-primary-soft);
+  flex-shrink: 0;
+}
+</style>

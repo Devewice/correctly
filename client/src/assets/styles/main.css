@@ -445,21 +445,9 @@ body {
   opacity: 1 !important;
 }
 
-/* —— Tabs / admin —— */
-.admin-shell .v-tabs {
-  background: var(--cx-surface-soft);
-  border: none;
-  border-radius: var(--cx-radius-pill);
-  padding: 0.3rem;
-  box-shadow: none;
-}
-.admin-shell .v-tab {
-  border-radius: var(--cx-radius-pill) !important;
-}
+/* —— Admin content cards stay soft —— */
 .admin-shell .v-card {
   border: none !important;
-  box-shadow: none !important;
-  background: var(--cx-surface-soft) !important;
 }
 
 /* —— Progress —— */

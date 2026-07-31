@@ -55,7 +55,7 @@ onMounted(load)
 </script>
 
 <template>
-  <PageHeader :title="t('activity.title')" :subtitle="t('activity.subtitle')" />
+  <PageHeader :title="t('activity.title')" :subtitle="t('activity.subtitle')" icon="mdi-walk" />
 
   <v-card class="pa-4 pa-sm-5 mb-5 cx-panel--lift">
     <p class="text-body-2 text-medium-emphasis mb-3">{{ t('activity.whatAsk') }}</p>

@@ -76,6 +76,7 @@ onMounted(async () => {
           size="large"
           height="56"
           class="text-body-2"
+          :prepend-icon="opt.key === 'sip' ? 'mdi-cup' : opt.key === 'glass' ? 'mdi-cup-water' : 'mdi-bottle-tonic'"
           :loading="busy"
           @click="add(opt.ml)"
         >

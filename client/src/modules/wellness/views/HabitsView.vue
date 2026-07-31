@@ -30,7 +30,7 @@ onMounted(load)
 </script>
 
 <template>
-  <PageHeader :title="t('habits.title')" />
+  <PageHeader :title="t('habits.title')" icon="mdi-checkbox-marked-circle-outline" />
 
   <v-list v-if="habits.length">
     <v-list-item

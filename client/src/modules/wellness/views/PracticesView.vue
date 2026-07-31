@@ -46,7 +46,7 @@ async function run(p) {
 </script>
 
 <template>
-  <PageHeader :title="t('practices.title')" :subtitle="t('practices.subtitle')" />
+  <PageHeader :title="t('practices.title')" :subtitle="t('practices.subtitle')" icon="mdi-spa-outline" />
 
   <v-row dense>
     <v-col v-for="p in PRACTICES" :key="p.id" cols="12" sm="6">

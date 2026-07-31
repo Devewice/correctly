@@ -56,7 +56,7 @@ const latest = computed(() => logs.value[0] || null)
 </script>
 
 <template>
-  <PageHeader :title="t('sleep.title')" :subtitle="t('sleep.subtitle')" />
+  <PageHeader :title="t('sleep.title')" :subtitle="t('sleep.subtitle')" icon="mdi-weather-night" />
 
   <p class="text-body-2 text-medium-emphasis mb-4">{{ t('sleep.ask') }}</p>
 

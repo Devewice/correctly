@@ -37,6 +37,7 @@
   "admin": {
     "badge": "Admin",
     "title": "Configuração",
+    "subtitle": "Login, notificações e papéis — a mesma calma do resto do Correctly.",
     "backApp": "Voltar ao app",
     "nav": {
       "overview": "Resumo",
@@ -48,9 +49,11 @@
       "overview": "Início",
       "google": "Google",
       "vapid": "Push",
-      "users": "Users"
+      "users": "Usuários"
     },
     "overview": {
+      "statusTitle": "Estado do sistema",
+      "todoTitle": "Por configurar",
       "users": "Usuários",
       "google": "Login Google",
       "push": "Web Push",
@@ -70,7 +73,8 @@
       "superadmins": "Superadmins"
     },
     "users": {
-      "title": "Usuários e papéis"
+      "title": "Usuários e papéis",
+      "subtitle": "Altere o papel de cada conta com cuidado."
     },
     "wizard": {
       "next": "Próximo",

@@ -39,7 +39,7 @@ onMounted(load)
 </script>
 
 <template>
-  <PageHeader :title="t('mood.title')" :subtitle="t('mood.subtitle')" />
+  <PageHeader :title="t('mood.title')" :subtitle="t('mood.subtitle')" icon="mdi-emoticon-outline" />
 
   <p class="text-body-2 text-medium-emphasis mb-4">{{ t('mood.ask') }}</p>
 

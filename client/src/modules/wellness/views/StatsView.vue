@@ -37,7 +37,7 @@ function barHeight(ml) {
 </script>
 
 <template>
-  <PageHeader :title="t('stats.title')" :subtitle="t('stats.subtitle')" />
+  <PageHeader :title="t('stats.title')" :subtitle="t('stats.subtitle')" icon="mdi-chart-bar" />
 
   <div v-if="!data" class="text-medium-emphasis">{{ t('common.loading') }}</div>
 

@@ -32,7 +32,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <PageHeader :title="t('friends.joinTitle')" :subtitle="t('friends.joinSubtitle')" />
+  <PageHeader :title="t('friends.joinTitle')" :subtitle="t('friends.joinSubtitle')" icon="mdi-account-plus-outline" />
 
   <v-card class="pa-6 text-center">
     <div v-if="status === 'loading'" class="text-medium-emphasis">{{ t('common.loading') }}</div>

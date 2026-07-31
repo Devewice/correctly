@@ -61,7 +61,7 @@ onMounted(load)
 </script>
 
 <template>
-  <PageHeader :title="t('weight.title')" :subtitle="t('weight.subtitle')" />
+  <PageHeader :title="t('weight.title')" :subtitle="t('weight.subtitle')" icon="mdi-scale-bathroom" />
 
   <template v-if="latest">
     <v-alert type="info" variant="tonal" class="mb-5">

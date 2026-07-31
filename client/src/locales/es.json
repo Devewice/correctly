@@ -37,6 +37,7 @@
   "admin": {
     "badge": "Admin",
     "title": "Configuración",
+    "subtitle": "Login, notificaciones y roles. Misma calma que el resto de Correctly.",
     "backApp": "Volver a la app",
     "nav": {
       "overview": "Resumen",
@@ -48,9 +49,11 @@
       "overview": "Inicio",
       "google": "Google",
       "vapid": "Push",
-      "users": "Users"
+      "users": "Usuarios"
     },
     "overview": {
+      "statusTitle": "Estado del sistema",
+      "todoTitle": "Por configurar",
       "users": "Usuarios",
       "google": "Login Google",
       "push": "Web Push",
@@ -70,7 +73,8 @@
       "superadmins": "Superadministradores"
     },
     "users": {
-      "title": "Usuarios y roles"
+      "title": "Usuarios y roles",
+      "subtitle": "Cambia el rol de cada cuenta con cuidado."
     },
     "wizard": {
       "next": "Siguiente",

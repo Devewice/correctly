@@ -138,7 +138,7 @@ onMounted(load)
 </script>
 
 <template>
-  <PageHeader :title="t('friends.title')" :subtitle="t('friends.subtitle')" />
+  <PageHeader :title="t('friends.title')" :subtitle="t('friends.subtitle')" icon="mdi-account-group-outline" />
 
   <v-alert v-if="error" type="error" variant="tonal" class="mb-4" closable @click:close="error = ''">
     {{ error }}

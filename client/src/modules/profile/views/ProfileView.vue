@@ -84,7 +84,7 @@ async function save() {
 </script>
 
 <template>
-  <PageHeader :title="t('nav.profile')" />
+  <PageHeader :title="t('nav.profile')" icon="mdi-account-circle-outline" />
 
   <InstallAppCard />
 

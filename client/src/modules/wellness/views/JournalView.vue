@@ -46,7 +46,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <PageHeader :title="t('journal.title')" :subtitle="t('journal.subtitle')" />
+  <PageHeader :title="t('journal.title')" :subtitle="t('journal.subtitle')" icon="mdi-notebook-outline" />
 
   <v-card class="pa-4 pa-sm-5 mb-4 cx-panel--lift">
     <p class="text-caption text-medium-emphasis mb-2">{{ t('journal.promptsTitle') }}</p>

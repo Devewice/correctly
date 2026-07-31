@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 defineProps({
   title: { type: String, required: true },
   subtitle: { type: String, default: '' },
+  icon: { type: String, default: '' },
   backTo: { type: String, default: '/dashboard' },
   showBack: { type: Boolean, default: true },
 })
@@ -25,8 +26,15 @@ const { t } = useI18n()
     >
       {{ t('nav.dashboard') }}
     </v-btn>
-    <h1 class="cx-page-title">{{ title }}</h1>
-    <p v-if="subtitle" class="cx-page-sub">{{ subtitle }}</p>
+    <div class="cx-page-header__row">
+      <div v-if="icon" class="cx-page-header__icon" aria-hidden="true">
+        <v-icon :icon="icon" color="primary" size="26" />
+      </div>
+      <div class="cx-page-header__text">
+        <h1 class="cx-page-title">{{ title }}</h1>
+        <p v-if="subtitle" class="cx-page-sub">{{ subtitle }}</p>
+      </div>
+    </div>
   </header>
 </template>
 
@@ -35,9 +43,26 @@ const { t } = useI18n()
   margin-bottom: 1.2rem;
 }
 .cx-page-header__back {
-  margin: 0 0 0.2rem -0.45rem;
+  margin: 0 0 0.35rem -0.45rem;
   min-height: 34px !important;
   font-weight: 600;
   opacity: 0.9;
+}
+.cx-page-header__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+.cx-page-header__icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: var(--cx-primary-soft);
+}
+.cx-page-header__text {
+  min-width: 0;
 }
 </style>

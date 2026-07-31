@@ -32,30 +32,68 @@ async function setRole(user, role) {
   }
 }
 
+function roleIcon(role) {
+  if (role === 'superadmin') return 'mdi-shield-crown-outline'
+  if (role === 'admin') return 'mdi-shield-account-outline'
+  return 'mdi-account-outline'
+}
+
 onMounted(load)
 </script>
 
 <template>
-  <h2 class="text-h5 font-weight-bold mb-4">{{ t('admin.users.title') }}</h2>
+  <header class="admin-page-head mb-4">
+    <div class="admin-page-head__icon" aria-hidden="true">
+      <v-icon icon="mdi-account-group-outline" color="primary" />
+    </div>
+    <div>
+      <h2 class="text-h6 font-weight-bold mb-0">{{ t('admin.users.title') }}</h2>
+      <p class="text-body-2 text-medium-emphasis mb-0 mt-1">{{ t('admin.users.subtitle') }}</p>
+    </div>
+  </header>
+
   <v-alert v-if="error" type="error" variant="tonal" class="mb-3" density="compact">
     {{ error }}
   </v-alert>
 
-  <v-card v-for="u in users" :key="u.id" class="pa-4 mb-2">
+  <div v-for="u in users" :key="u.id" class="cx-log mb-2">
     <div class="d-flex flex-wrap align-center justify-space-between ga-3">
-      <div>
-        <div class="font-weight-medium">{{ u.name }}</div>
-        <div class="text-caption text-medium-emphasis">{{ u.email }}</div>
+      <div class="d-flex align-center ga-3 min-w-0">
+        <v-avatar color="primary" variant="tonal" size="42">
+          <v-icon :icon="roleIcon(u.role)" />
+        </v-avatar>
+        <div class="min-w-0">
+          <div class="font-weight-medium text-truncate">{{ u.name }}</div>
+          <div class="text-caption text-medium-emphasis text-truncate">{{ u.email }}</div>
+        </div>
       </div>
       <v-select
         :model-value="u.role"
         :items="roles"
         density="compact"
-        style="max-width: 160px"
+        style="max-width: 170px; min-width: 140px"
         :disabled="u.id === auth.user?.id"
         hide-details
+        :prepend-inner-icon="roleIcon(u.role)"
         @update:model-value="setRole(u, $event)"
       />
     </div>
-  </v-card>
+  </div>
 </template>
+
+<style scoped>
+.admin-page-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+.admin-page-head__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--cx-primary-soft);
+  flex-shrink: 0;
+}
+</style>
