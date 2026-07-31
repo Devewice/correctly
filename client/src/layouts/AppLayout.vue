@@ -26,6 +26,7 @@ watch(mdAndUp, (v) => {
 
 const tab = computed(() => {
   if (route.path.startsWith('/profile')) return 'profile'
+  if (route.path.startsWith('/friends')) return 'friends'
   if (route.path === '/dashboard' || route.path === '/') return 'today'
   return 'more'
 })
@@ -45,7 +46,6 @@ const moreItems = computed(() => {
     { to: '/practices', module: null, title: t('practices.title'), icon: 'mdi-spa-outline', hint: t('day.moreHints.practices') },
     { to: '/weight', module: 'weight', title: t('modules.weight'), icon: 'mdi-scale-bathroom', hint: t('day.moreHints.weight') },
     { to: '/stats', module: null, title: t('stats.title'), icon: 'mdi-chart-bar', hint: t('day.moreHints.stats') },
-    { to: '/friends', module: null, title: t('friends.title'), icon: 'mdi-account-group-outline', hint: t('day.moreHints.friends') },
     { to: '/reminders', module: null, title: t('reminders.title'), icon: 'mdi-bell-ring-outline', hint: t('day.moreHints.reminders') },
     { to: '/profile', module: null, title: t('nav.profile'), icon: 'mdi-account-circle-outline', hint: t('day.moreHints.profile') },
     { to: '/dashboard', module: null, title: t('nav.dashboard'), icon: 'mdi-white-balance-sunny', hint: t('day.moreHints.today') },
@@ -126,6 +126,14 @@ async function logout() {
         prepend-icon="mdi-white-balance-sunny"
         :title="lgAndUp ? t('nav.dashboard') : undefined"
         :active="tab === 'today'"
+        color="primary"
+        rounded="lg"
+      />
+      <v-list-item
+        to="/friends"
+        prepend-icon="mdi-account-group-outline"
+        :title="lgAndUp ? t('nav.friends') : undefined"
+        :active="tab === 'friends'"
         color="primary"
         rounded="lg"
       />
@@ -219,6 +227,16 @@ async function logout() {
         </v-chip>
         <v-chip
           size="small"
+          :color="tab === 'friends' ? 'primary' : undefined"
+          :variant="tab === 'friends' ? 'flat' : 'tonal'"
+          label
+          to="/friends"
+          prepend-icon="mdi-account-group-outline"
+        >
+          {{ t('nav.friends') }}
+        </v-chip>
+        <v-chip
+          size="small"
           :color="tab === 'profile' ? 'primary' : undefined"
           :variant="tab === 'profile' ? 'flat' : 'tonal'"
           label
@@ -277,6 +295,9 @@ async function logout() {
   >
     <v-btn value="today" to="/dashboard" prepend-icon="mdi-white-balance-sunny">
       {{ t('nav.dashboard') }}
+    </v-btn>
+    <v-btn value="friends" to="/friends" prepend-icon="mdi-account-group-outline">
+      {{ t('nav.friends') }}
     </v-btn>
     <v-btn value="more" prepend-icon="mdi-dots-grid" @click="toggleMore">
       {{ t('nav.more') }}
