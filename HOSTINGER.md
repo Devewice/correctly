@@ -1,58 +1,44 @@
 # Despliegue en Hostinger — jeisson.click
 
-## Diagnóstico actual
-
-| URL | Resultado | Significado |
-|-----|-----------|-------------|
-| `/api/auth/status` | OK | Node Express **sí corre** |
-| `/api/health` | `ui:true` + `db:down` | Front copiado en Node; MySQL rechaza credenciales |
-| `/` | **404** | Apache mira `public_html` vacío; **no** pasa `/` a Node |
-
-## Configuración correcta
+## Configuración de build
 
 | Campo | Valor |
 |-------|--------|
 | Preajuste | `Other` |
 | Build | `npm run build` |
-| **Directorio de salida** | **`server/public`** (Apache / public_html) |
+| Directorio de salida | `server/public` |
 | Archivo de entrada | `server/src/index.js` |
 
-Hostinger copia el “output” a `public_html`. Ahí debe estar el Vue.  
-Node sigue atendiendo `/api/*`.
+## Variables de entorno (MySQL con caracteres especiales)
 
----
-
-## Variables de entorno
-
-Usa el **host remoto** (el login con `localhost` falló):
+Hostinger **corta** valores con `&` en el panel.  
+Tu password `u;DoKQ~&2` debe ir en **Base64**:
 
 ```env
 NODE_ENV=production
 CLIENT_URL=https://jeisson.click
+ALLOW_DEMO_LOGIN=true
 
-DATABASE_HOST=srv1855.hstgr.io
+DATABASE_HOST=localhost
 DATABASE_PORT=3306
 DATABASE_NAME=u301973293_correctly
 DATABASE_USER=u301973293_admin
-DATABASE_PASSWORD=TU_PASSWORD_AQUI
-DATABASE_URL=mysql://u301973293_admin:PASSWORD_ENCODED@srv1855.hstgr.io:3306/u301973293_correctly
+DATABASE_PASSWORD_B64=dTtEb0tRfiYy
 
 JWT_SECRET=cambia-esta-clave
 GOOGLE_CALLBACK_URL=https://jeisson.click/api/auth/google/callback
-ALLOW_DEMO_LOGIN=true
 ```
 
-- **NO** pongas `PORT`
-- Caracteres especiales en la contraseña van **URL-encoded** en `DATABASE_URL` (`;`→`%3B`, `&`→`%26`, `:`→`%3A`, `?`→`%3F`, `>`→`%3E`)
-- MySQL remoto con acceso `%` ya está bien para `u301973293_correctly`
+### Importante
+1. Añade **`DATABASE_PASSWORD_B64`** = `dTtEb0tRfiYy` (es `u;DoKQ~&2` en base64)
+2. Pon **`DATABASE_HOST=localhost`** (Node corre en el mismo Hostinger)
+3. Puedes **borrar** `DATABASE_PASSWORD` y `DATABASE_URL` del panel (el server las reconstruye)
+4. Si `localhost` falla, cambia solo a: `DATABASE_HOST=srv1855.hstgr.io`
+5. **NO** pongas `PORT`
 
----
+### Comprobar
+https://jeisson.click/api/health
 
-## Pasos
-
-1. **Directorio de salida** = `server/public`
-2. Variables como arriba (host `srv1855.hstgr.io`)
-3. Redesplegar
-4. Probar:
-   - https://jeisson.click/ → login
-   - https://jeisson.click/api/health → `"ok":true,"db":"up","ui":true`
+- `"ok":true` → DB bien  
+- `"passLen":9` → password completa  
+- `"passLen"` menor → sigue truncada; revisa `DATABASE_PASSWORD_B64`

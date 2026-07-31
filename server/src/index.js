@@ -84,22 +84,28 @@ app.use(
 )
 
 app.get('/api/health', async (_req, res) => {
+  const meta = {
+    ui: Boolean(clientDist),
+    uiPath: clientDist || null,
+    dbHost: env.dbMeta.host,
+    dbName: env.dbMeta.name,
+    dbUser: env.dbMeta.user,
+    passLen: env.dbMeta.passLen,
+    usedB64: env.dbMeta.usedB64,
+  }
   try {
     await checkDatabase()
-    res.json({
-      ok: true,
-      db: 'up',
-      name: 'correctly',
-      ui: Boolean(clientDist),
-      uiPath: clientDist || null,
-    })
+    res.json({ ok: true, db: 'up', name: 'correctly', ...meta })
   } catch (err) {
     res.status(503).json({
       ok: false,
       db: 'down',
       error: err.message,
-      ui: Boolean(clientDist),
-      uiPath: clientDist || null,
+      hint:
+        meta.passLen < 9
+          ? 'La contraseña parece truncada (Hostinger corta el &). Usa DATABASE_PASSWORD_B64=dTtEb0tRfiYy y DATABASE_HOST=localhost'
+          : 'Prueba DATABASE_HOST=localhost o DATABASE_HOST=srv1855.hstgr.io',
+      ...meta,
     })
   }
 })
