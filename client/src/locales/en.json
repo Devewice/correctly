@@ -198,6 +198,35 @@
     "themeDark": "Dark",
     "themeSystem": "System"
   },
+  "companions": {
+    "title": "Companion",
+    "hint": "Pick a pet. It mirrors your day (mood, sleep, water, meals).",
+    "none": "None",
+    "tapHint": "Wave to {name}",
+    "stateHint": "{name}: {state}",
+    "states": {
+      "idle": "Calm",
+      "ok": "Okay",
+      "happy": "Good",
+      "great": "Great",
+      "strong": "Strong",
+      "low": "Low",
+      "destroyed": "Wrecked",
+      "sleepy": "Sleepy",
+      "hungry": "Hungry",
+      "thirsty": "Thirsty",
+      "sick": "Under the weather",
+      "proud": "Proud",
+      "wave": "Hi!"
+    },
+    "pets": {
+      "moka": { "name": "Moka" },
+      "pipa": { "name": "Pipa" },
+      "nori": { "name": "Nori" },
+      "luma": { "name": "Luma" },
+      "kiwi": { "name": "Kiwi" }
+    }
+  },
   "journal": {
     "title": "Journal",
     "subtitle": "One line is enough. No pressure.",

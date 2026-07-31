@@ -5,10 +5,12 @@ import { useDisplay } from 'vuetify'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
 import BrandLogo from '@/shared/components/BrandLogo.vue'
+import CompanionBuddy from '@/shared/components/CompanionBuddy.vue'
 import InstallAppCard from '@/shared/components/InstallAppCard.vue'
 import SystemHealthBanner from '@/shared/components/SystemHealthBanner.vue'
 import { fadeUp, withDelay } from '@/shared/motion/presets'
 import { activeModuleSet } from '@/shared/utils/timeContext'
+import { syncCompanionFromPrefs } from '@/shared/companions/companionBus'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -23,6 +25,12 @@ watch(mdAndUp, (v) => {
   drawer.value = v
   if (v) moreOpen.value = false
 })
+
+watch(
+  () => auth.user?.id,
+  (id) => syncCompanionFromPrefs(id),
+  { immediate: true },
+)
 
 const tab = computed(() => {
   if (route.path.startsWith('/profile')) return 'profile'
@@ -350,6 +358,8 @@ async function logout() {
       </div>
     </v-card>
   </v-bottom-sheet>
+
+  <CompanionBuddy />
 </template>
 
 <style scoped>

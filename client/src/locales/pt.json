@@ -198,6 +198,35 @@
     "themeDark": "Escuro",
     "themeSystem": "Sistema"
   },
+  "companions": {
+    "title": "Companheiro",
+    "hint": "Escolha um pet. Reflete o seu dia (ânimo, sono, água, refeições).",
+    "none": "Nenhum",
+    "tapHint": "Acenar para {name}",
+    "stateHint": "{name}: {state}",
+    "states": {
+      "idle": "Tranquilo",
+      "ok": "Mais ou menos",
+      "happy": "Bem",
+      "great": "Super bem",
+      "strong": "Forte",
+      "low": "Baixo",
+      "destroyed": "Acabado",
+      "sleepy": "Com sono",
+      "hungry": "Fome",
+      "thirsty": "Sede",
+      "sick": "Malzinho",
+      "proud": "Orgulhoso",
+      "wave": "Oi!"
+    },
+    "pets": {
+      "moka": { "name": "Moka" },
+      "pipa": { "name": "Pipa" },
+      "nori": { "name": "Nori" },
+      "luma": { "name": "Luma" },
+      "kiwi": { "name": "Kiwi" }
+    }
+  },
   "journal": {
     "title": "Diário",
     "subtitle": "Uma linha basta. Sem pressão.",

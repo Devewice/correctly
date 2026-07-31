@@ -198,6 +198,35 @@
     "themeDark": "Oscuro",
     "themeSystem": "Sistema"
   },
+  "companions": {
+    "title": "Compañero",
+    "hint": "Elige una mascota. Refleja cómo va tu día (ánimo, sueño, agua, comida).",
+    "none": "Ninguno",
+    "tapHint": "Saludar a {name}",
+    "stateHint": "{name}: {state}",
+    "states": {
+      "idle": "Tranquilo",
+      "ok": "Regular",
+      "happy": "Bien",
+      "great": "Súper bien",
+      "strong": "Fuerte",
+      "low": "Bajo",
+      "destroyed": "Destruido",
+      "sleepy": "Con sueño",
+      "hungry": "Hambre",
+      "thirsty": "Sed",
+      "sick": "Malito",
+      "proud": "Orgulloso",
+      "wave": "¡Hola!"
+    },
+    "pets": {
+      "moka": { "name": "Moka" },
+      "pipa": { "name": "Pipa" },
+      "nori": { "name": "Nori" },
+      "luma": { "name": "Luma" },
+      "kiwi": { "name": "Kiwi" }
+    }
+  },
   "journal": {
     "title": "Diario",
     "subtitle": "Una línea basta. Sin presión.",

@@ -3,6 +3,7 @@ const KEY = (userId) => `correctly_care_prefs_${userId || 'anon'}`
 const DEFAULTS = {
   lowEnergy: false,
   ritualId: null, // 'morning' | 'evening' | null
+  companionPetId: 'moka', // companions id | 'none'
 }
 
 export function loadCarePrefs(userId) {

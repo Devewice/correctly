@@ -14,6 +14,9 @@ import {
   loadThemeMode,
   saveThemeMode,
 } from '@/shared/theme/themePrefs'
+import { COMPANIONS, COMPANION_NONE } from '@/shared/data/companions'
+import { setCompanionPet, companionPetId } from '@/shared/companions/companionBus'
+import CompanionBuddy from '@/shared/components/CompanionBuddy.vue'
 
 const { t } = useI18n()
 const theme = useTheme()
@@ -31,6 +34,10 @@ const themeOptions = [
 function setTheme(mode) {
   themeMode.value = saveThemeMode(mode)
   applyTheme(theme, mode)
+}
+
+function pickCompanion(id) {
+  setCompanionPet(auth.user?.id, id)
 }
 
 const moduleKeys = [
@@ -134,6 +141,33 @@ async function save() {
     </div>
   </section>
 
+  <section class="cx-section">
+    <p class="cx-section-label">{{ t('companions.title') }}</p>
+    <p class="text-body-2 text-medium-emphasis mb-3">{{ t('companions.hint') }}</p>
+    <div class="companion-pick">
+      <button
+        v-for="c in COMPANIONS"
+        :key="c.id"
+        type="button"
+        class="companion-pick__item"
+        :class="{ 'companion-pick__item--on': companionPetId === c.id }"
+        @click="pickCompanion(c.id)"
+      >
+        <CompanionBuddy preview :pet-id="c.id" mood="idle" />
+        <span class="companion-pick__name">{{ t(`companions.pets.${c.id}.name`) }}</span>
+      </button>
+      <button
+        type="button"
+        class="companion-pick__item companion-pick__item--none"
+        :class="{ 'companion-pick__item--on': companionPetId === COMPANION_NONE }"
+        @click="pickCompanion(COMPANION_NONE)"
+      >
+        <span class="companion-pick__empty" aria-hidden="true">—</span>
+        <span class="companion-pick__name">{{ t('companions.none') }}</span>
+      </button>
+    </div>
+  </section>
+
   <v-card class="pa-4 pa-sm-5 mb-4 cx-panel--lift">
     <v-form @submit.prevent="save">
       <v-text-field v-model="form.name" :label="t('profile.name')" class="mb-2" />
@@ -215,3 +249,58 @@ async function save() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.companion-pick {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.55rem;
+}
+
+.companion-pick__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.55rem 0.35rem 0.65rem;
+  border-radius: var(--cx-radius-md, 14px);
+  border: 1px solid var(--cx-border);
+  background: color-mix(in srgb, var(--cx-surface) 92%, var(--cx-bg));
+  cursor: pointer;
+  color: var(--cx-text);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.companion-pick__item--on {
+  border-color: color-mix(in srgb, var(--cx-primary) 55%, var(--cx-border));
+  background: color-mix(in srgb, var(--cx-primary-soft) 75%, var(--cx-surface));
+}
+
+.companion-pick__name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.companion-pick__empty {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  font-size: 1.4rem;
+  color: var(--cx-text-faint);
+}
+
+.companion-pick__item--none .companion-pick__name {
+  font-weight: 500;
+}
+
+@media (min-width: 600px) {
+  .companion-pick {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+</style>

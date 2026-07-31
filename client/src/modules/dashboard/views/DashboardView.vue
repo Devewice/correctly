@@ -16,6 +16,7 @@ import { addDaySkip, loadDaySkips } from '@/shared/utils/daySkips'
 import { activeModuleSet, dateKeyLocal } from '@/shared/utils/timeContext'
 import { loadCarePrefs, saveCarePrefs } from '@/shared/utils/carePrefs'
 import { RITUALS } from '@/shared/data/rituals'
+import { celebrateCompanion, syncCompanionFromDay } from '@/shared/companions/companionBus'
 
 const { t } = useI18n()
 const { lgAndUp } = useDisplay()
@@ -137,6 +138,7 @@ function flashComplete(label) {
   window.setTimeout(() => {
     burst.value = false
   }, 700)
+  celebrateCompanion('happy', 2400)
 }
 
 watch(
@@ -147,6 +149,10 @@ watch(
   },
   { immediate: true },
 )
+
+watch(dayFinished, (done, was) => {
+  if (done && was === false) celebrateCompanion('proud', 3200)
+})
 
 onMounted(async () => {
   await dash.loadAll()
@@ -169,6 +175,7 @@ async function handleQuickAction() {
       flashComplete(t('day.burstMood'))
     }
     await dash.loadAll()
+    syncCompanionFromDay(dash.today)
   } finally {
     router.replace({ path: '/dashboard', query: {} })
   }
@@ -188,6 +195,7 @@ async function withBusy(fn, burstKey) {
     await fn()
     if (burstKey) flashComplete(t(burstKey))
     await dash.loadAll()
+    syncCompanionFromDay(dash.today)
     syncSkips()
   } finally {
     busy.value = false
