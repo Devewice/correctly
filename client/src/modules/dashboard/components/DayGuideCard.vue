@@ -126,7 +126,7 @@ function pickMood(value) {
       scale: 1,
       transition: { type: 'spring', stiffness: 160, damping: 18 },
     }"
-    class="day-guide-card"
+    class="day-guide-card cx-card-shell"
     variant="flat"
   >
     <div class="guide-head">
@@ -325,13 +325,48 @@ function pickMood(value) {
     </template>
 
     <template v-else-if="step.key === 'rest'">
-      <v-btn color="primary" variant="tonal" block to="/sleep">{{ t('day.seeSleep') }}</v-btn>
+      <v-row dense class="mb-2">
+        <v-col cols="6">
+          <v-btn
+            block
+            color="info"
+            variant="tonal"
+            size="large"
+            :loading="busy"
+            @click="emit('water', 250)"
+          >
+            {{ t('day.waterGlass') }}
+          </v-btn>
+        </v-col>
+        <v-col cols="6">
+          <v-btn color="primary" variant="tonal" block size="large" to="/sleep">
+            {{ t('day.seeSleep') }}
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-btn variant="text" block to="/mood">{{ t('modules.mood') }}</v-btn>
     </template>
 
     <template v-else>
-      <v-btn color="primary" variant="tonal" block to="/stats" prepend-icon="mdi-chart-bar">
-        {{ t('day.seeStats') }}
-      </v-btn>
+      <v-row dense class="mb-2">
+        <v-col cols="6">
+          <v-btn
+            block
+            color="info"
+            variant="tonal"
+            :loading="busy"
+            @click="emit('water', 250)"
+          >
+            {{ t('day.waterGlass') }}
+          </v-btn>
+        </v-col>
+        <v-col cols="6">
+          <v-btn color="primary" variant="tonal" block to="/stats" prepend-icon="mdi-chart-bar">
+            {{ t('day.seeStats') }}
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-btn variant="text" block to="/mood">{{ t('modules.mood') }}</v-btn>
     </template>
   </v-card>
 </template>

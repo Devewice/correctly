@@ -320,7 +320,8 @@
     "burstMeal": "Meal logged",
     "burstHabit": "Habit done",
     "burstSleep": "Sleep logged",
-    "burstDone": "Done"
+    "burstDone": "Done",
+    "dayPrefs": "Day settings"
   },
   "pwa": {
     "title": "Use as an app",

@@ -93,8 +93,11 @@ export function useDayGuide(todayRef, userRef, skippedRef, prefsRef) {
     }
 
     if (b === 'rest') {
+      // De madrugada: sigue ofreciendo acciones útiles (no solo un mensaje)
       if (mods.has('sleep') && !hasSleep) push({ id: 'sleep', key: 'sleep' }, 10)
-      if (mods.has('water') && water < 200) push({ id: 'water', key: 'water', water }, 20)
+      if (mods.has('water') && water < 400) push({ id: 'water', key: 'water', water }, 15)
+      if (mods.has('mood') && !hasMood) push({ id: 'mood', key: 'mood' }, 25)
+      if (mods.has('journal') && !hasJournal) push({ id: 'journal', key: 'journal' }, 40)
       if (!candidates.length) push({ id: 'rest', key: 'rest' }, 100)
     } else {
       if (mods.has('mood') && !hasMood && (b === 'morning' || b === 'midday')) {

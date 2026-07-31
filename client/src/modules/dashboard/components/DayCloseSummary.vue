@@ -23,8 +23,8 @@ const labels = computed(() =>
 </script>
 
 <template>
-  <v-card class="day-close pa-4 pa-sm-5" variant="flat">
-    <p class="day-close__eyebrow">{{ t('day.closeTitle') }}</p>
+  <v-card class="day-close cx-card-shell pa-4 pa-sm-5" variant="flat">
+    <p class="cx-section-label">{{ t('day.closeTitle') }}</p>
     <h2 class="day-close__phrase">{{ phrase }}</h2>
     <p v-if="labels.length" class="day-close__cared">
       {{ t('day.closeCared') }}
@@ -48,29 +48,20 @@ const labels = computed(() =>
 
 <style scoped>
 .day-close {
-  border: 1px solid rgba(94, 122, 91, 0.2);
-  background: linear-gradient(160deg, #eef3ed 0%, #faf8f5 55%, #f5ede3 100%);
-}
-.day-close__eyebrow {
-  margin: 0 0 0.35rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #5e7a5b;
+  background: linear-gradient(160deg, #eef3ed 0%, #faf8f5 55%, #f5ede3 100%) !important;
 }
 .day-close__phrase {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 700;
   line-height: 1.3;
-  color: #3d3d3d;
+  color: var(--cx-text);
 }
 .day-close__cared,
 .day-close__streak {
   margin: 0.65rem 0 0;
   font-size: 0.875rem;
-  color: rgba(61, 61, 61, 0.75);
+  color: var(--cx-text-soft);
   line-height: 1.4;
 }
 </style>

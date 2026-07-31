@@ -29,7 +29,7 @@ onMounted(async () => {
   <div v-else class="d-flex flex-column ga-4">
     <v-row dense>
       <v-col cols="12" sm="4">
-        <v-card class="pa-5">
+        <v-card class="pa-5 cx-card-shell">
           <div class="text-caption text-medium-emphasis">{{ t('admin.overview.users') }}</div>
           <div class="text-h4 font-weight-bold">{{ data.stats.usersCount }}</div>
         </v-card>

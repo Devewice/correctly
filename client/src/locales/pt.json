@@ -320,7 +320,8 @@
     "burstMeal": "Refeição registrada",
     "burstHabit": "Hábito pronto",
     "burstSleep": "Sono contado",
-    "burstDone": "Pronto"
+    "burstDone": "Pronto",
+    "dayPrefs": "Ajustes do dia"
   },
   "pwa": {
     "title": "Usar como app",

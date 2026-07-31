@@ -1,4 +1,5 @@
-/* Solo tipografía y reset mínimo — UI 100% Vuetify */
+@import './tokens.css';
+
 html,
 body,
 #app {
@@ -8,9 +9,10 @@ body,
 body {
   margin: 0;
   overflow-x: hidden;
+  background: var(--cx-bg);
+  color: var(--cx-text);
 }
 
-/* URLs largas en wizards admin / campos mono */
 .font-mono,
 .v-btn[style*='monospace'] {
   word-break: break-all;
@@ -20,10 +22,63 @@ body {
 }
 
 .v-application {
-  font-family: 'DM Sans', system-ui, sans-serif !important;
+  font-family: var(--cx-font) !important;
+  background: var(--cx-bg) !important;
 }
 
-/* Alertas info/success más legibles en móvil (sin “banner gigante”) */
+.v-application .text-h1,
+.v-application .text-h2,
+.v-application .text-h3,
+.v-application .text-h4,
+.v-application .text-h5,
+.v-application .text-h6,
+.v-application .v-app-bar-title {
+  font-family: var(--cx-font-display) !important;
+  color: var(--cx-text);
+}
+
+/* —— Sistema de página compartido (app + admin) —— */
+.cx-page-title {
+  margin: 0;
+  font-family: var(--cx-font-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--cx-text);
+}
+.cx-page-sub {
+  margin: 0.35rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--cx-text-soft);
+}
+.cx-section-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cx-primary-deep);
+}
+.cx-card-shell {
+  border: 1px solid var(--cx-border) !important;
+  border-radius: var(--cx-radius-lg) !important;
+  background: var(--cx-surface) !important;
+  box-shadow: var(--cx-shadow) !important;
+}
+.cx-soft-panel {
+  padding: var(--cx-space-3);
+  border-radius: var(--cx-radius);
+  background: var(--cx-primary-soft);
+  border: 1px solid var(--cx-border);
+  color: var(--cx-text);
+}
+.cx-meta {
+  font-size: 0.8125rem;
+  color: var(--cx-text-soft);
+}
+
+/* Alertas legibles */
 .v-alert {
   --v-activated-opacity: 0.08;
 }
@@ -39,15 +94,12 @@ body {
   background: rgba(47, 127, 163, 0.14) !important;
 }
 
-/*
- * Contraste global: primary claro + on-primary blanco rompe variant="tonal"
- * (texto blanco sobre fondo pastel → “desaparece” Ánimo, chips, etc.).
- */
+/* Contraste tonal */
 .v-card--variant-tonal,
 .v-chip--variant-tonal,
 .v-btn--variant-tonal,
 .v-list-item--variant-tonal {
-  color: #3d3d3d !important;
+  color: var(--cx-text) !important;
 }
 .v-card--variant-tonal.bg-primary,
 .v-chip--variant-tonal.bg-primary,
@@ -59,7 +111,7 @@ body {
 .v-chip--variant-tonal.bg-secondary,
 .v-btn--variant-tonal.bg-secondary {
   background: rgba(244, 203, 168, 0.45) !important;
-  color: #3d3d3d !important;
+  color: var(--cx-text) !important;
 }
 .v-card--variant-tonal .text-body-1,
 .v-card--variant-tonal .text-body-2,
@@ -71,7 +123,13 @@ body {
   color: inherit !important;
 }
 
-/* Tile seleccionable reutilizable (onboarding, perfil, formularios) */
+/* Botones flat primary: texto oscuro sobre sage */
+.v-btn--variant-flat.bg-primary,
+.v-chip--variant-flat.bg-primary {
+  color: #2f3d2e !important;
+}
+
+/* Tile seleccionable */
 .select-tile {
   display: flex;
   align-items: center;
@@ -81,8 +139,8 @@ body {
   padding: 0.7rem 0.75rem;
   border: 2px solid #e4d9cb;
   border-radius: 12px;
-  background: #faf8f5;
-  color: #3d3d3d;
+  background: var(--cx-bg);
+  color: var(--cx-text);
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.25;
@@ -93,14 +151,14 @@ body {
     background 0.15s ease;
 }
 .select-tile:hover {
-  border-color: #8ba888;
+  border-color: var(--cx-primary);
   background: #eef3ed;
 }
 .select-tile--on {
-  border-color: #5e7a5b;
+  border-color: var(--cx-primary-deep);
   background: #dfe9dd;
   color: #2f3d2e;
-  box-shadow: inset 0 0 0 1px #5e7a5b;
+  box-shadow: inset 0 0 0 1px var(--cx-primary-deep);
 }
 .select-tile--center {
   flex-direction: column;
@@ -116,12 +174,13 @@ body {
   cursor: default;
 }
 
-.v-application .text-h1,
-.v-application .text-h2,
-.v-application .text-h3,
-.v-application .text-h4,
-.v-application .text-h5,
-.v-application .text-h6,
-.v-application .v-app-bar-title {
-  font-family: 'Nunito', 'DM Sans', system-ui, sans-serif !important;
+/* Admin: misma base visual */
+.admin-shell .v-tabs {
+  background: var(--cx-surface);
+  border: 1px solid var(--cx-border);
+  border-radius: var(--cx-radius);
+  padding: 0.25rem;
+}
+.admin-shell .v-card {
+  border-color: var(--cx-border) !important;
 }

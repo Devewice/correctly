@@ -38,10 +38,10 @@ const { steps, suggestedMealType, band, caredFor } = useDayGuide(
   prefs,
 )
 
-const current = computed(() => steps.value[0] || null)
+const current = computed(() => steps.value[0] || { id: 'done', key: 'done' })
 const progressPct = computed(() => dash.today?.progress ?? 0)
 const mods = computed(() => activeModuleSet(auth.user))
-const showSummary = computed(
+const dayFinished = computed(
   () => current.value?.key === 'done' || current.value?.key === 'rest',
 )
 
@@ -259,54 +259,25 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
     :class="`today-view--${band}`"
   >
     <header v-motion v-bind="withDelay(fadeUp, 0)" class="today-view__header">
-      <h1 class="today-view__greeting">{{ greeting }}</h1>
-      <p class="today-view__meta">
+      <h1 class="cx-page-title">{{ greeting }}</h1>
+      <p class="cx-meta today-view__meta">
         <span>{{ t(`day.band.${band}`) }}</span>
-        <span class="today-view__dot" aria-hidden="true">·</span>
+        <span aria-hidden="true">·</span>
         <span>{{ t('dashboard.streak', { days: dash.today.stats?.currentStreak || 0 }) }}</span>
         <template v-if="freezes > 0">
-          <span class="today-view__dot" aria-hidden="true">·</span>
+          <span aria-hidden="true">·</span>
           <span>{{ t('day.freezeLeft', { n: freezes }) }}</span>
         </template>
       </p>
-      <div class="today-view__toggles">
-        <button
-          type="button"
-          class="select-tile"
-          :class="{ 'select-tile--on': prefs.lowEnergy }"
-          style="width: auto"
-          @click="toggleLowEnergy"
-        >
-          {{ t('day.lowEnergy') }}
-        </button>
-        <button
-          v-for="r in RITUALS"
-          :key="r.id"
-          type="button"
-          class="select-tile"
-          :class="{ 'select-tile--on': prefs.ritualId === r.id }"
-          style="width: auto"
-          @click="setRitual(r.id)"
-        >
-          {{ r.icon }} {{ t(`rituals.${r.id}.short`) }}
-        </button>
-      </div>
     </header>
 
-    <v-row :dense="!lgAndUp" class="today-view__row">
-      <v-col cols="12" lg="7" order="1" order-lg="2" class="today-view__focus">
-        <p class="today-view__focus-label">{{ t('day.guideTitle') }}</p>
+    <v-row :dense="!lgAndUp">
+      <!-- Card interactiva SIEMPRE primero -->
+      <v-col cols="12" lg="7" order="1" order-lg="2">
+        <p class="cx-section-label">{{ t('day.guideTitle') }}</p>
 
         <Transition name="guide-swap" mode="out-in">
-          <DayCloseSummary
-            v-if="showSummary"
-            :key="'summary'"
-            :cared-for="caredFor"
-            :progress="progressPct"
-            :streak="dash.today.stats?.currentStreak || 0"
-          />
           <DayGuideCard
-            v-else-if="current"
             :key="current.id"
             :step="current"
             :meal-type="suggestedMealType"
@@ -325,7 +296,7 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
         </Transition>
 
         <DayCloseSummary
-          v-if="!showSummary && progressPct >= 70 && caredFor.length"
+          v-if="dayFinished || (progressPct >= 80 && caredFor.length)"
           class="mt-4"
           :cared-for="caredFor"
           :progress="progressPct"
@@ -334,7 +305,7 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
       </v-col>
 
       <v-col cols="12" lg="5" order="2" order-lg="1" class="today-view__aside">
-        <div v-motion v-bind="withDelay(fadeUp, 80)" class="today-progress">
+        <div class="cx-soft-panel">
           <div class="today-progress__top">
             <span class="today-progress__label">{{ t('day.dayProgress') }}</span>
             <span class="today-progress__pct">{{ progressPct }}%</span>
@@ -347,17 +318,36 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
           </div>
         </div>
 
-        <p
-          v-if="insightText"
-          v-motion
-          v-bind="withDelay(fadeUp, 120)"
-          class="today-insight"
-        >
-          {{ insightText }}
-        </p>
+        <p v-if="insightText" class="today-insight">{{ insightText }}</p>
+
+        <details class="today-prefs">
+          <summary>{{ t('day.dayPrefs') }}</summary>
+          <div class="today-prefs__body">
+            <button
+              type="button"
+              class="select-tile"
+              :class="{ 'select-tile--on': prefs.lowEnergy }"
+              style="width: auto"
+              @click="toggleLowEnergy"
+            >
+              {{ t('day.lowEnergy') }}
+            </button>
+            <button
+              v-for="r in RITUALS"
+              :key="r.id"
+              type="button"
+              class="select-tile"
+              :class="{ 'select-tile--on': prefs.ritualId === r.id }"
+              style="width: auto"
+              @click="setRitual(r.id)"
+            >
+              {{ r.icon }} {{ t(`rituals.${r.id}.short`) }}
+            </button>
+          </div>
+        </details>
 
         <v-btn
-          class="mt-3"
+          class="mt-2"
           variant="text"
           size="small"
           to="/practices"
@@ -373,12 +363,8 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
 <style scoped>
 .today-view {
   --today-glow: rgba(139, 168, 136, 0.12);
-  border-radius: 18px;
-  padding: 0.15rem;
-  background:
-    radial-gradient(120% 80% at 10% 0%, var(--today-glow), transparent 55%),
-    transparent;
-  transition: background 0.4s ease;
+  border-radius: var(--cx-radius-lg);
+  background: radial-gradient(120% 80% at 10% 0%, var(--today-glow), transparent 55%);
 }
 .today-view--morning {
   --today-glow: rgba(244, 203, 168, 0.35);
@@ -393,65 +379,31 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
 .today-view--rest {
   --today-glow: rgba(95, 122, 140, 0.18);
 }
-
 .today-view__header {
   margin-bottom: 1rem;
 }
-.today-view__greeting {
-  font-size: 1.35rem;
-  font-weight: 700;
-  line-height: 1.25;
-  color: #3d3d3d;
-  margin: 0;
-}
 .today-view__meta {
-  margin: 0.35rem 0 0;
-  font-size: 0.8125rem;
-  color: rgba(61, 61, 61, 0.72);
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   gap: 0.25rem 0.35rem;
+  margin-top: 0.35rem;
 }
-.today-view__dot {
-  opacity: 0.5;
-}
-.today-view__toggles {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.75rem;
-}
-.today-view__focus-label {
-  margin: 0 0 0.5rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #5e7a5b;
-}
-.today-progress {
-  padding: 0.85rem 1rem;
-  border-radius: 14px;
-  background: rgba(139, 168, 136, 0.14);
-  border: 1px solid rgba(94, 122, 91, 0.16);
+.today-view__aside {
+  margin-top: 0.25rem;
 }
 .today-progress__top {
   display: flex;
-  align-items: baseline;
   justify-content: space-between;
-  gap: 0.75rem;
   margin-bottom: 0.45rem;
 }
 .today-progress__label {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #3d3d3d;
 }
 .today-progress__pct {
   font-size: 1rem;
   font-weight: 700;
-  color: #5e7a5b;
+  color: var(--cx-primary-deep);
 }
 .today-progress__chips {
   display: flex;
@@ -460,23 +412,38 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   margin-top: 0.65rem;
 }
 .today-progress__chip {
-  display: inline-flex;
-  align-items: center;
   padding: 0.15rem 0.55rem;
   border-radius: 999px;
-  background: #fff;
+  background: var(--cx-surface);
   font-size: 0.75rem;
   font-weight: 600;
-  color: #3d3d3d;
-  border: 1px solid rgba(94, 122, 91, 0.12);
+  border: 1px solid var(--cx-border);
 }
 .today-insight {
   margin: 0.85rem 0 0;
   font-size: 0.8125rem;
   line-height: 1.4;
-  color: rgba(61, 61, 61, 0.75);
+  color: var(--cx-text-soft);
 }
-
+.today-prefs {
+  margin-top: 0.85rem;
+}
+.today-prefs summary {
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cx-primary-deep);
+  list-style: none;
+}
+.today-prefs summary::-webkit-details-marker {
+  display: none;
+}
+.today-prefs__body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.55rem;
+}
 .guide-swap-enter-active,
 .guide-swap-leave-active {
   transition:
@@ -491,16 +458,11 @@ const moodEmoji = ['', '😢', '😕', '😐', '🙂', '😄']
   opacity: 0;
   transform: translateY(-10px) scale(0.98);
 }
-
 @media (min-width: 1280px) {
-  .today-view__greeting {
-    font-size: 1.75rem;
-  }
   .today-view__aside {
     margin-top: 1.65rem;
   }
 }
-
 @media (prefers-reduced-motion: reduce) {
   .guide-swap-enter-active,
   .guide-swap-leave-active {

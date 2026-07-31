@@ -1,0 +1,28 @@
+/**
+ * Design tokens Correctly — tipografía, color, radio, espacio.
+ * Usar en app y admin para una sola lengua visual.
+ */
+:root {
+  --cx-bg: #faf8f5;
+  --cx-surface: #ffffff;
+  --cx-surface-soft: #f5ede3;
+  --cx-surface-muted: #ede4d8;
+  --cx-border: rgba(94, 122, 91, 0.18);
+  --cx-border-strong: rgba(94, 122, 91, 0.32);
+  --cx-text: #3d3d3d;
+  --cx-text-soft: rgba(61, 61, 61, 0.72);
+  --cx-primary: #8ba888;
+  --cx-primary-deep: #5e7a5b;
+  --cx-primary-soft: rgba(139, 168, 136, 0.18);
+  --cx-secondary: #f4cba8;
+  --cx-info: #2f7fa3;
+  --cx-radius: 14px;
+  --cx-radius-lg: 18px;
+  --cx-space-1: 0.35rem;
+  --cx-space-2: 0.65rem;
+  --cx-space-3: 1rem;
+  --cx-space-4: 1.35rem;
+  --cx-font: 'DM Sans', system-ui, sans-serif;
+  --cx-font-display: 'Nunito', 'DM Sans', system-ui, sans-serif;
+  --cx-shadow: 0 8px 28px rgba(61, 61, 61, 0.06);
+}

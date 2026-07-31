@@ -42,8 +42,9 @@ const links = [
     </template>
   </v-app-bar>
 
-  <v-main>
+  <v-main class="admin-shell">
     <v-container class="py-4 py-md-8 px-3 px-sm-4" style="max-width: 1040px">
+      <p class="cx-section-label mb-2">{{ t('admin.badge') }}</p>
       <v-tabs
         :model-value="route.path"
         color="primary"
