@@ -264,17 +264,19 @@
       }
     },
     "species": {
-      "cat": "Cats", "dog": "Dogs", "bird": "Birds", "fox": "Foxes", "bunny": "Bunnies",
-      "critter": "Critters", "bear": "Bears", "panda": "Pandas", "frog": "Frogs", "owl": "Owls",
-      "chick": "Chicks", "penguin": "Penguins", "koala": "Koalas", "raccoon": "Raccoons",
-      "squirrel": "Squirrels", "hedgehog": "Hedgehogs", "otter": "Otters", "seal": "Seals",
-      "deer": "Deer", "pig": "Pigs", "cow": "Cows", "sheep": "Sheep", "pony": "Ponies",
-      "elephant": "Elephants", "lion": "Lions", "tiger": "Tigers", "monkey": "Monkeys",
-      "mouse": "Mice", "hamster": "Hamsters", "turtle": "Turtles", "dino": "Dinos",
-      "dragon": "Dragons", "unicorn": "Unicorns", "axolotl": "Axolotls", "bee": "Bees",
-      "ladybug": "Ladybugs", "fish": "Fish", "whale": "Whales", "dolphin": "Dolphins",
-      "cactus": "Cactus", "cloud": "Clouds", "star": "Stars", "leaf": "Leaves",
-      "peach": "Peaches", "wolf": "Wolves"
+      "cat": "Cats",
+      "dog": "Dogs",
+      "bear": "Bears",
+      "bunny": "Bunnies",
+      "fox": "Foxes",
+      "bird": "Birds",
+      "frog": "Frogs",
+      "sea": "Sea",
+      "farm": "Farm",
+      "wild": "Wild",
+      "critter": "Critters",
+      "mythical": "Mythical",
+      "nature": "Nature"
     },
     "states": {
       "idle": "Calm", "ok": "Okay", "happy": "Good", "great": "Great", "strong": "Strong",

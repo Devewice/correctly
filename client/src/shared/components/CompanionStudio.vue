@@ -4,12 +4,14 @@ import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/modules/auth/stores/useAuthStore'
 import {
   COMPANIONS,
+  COMPANION_CATEGORIES,
   COMPANION_NONE,
   COMPANION_PALETTES,
   BODY_PARTS,
   EAR_PARTS,
   LEG_PARTS,
   TAIL_PARTS,
+  companionsByCategory,
   resolveCompanionAppearance,
 } from '@/shared/data/companions'
 import {
@@ -40,15 +42,9 @@ const customDraft = reactive({
   accent2: '#4a6648',
 })
 
-const speciesList = computed(() => {
-  const set = new Set(COMPANIONS.map((c) => c.species))
-  return ['all', ...[...set].sort()]
-})
+const speciesList = computed(() => ['all', ...COMPANION_CATEGORIES])
 
-const filtered = computed(() => {
-  if (speciesFilter.value === 'all') return COMPANIONS
-  return COMPANIONS.filter((c) => c.species === speciesFilter.value)
-})
+const filtered = computed(() => companionsByCategory(speciesFilter.value))
 
 const previewLook = computed(() => ({
   id: 'custom',

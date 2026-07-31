@@ -56,10 +56,9 @@ function resize() {
 function loop() {
   if (disposed) return
   const t = clock.getElapsedTime()
+  const dt = Math.min(0.05, clock.getDelta())
   if (mesh) {
-    animateCompanionMesh(mesh, props.mood, t)
-    // Ligera órbita idle
-    mesh.rotation.y = Math.sin(t * 0.6) * 0.25
+    animateCompanionMesh(mesh, props.mood, t, dt)
   }
   renderer.render(scene, camera)
   raf = requestAnimationFrame(loop)

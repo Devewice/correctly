@@ -1,0 +1,193 @@
+/**
+ * Siluetas 3D por categoría/especie.
+ * body: [rx, ry, rz], headScale relativo, features distintivas.
+ */
+export const SPECIES_RECIPES = {
+  cat: {
+    body: [0.48, 0.46, 0.5],
+    head: [0.34, 0.32, 0.34],
+    headY: 0.95,
+    ear: 'cat',
+    snout: 'small',
+    legs: 'walk',
+    tail: 'long',
+    eyeGap: 0.15,
+  },
+  dog: {
+    body: [0.52, 0.48, 0.55],
+    head: [0.33, 0.3, 0.38],
+    headY: 0.92,
+    ear: 'dog',
+    snout: 'long',
+    legs: 'walk',
+    tail: 'wag',
+    eyeGap: 0.14,
+  },
+  bear: {
+    body: [0.62, 0.58, 0.6],
+    head: [0.4, 0.38, 0.38],
+    headY: 1.0,
+    ear: 'bear',
+    snout: 'round',
+    legs: 'stubby',
+    tail: 'none',
+    eyeGap: 0.13,
+    stocky: true,
+  },
+  bunny: {
+    body: [0.5, 0.48, 0.52],
+    head: [0.32, 0.3, 0.32],
+    headY: 0.92,
+    ear: 'bunny',
+    snout: 'tiny',
+    legs: 'hop',
+    tail: 'puff',
+    eyeGap: 0.14,
+  },
+  fox: {
+    body: [0.5, 0.45, 0.55],
+    head: [0.32, 0.28, 0.36],
+    headY: 0.9,
+    ear: 'fox',
+    snout: 'point',
+    legs: 'walk',
+    tail: 'bush',
+    eyeGap: 0.13,
+  },
+  bird: {
+    body: [0.42, 0.5, 0.42],
+    head: [0.28, 0.28, 0.28],
+    headY: 1.0,
+    ear: 'none',
+    snout: 'beak',
+    legs: 'stick',
+    tail: 'wings',
+    eyeGap: 0.12,
+  },
+  frog: {
+    body: [0.58, 0.4, 0.5],
+    head: [0.36, 0.28, 0.34],
+    headY: 0.78,
+    ear: 'none',
+    snout: 'wide',
+    legs: 'hop',
+    tail: 'none',
+    eyeGap: 0.18,
+    eyeY: 0.12,
+  },
+  sea: {
+    body: [0.65, 0.4, 0.42],
+    head: [0.3, 0.28, 0.34],
+    headY: 0.72,
+    ear: 'none',
+    snout: 'blunt',
+    legs: 'flipper',
+    tail: 'fin',
+    eyeGap: 0.14,
+  },
+  farm: {
+    body: [0.58, 0.5, 0.55],
+    head: [0.34, 0.32, 0.36],
+    headY: 0.95,
+    ear: 'farm',
+    snout: 'round',
+    legs: 'stubby',
+    tail: 'curl',
+    eyeGap: 0.14,
+  },
+  wild: {
+    body: [0.55, 0.52, 0.58],
+    head: [0.34, 0.32, 0.36],
+    headY: 0.98,
+    ear: 'wild',
+    snout: 'long',
+    legs: 'walk',
+    tail: 'long',
+    eyeGap: 0.14,
+  },
+  critter: {
+    body: [0.45, 0.4, 0.48],
+    head: [0.3, 0.28, 0.3],
+    headY: 0.82,
+    ear: 'round',
+    snout: 'tiny',
+    legs: 'short',
+    tail: 'thin',
+    eyeGap: 0.12,
+  },
+  mythical: {
+    body: [0.52, 0.55, 0.5],
+    head: [0.34, 0.32, 0.34],
+    headY: 1.02,
+    ear: 'horn',
+    snout: 'small',
+    legs: 'walk',
+    tail: 'fancy',
+    eyeGap: 0.14,
+  },
+  nature: {
+    body: [0.5, 0.55, 0.48],
+    head: [0.3, 0.3, 0.3],
+    headY: 0.95,
+    ear: 'leaf',
+    snout: 'none',
+    legs: 'stubby',
+    tail: 'leaf',
+    eyeGap: 0.13,
+  },
+}
+
+/** Variantes visuales dentro de una categoría */
+export const VARIANT_TWEAKS = {
+  // bear
+  panda: { accentForce: '#f2efe8', accent2Force: '#2c2f2b', patches: true },
+  grizzly: {},
+  // bird
+  owl: { ear: 'tuft', snout: 'beak', body: [0.48, 0.52, 0.48] },
+  chick: { ear: 'crest', snout: 'beak' },
+  penguin: { body: [0.4, 0.62, 0.4], legs: 'stubby', tuxedo: true },
+  // sea
+  whale: { body: [0.75, 0.38, 0.4], snout: 'blunt' },
+  dolphin: { body: [0.68, 0.36, 0.38], snout: 'point' },
+  fish: { body: [0.55, 0.32, 0.28], legs: 'none', tail: 'fin' },
+  otter: { body: [0.6, 0.38, 0.4], ear: 'round' },
+  seal: { body: [0.62, 0.36, 0.4], legs: 'flipper' },
+  // farm
+  pig: { snout: 'disk', ear: 'farm' },
+  cow: { patches: true, ear: 'farm', snout: 'wide' },
+  sheep: { fluffy: true, ear: 'round' },
+  pony: { snout: 'long', legs: 'walk', ear: 'wild' },
+  // wild
+  lion: { mane: true, ear: 'round' },
+  tiger: { stripes: true, ear: 'cat' },
+  elephant: { trunk: true, ear: 'elephant', snout: 'none' },
+  deer: { antlers: true, ear: 'fox', snout: 'point' },
+  monkey: { snout: 'flat', ear: 'round', legs: 'hop' },
+  koala: { ear: 'fluff', snout: 'round', legs: 'stubby' },
+  raccoon: { mask: true, ear: 'round', tail: 'ring' },
+  wolf: { snout: 'long', ear: 'fox', tail: 'bush' },
+  // mythical
+  dino: { snout: 'long', plates: true, tail: 'thick' },
+  dragon: { ear: 'horn', wings: true, snout: 'point' },
+  unicorn: { ear: 'horn', snout: 'long', sparkle: true },
+  axolotl: { gills: true, snout: 'blunt', legs: 'short' },
+  // nature
+  cactus: { spikes: true, legs: 'none', snout: 'none' },
+  cloud: { fluffy: true, legs: 'none' },
+  star: { pointy: true, legs: 'none' },
+}
+
+export function resolveRecipe(species, variant) {
+  const base = SPECIES_RECIPES[species] || SPECIES_RECIPES.critter
+  const tweak = (variant && VARIANT_TWEAKS[variant]) || {}
+  return {
+    ...base,
+    ...tweak,
+    body: tweak.body || base.body,
+    ear: tweak.ear || base.ear,
+    snout: tweak.snout || base.snout,
+    legs: tweak.legs || base.legs,
+    tail: tweak.tail || base.tail,
+    variant: variant || species,
+  }
+}

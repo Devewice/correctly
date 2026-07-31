@@ -264,17 +264,19 @@
       }
     },
     "species": {
-      "cat": "Gatos", "dog": "Cães", "bird": "Aves", "fox": "Raposas", "bunny": "Coelhos",
-      "critter": "Bichinhos", "bear": "Ursos", "panda": "Pandas", "frog": "Sapos", "owl": "Corujas",
-      "chick": "Pintinhos", "penguin": "Pinguins", "koala": "Coalas", "raccoon": "Guaxinins",
-      "squirrel": "Esquilos", "hedgehog": "Ouriços", "otter": "Lontras", "seal": "Focas",
-      "deer": "Cervos", "pig": "Porquinhos", "cow": "Vacas", "sheep": "Ovelhas", "pony": "Pôneis",
-      "elephant": "Elefantes", "lion": "Leões", "tiger": "Tigres", "monkey": "Macacos",
-      "mouse": "Ratos", "hamster": "Hamsters", "turtle": "Tartarugas", "dino": "Dinos",
-      "dragon": "Dragões", "unicorn": "Unicórnios", "axolotl": "Axolotes", "bee": "Abelhas",
-      "ladybug": "Joaninhas", "fish": "Peixes", "whale": "Baleias", "dolphin": "Golfinhos",
-      "cactus": "Cactos", "cloud": "Nuvens", "star": "Estrelas", "leaf": "Folhas",
-      "peach": "Pêssegos", "wolf": "Lobos"
+      "cat": "Gatos",
+      "dog": "Cães",
+      "bear": "Ursos",
+      "bunny": "Coelhos",
+      "fox": "Raposas",
+      "bird": "Aves",
+      "frog": "Sapos",
+      "sea": "Mar",
+      "farm": "Fazenda",
+      "wild": "Selvagens",
+      "critter": "Bichinhos",
+      "mythical": "Míticos",
+      "nature": "Natureza"
     },
     "states": {
       "idle": "Tranquilo", "ok": "Mais ou menos", "happy": "Bem", "great": "Super bem",
